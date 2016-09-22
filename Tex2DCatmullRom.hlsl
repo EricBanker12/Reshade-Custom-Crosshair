@@ -11,16 +11,14 @@ float4 SampleTextureCatmullRom(in Texture2D<float4> tex, in SamplerState linearS
     // Compute the fractional offset from our starting texel to our original sample location, which we'll
     // feed into the Catmull-Rom spline function to get our filter weights.
     float2 f = samplePos - texPos1;
-    float2 f2 = f * f;
-    float2 f3 = f2 * f;
 
     // Compute the Catmull-Rom weights using the fractional offset that we calculated earlier.
     // These equations are pre-expanded based on our knowledge of where the texels will be located,
     // which lets us avoid having to evaluate a piece-wise function.
-    float2 w0 = (1.0f / 6.0f) * (-3.0f * f3 + 6.0f * f2 - 3.0f * f);
-    float2 w1 = (1.0f / 6.0f) * (9.0f * f3 - 15.0f * f2 + 6.0f);
-    float2 w2 = (1.0f / 6.0f) * (-9.0f * f3 + 12.0f * f2 + 3.0f * f);
-    float2 w3 = (1.0f / 6.0f) * (3.0f * f3 - 3.0f * f2);
+    float2 w0 = f * (-0.5f + f * (1.0f - 0.5f * f));
+    float2 w1 = 1.0f + f * f * (-2.5f + 1.5f * f);
+    float2 w2 = f * (0.5f + f * (2.0f - 1.5f * f));
+    float2 w3 = f * f * (-0.5f + 0.5f * f);
 
     // Work out weighting factors and sampling offsets that will let us use bilinear filtering to
     // simultaneously evaluate the middle 2 samples from the 4x4 grid.
