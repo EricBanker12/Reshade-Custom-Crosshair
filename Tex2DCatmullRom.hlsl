@@ -1,3 +1,5 @@
+// The following code is licensed under the MIT license: https://gist.github.com/TheRealMJP/bc503b0b87b643d3505d41eab8b332ae
+
 // Samples a texture with Catmull-Rom filtering, using 9 texture fetches instead of 16.
 // See http://vec3.ca/bicubic-filtering-in-fewer-taps/ for more details
 float4 SampleTextureCatmullRom(in Texture2D<float4> tex, in SamplerState linearSampler, in float2 uv, in float2 texSize)
