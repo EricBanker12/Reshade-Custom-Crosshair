@@ -1,21 +1,118 @@
 #include "ReShadeUI.fxh";
 
 uniform float HorizontalOffset < __UNIFORM_SLIDER_ANY
-	ui_min = BUFFER_WIDTH / -2.0; ui_max = BUFFER_WIDTH / 2.0; ui_step = 1.0;
+	ui_min = BUFFER_WIDTH / -2.0;
+    ui_max = BUFFER_WIDTH / 2.0;
+    ui_step = 1.0;
+    ui_label = "X Offset";
 	ui_tooltip = "Horizontal offset for the crosshair relative to the window center or mouse cursor.";
 > = float(0);
 
 uniform float VerticalOffset < __UNIFORM_SLIDER_ANY
-	ui_min = BUFFER_HEIGHT / -2.0; ui_max = BUFFER_HEIGHT / 2.0; ui_step = 1.0;
+	ui_min = BUFFER_HEIGHT / -2.0;
+    ui_max = BUFFER_HEIGHT / 2.0;
+    ui_step = 1.0;
+    ui_label = "Y Offset";
 	ui_tooltip = "Vertical offset for the crosshair relative to the window center or mouse cursor.";
 > = float(0);
 
 uniform bool UseAntialiasing <
+    ui_label = "Use Antialiasing";
     ui_tooltip = "Applies low preset SMAA.";
 > = false;
 
-// uniform bool FollowCursor = false;
-// uniform float2 MousePoint < source = "mousepoint"; >;
+uniform bool FollowCursor <
+    ui_label = "Follow Cursor";
+    ui_tooltip = "Apply crosshair relative to mouse cursor instead of the window center.";
+> = false;
+
+uniform float2 MousePoint < source = "mousepoint"; >;
+
+uniform int Shape1 <
+    ui_category = "Shape 1";
+    ui_category_closed = true;
+    ui_type = "combo";
+    ui_label = "Shape";
+    ui_items = "None\0Rectangle\0Circle\0Triangle\0";
+> = 1;
+
+uniform float Width1 <
+    ui_category = "Shape 1";
+    ui_type = "slider";
+    ui_label = "Fill Width";
+    ui_min = 0;
+    ui_max = 1000;
+    ui_step = 1.0;
+    ui_spacing = 2;
+> = 20;
+
+uniform float Height1 <
+    ui_category = "Shape 1";
+    ui_type = "slider";
+    ui_label = "Fill Height";
+    ui_min = 0;
+    ui_max = 1000;
+    ui_step = 1.0;
+> = 3;
+
+uniform float4 Color1 <
+    ui_category = "Shape 1";
+    ui_type = "color";
+    ui_label = "Fill Color";
+> = float4(0,1,0,0.9);
+
+uniform float OutlineWidth1 <
+    ui_category = "Shape 1";
+    ui_type = "slider";
+    ui_label = "Outline Width";
+    ui_min = 0;
+    ui_max = 200.0;
+    ui_step = 1.0;
+    ui_spacing = 2;
+> = 1;
+
+uniform float4 OutlineColor1 <
+    ui_category = "Shape 1";
+    ui_type = "color";
+    ui_label = "Outline Color";
+> = float4(0,0,0,0.9);
+
+uniform int Anchor1 <
+    ui_category = "Shape 1";
+    ui_category_closed = true;
+    ui_type = "combo";
+    ui_label = "Anchor";
+    ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+    ui_spacing = 2;
+> = 3;
+
+uniform float HorizontalOffset1 <
+    ui_category = "Shape 1";
+    ui_type = "slider";
+    ui_label = "X Offset";
+    ui_min = BUFFER_WIDTH / -2.0;
+    ui_max = BUFFER_WIDTH / 2.0;
+    ui_step = 1.0;
+> = 5;
+
+uniform float VerticalOffset1 <
+    ui_category = "Shape 1";
+    ui_type = "slider";
+    ui_label = "Y Offset";
+    ui_min = BUFFER_HEIGHT / -2.0;
+    ui_max = BUFFER_HEIGHT / 2.0;
+    ui_step = 1.0;
+> = 0;
+
+uniform float Rotation1 <
+    ui_category = "Shape 1";
+    ui_type = "slider";
+    ui_label = "Rotation";
+    ui_min = 0;
+    ui_max = 360;
+    ui_step = 1.0;
+> = 0;
+
 // uniform float2 MouseDelta < source = "mousedelta"; >;
 // uniform float FrameTime < source = "frametime"; >;
 // uniform bool SpaceBar <source = "key"; keycode = 0x20; mode = ""; >;
@@ -43,7 +140,6 @@ texture blendTex < pooled = true; >
 	Height = BUFFER_HEIGHT;
 	Format = RGBA8;
 };
-
 texture areaTex < source = "AreaTex.png"; >
 {
 	Width = 160;
@@ -150,6 +246,7 @@ Rectangle (height, width, color, border, rotation, anchor, offset)
 Circle (height, width, color, border, rotation, section, anchor, position)
 Triangle (height, width, color, border, rotation, skew, anchor, position)
 
+Animations/Transitions
 
 UI Detection:
 Set position and color (height, width, color, threshold, anchor, position)
@@ -157,15 +254,52 @@ Show Detector (red border = no match; green border = match)
 Invert Detector
 */
 
-float4 DrawRect(float4 baseColor, float4 basePos, float2 rectPos, float2 rectSize, float4 rectColor, float4 outlineColor, float outlineSize, float rectRotation) {
+float4 DrawRect(float4 baseColor, float4 basePos, float2 rectPos, float2 rectSize, float4 rectColor, float outlineWidth, float4 outlineColor, float rotation, int anchor) {
+    float2 anchorOffset = float2(0, 0);
     
-    const float2 rotatedPos = float2((basePos.x - rectPos.x) * cos(-rectRotation) - (basePos.y - rectPos.y) * sin(-rectRotation) + rectPos.x, (basePos.x - rectPos.x) * sin(-rectRotation) + (basePos.y - rectPos.y) * cos(-rectRotation) + rectPos.y);
-    if (rotatedPos.x >= rectPos.x && rotatedPos.x < rectPos.x + rectSize.x && rotatedPos.y >= rectPos.y && rotatedPos.y < rectPos.y + rectSize.y) {
+    switch (anchor) {
+        default:
+        case 0: // Top Left
+            break;
+        case 1: // Top Center
+            anchorOffset.x = 0.5;
+            break;
+        case 2: // Top Right
+            anchorOffset.x = 1.0;
+            break;
+        case 3: // Center Left
+            anchorOffset.y = 0.5;
+            break;
+        case 4: // Center
+            anchorOffset.x = 0.5;
+            anchorOffset.y = 0.5;
+            break;
+        case 5: // Center Right
+            anchorOffset.x = 1.0;
+            anchorOffset.y = 0.5;
+            break;
+        case 6: // Bottom Left
+            anchorOffset.y = 1.0;
+            break;
+        case 7: // Bottom Center
+            anchorOffset.x = 0.5;
+            anchorOffset.y = 1.0;
+            break;
+        case 8: //Bottom Right
+            anchorOffset.x = 1.0;
+            anchorOffset.y = 1.0;
+            break;
+    }
+
+    const float2 rotatedPos = float2((basePos.x - rectPos.x) * cos(-rotation) - (basePos.y - rectPos.y) * sin(-rotation) + rectPos.x, (basePos.x - rectPos.x) * sin(-rotation) + (basePos.y - rectPos.y) * cos(-rotation) + rectPos.y);
+    const float2 fillStartPos = rectPos - rectSize * anchorOffset;
+    const float2 fillEndPos = rectPos + rectSize * (float2(1,1) - anchorOffset);
+    if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) {
         return lerp(baseColor, rectColor, rectColor.a);
     }
     
-    const float2 outlineStartPos = rectPos - float2(outlineSize, outlineSize);
-    const float2 outlineEndPos = rectPos + rectSize + float2(outlineSize, outlineSize);
+    const float2 outlineStartPos = rectPos - rectSize * anchorOffset - outlineWidth;
+    const float2 outlineEndPos = rectPos + rectSize * (float2(1,1) - anchorOffset) + outlineWidth;
     if (rotatedPos.x >= outlineStartPos.x && rotatedPos.x < outlineEndPos.x && rotatedPos.y >= outlineStartPos.y && rotatedPos.y < outlineEndPos.y) {
         return lerp(baseColor, outlineColor, outlineColor.a);
     }
@@ -175,17 +309,35 @@ float4 DrawRect(float4 baseColor, float4 basePos, float2 rectPos, float2 rectSiz
 
 float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
     // Draw a rectangle in the middle of the screen
-    const float4 baseColor = tex2D(ReShade::BackBuffer, texCoord);
+    float4 color = tex2D(ReShade::BackBuffer, texCoord);
 
-    // if (!FollowCursor) {
-        const float2 rectPos = float2(BUFFER_WIDTH / 2.0 + HorizontalOffset + 50.0, BUFFER_HEIGHT / 2.0 + VerticalOffset);
-        const float2 rectSize = float2(50, 10);
-        const float4 rectColor = float4(0,1,0,0);
-        const float4 outlineColor = float4(0,1,0,1);
-        const float outlineSize = float(2);
-        const float rectRotation = radians(30.0);
-        return DrawRect(baseColor, pos, rectPos, rectSize, rectColor, outlineColor, outlineSize, rectRotation);
-    // }
+    if (FollowCursor) {
+        color = DrawRect(
+            color,
+            pos,
+            MousePoint + float2(HorizontalOffset, VerticalOffset) + float2(HorizontalOffset1, VerticalOffset1),
+            float2(Width1, Height1),
+            Color1,
+            OutlineWidth1,
+            OutlineColor1,
+            radians(Rotation1),
+            Anchor1
+        );
+    }
+    else {
+        color = DrawRect(
+            color,
+            pos,
+            float2(BUFFER_WIDTH / 2.0, BUFFER_HEIGHT / 2.0) + float2(HorizontalOffset, VerticalOffset) + float2(HorizontalOffset1, VerticalOffset1),
+            float2(Width1, Height1),
+            Color1,
+            OutlineWidth1,
+            OutlineColor1,
+            radians(Rotation1),
+            Anchor1
+        );
+    }
+    return color;
 }
 
 technique CustomCrosshair {
