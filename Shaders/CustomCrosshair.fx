@@ -254,43 +254,33 @@ Show Detector (red border = no match; green border = match)
 Invert Detector
 */
 
-float4 DrawRect(float4 baseColor, float4 basePos, float2 rectPos, float2 rectSize, float4 rectColor, float outlineWidth, float4 outlineColor, float rotation, int anchor) {
-    float2 anchorOffset = float2(0, 0);
-    
+float2 GetAnchorOffset(int anchor) {
     switch (anchor) {
         default:
         case 0: // Top Left
-            break;
+            return float2(0,0);
         case 1: // Top Center
-            anchorOffset.x = 0.5;
-            break;
+            return float2(0.5,0);
         case 2: // Top Right
-            anchorOffset.x = 1.0;
-            break;
+            return float2(1.0,0);
         case 3: // Center Left
-            anchorOffset.y = 0.5;
-            break;
+            return float2(0,0.5);
         case 4: // Center
-            anchorOffset.x = 0.5;
-            anchorOffset.y = 0.5;
-            break;
+            return float2(0.5,0.5);
         case 5: // Center Right
-            anchorOffset.x = 1.0;
-            anchorOffset.y = 0.5;
-            break;
+            return float2(1.0,0.5);
         case 6: // Bottom Left
-            anchorOffset.y = 1.0;
-            break;
+            return float2(0,1.0);
         case 7: // Bottom Center
-            anchorOffset.x = 0.5;
-            anchorOffset.y = 1.0;
-            break;
+            return float2(0.5,1.0);
         case 8: //Bottom Right
-            anchorOffset.x = 1.0;
-            anchorOffset.y = 1.0;
-            break;
+            return float2(1.0,1.0);
     }
+}
 
+float4 DrawRect(float4 baseColor, float4 basePos, float2 rectPos, float2 rectSize, float4 rectColor, float outlineWidth, float4 outlineColor, float rotation, int anchor) {
+    const float2 anchorOffset = GetAnchorOffset(anchor);
+    
     const float2 rotatedPos = float2((basePos.x - rectPos.x) * cos(-rotation) - (basePos.y - rectPos.y) * sin(-rotation) + rectPos.x, (basePos.x - rectPos.x) * sin(-rotation) + (basePos.y - rectPos.y) * cos(-rotation) + rectPos.y);
     const float2 fillStartPos = rectPos - rectSize * anchorOffset;
     const float2 fillEndPos = rectPos + rectSize * (float2(1,1) - anchorOffset);
