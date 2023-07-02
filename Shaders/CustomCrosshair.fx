@@ -1,6 +1,6 @@
 #include "ReShadeUI.fxh";
 
-// Main Settings
+// Main
 
 uniform float2 Offset <
     ui_type = "drag";
@@ -27,11 +27,20 @@ uniform bool FollowCursor <
 
 uniform float2 MousePoint < source = "mousepoint"; >;
 
+// Debug
+
 uniform bool ShowDebug <
     ui_label = "Show Debug";
     ui_tooltip = "Render only crosshair.";
-    ui_category = "Main";
+    ui_category = "Debug";
+    ui_category_closed = true;
 > = false;
+
+uniform float4 DebugColor <
+    ui_type = "color";
+    ui_label = "Debug Color";
+    ui_category = "Debug";
+> = float4(1, 1, 1, 0f);
 
 // Shape 1
 
@@ -174,54 +183,128 @@ float2 GetAnchorOffset(int anchor) {
     }
 }
 
-// float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float outlineWidth, float4 outlineColor, float rotation, int anchor) {
-
-// }
-
-float4 DrawRect(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float outlineWidth, float4 outlineColor, float rotation, int anchor) {
-    const float2 anchorOffset = GetAnchorOffset(anchor);
-    
-    const float2 rotatedPos = float2((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y);
+float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineSize, float4 outlineColor, float2 anchorOffset) {
     const float2 fillStartPos = fillPos - fillSize * anchorOffset;
     const float2 fillEndPos = fillPos + fillSize * (float2(1, 1) - anchorOffset);
-    if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) {
-        return lerp(baseColor, fillColor, fillColor.a);
-    }
+    const float2 gapStartPos = fillPos - gapSize * anchorOffset;
+    const float2 gapEndPos = fillPos + gapSize * (float2(1, 1) - anchorOffset);
+    if (basePos.x >= fillStartPos.x && basePos.x < fillEndPos.x && basePos.y >= fillStartPos.y && basePos.y < fillEndPos.y)
+        if (gapSize.x == 0 || gapSize.y == 0 || basePos.x < gapStartPos.x || basePos.x >= gapEndPos.x || basePos.y < gapStartPos.y || basePos.y >= gapEndPos.y)
+            return lerp(baseColor, fillColor, fillColor.a);
     
-    const float2 outlineStartPos = fillPos - fillSize * anchorOffset - outlineWidth;
-    const float2 outlineEndPos = fillPos + fillSize * (float2(1, 1) - anchorOffset) + outlineWidth;
-    if (rotatedPos.x >= outlineStartPos.x && rotatedPos.x < outlineEndPos.x && rotatedPos.y >= outlineStartPos.y && rotatedPos.y < outlineEndPos.y) {
-        return lerp(baseColor, outlineColor, outlineColor.a);
-    }
+    if (basePos.x >= fillStartPos.x - outlineSize && basePos.x < fillEndPos.x + outlineSize && basePos.y >= fillStartPos.y - outlineSize && basePos.y < fillEndPos.y + outlineSize)
+        if (gapSize.x == 0 || gapSize.y == 0 || basePos.x < gapStartPos.x + outlineSize || basePos.x >= gapEndPos.x - outlineSize || basePos.y < gapStartPos.y + outlineSize || basePos.y >= gapEndPos.y - outlineSize)
+            return lerp(baseColor, outlineColor, outlineColor.a);
 
     return baseColor;
 }
 
-float4 DrawEllipse(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineWidth, float4 outlineColor, float rotation, int anchor, float2 section) {
-    const float2 anchorOffset = GetAnchorOffset(anchor);
-    const float2 rotatedPos = float2((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y);
-    const float2 centeredPos = float2(rotatedPos.x - fillPos.x - fillSize.x * (0.5f - anchorOffset.x), rotatedPos.y  - fillPos.y - fillSize.y * (0.5f - anchorOffset.y));
+float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineSize, float4 outlineColor, float2 anchorOffset, float2 section) {
+    const float2 centeredPos = float2(basePos.x - fillPos.x - fillSize.x * (0.5f - anchorOffset.x), basePos.y  - fillPos.y - fillSize.y * (0.5f - anchorOffset.y));
     const float centeredAngle = degrees(atan2(centeredPos.y, centeredPos.x)) + 180.0f;
-    
     if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0f, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0f, 2) <= 1)
         if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0f, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0f, 2) > 1)
             if (centeredAngle >= section.x && (centeredAngle < section.y || section.y == 360))
                 return lerp(baseColor, fillColor, fillColor.a);
     
     const float outlinedDist = distance(centeredPos, float2(0, 0));
-    const float outlinedAngle = degrees(atan(outlineWidth / outlinedDist));
-    if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0f + outlineWidth, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0f + outlineWidth, 2) <= 1)
-        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0f - outlineWidth, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0f - outlineWidth, 2) > 1)
-            if (outlinedDist < outlineWidth || (centeredAngle >= section.x - outlinedAngle || centeredAngle < section.y - 360.0f + outlinedAngle) && (centeredAngle < section.y + outlinedAngle || centeredAngle >= 360.0f + section.x - outlinedAngle))
+    const float outlinedAngle = degrees(atan(outlineSize / outlinedDist));
+    if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0f + outlineSize, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0f + outlineSize, 2) <= 1)
+        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0f - outlineSize, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0f - outlineSize, 2) > 1)
+            if (outlinedDist < outlineSize || (centeredAngle >= section.x - outlinedAngle || centeredAngle < section.y - 360.0f + outlinedAngle) && (centeredAngle < section.y + outlinedAngle || centeredAngle >= 360.0f + section.x - outlinedAngle))
                 return lerp(baseColor, outlineColor, outlineColor.a);
 
     return baseColor;
 }
 
+float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineSize, float4 outlineColor, float2 anchorOffset) {
+    const float2 center = float2(fillPos.x + fillSize.x * (0.5f - anchorOffset.x), fillPos.y - fillSize.y * anchorOffset.y + fillSize.y * 2.0 / 3.0);
+
+    const float2 A = float2 (center.x - fillSize.x / 2.0, center.y + fillSize.y / 3.0);
+    const float2 B = float2 (center.x, center.y - fillSize.y * 2.0 / 3.0);
+    const float2 C = float2 (center.x + fillSize.x / 2.0, center.y + fillSize.y / 3.0);
+    
+    const float2 AP = basePos - A;
+    const float2 BP = basePos - B;
+    const float2 CP = basePos - C;
+
+    const float2 AB = B - A;
+    const float2 BC = C - B;
+    const float2 CA = A - C;
+
+    const float2 D = float2 (center.x - gapSize.x / 2.0, center.y + gapSize.y / 3.0);
+    const float2 E = float2 (center.x, center.y - gapSize.y * 2.0 / 3.0);
+    const float2 F = float2 (center.x + gapSize.x / 2.0, center.y + gapSize.y / 3.0);
+    
+    const float2 DP = basePos - D;
+    const float2 EP = basePos - E;
+    const float2 FP = basePos - F;
+
+    const float2 DE = E - D;
+    const float2 EF = F - E;
+    const float2 FD = D - F;
+
+    if ((AB.x * AP.y - AB.y * AP.x > 0) == (BC.x * BP.y - BC.y * BP.x > 0) && (AB.x * AP.y - AB.y * AP.x > 0) == (CA.x * CP.y - CA.y * CP.x > 0))
+        if (gapSize.x == 0 || gapSize.y == 0 || !((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0)))
+            return lerp(baseColor, fillColor, fillColor.a);
+
+    const float2 H = A + outlineSize * float2(-3, 1);
+    const float2 I = B + outlineSize * float2(0, -2);
+    const float2 J = C + outlineSize * float2(3, 1);
+    
+    const float2 HP = basePos - H;
+    const float2 IP = basePos - I;
+    const float2 JP = basePos - J;
+
+    const float2 HI = I - H;
+    const float2 IJ = J - I;
+    const float2 JH = H - J;
+
+    const float2 K = D - outlineSize * float2(-3, 1);
+    const float2 L = E - outlineSize * float2(0, -2);
+    const float2 M = F - outlineSize * float2(3, 1);
+    
+    const float2 KP = basePos - K;
+    const float2 LP = basePos - L;
+    const float2 MP = basePos - M;
+
+    const float2 KL = L - K;
+    const float2 LM = M - L;
+    const float2 MK = K - M;
+    
+    if ((HI.x * HP.y - HI.y * HP.x > 0) == (IJ.x * IP.y - IJ.y * IP.x > 0) && (HI.x * HP.y - HI.y * HP.x > 0) == (JH.x * JP.y - JH.y * JP.x > 0))
+        if (gapSize.x == 0 || gapSize.y == 0 || !((KL.x * KP.y - KL.y * KP.x > 0) == (LM.x * LP.y - LM.y * LP.x > 0) && (KL.x * KP.y - KL.y * KP.x > 0) == (MK.x * MP.y - MK.y * MP.x > 0)))
+            return lerp(baseColor, outlineColor, outlineColor.a);
+
+    return baseColor;
+
+}
+
+float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineSize, float4 outlineColor, float rotation, int anchor, float2 section) {
+    rotation = radians(rotation);
+    const float2 anchorOffset = GetAnchorOffset(anchor);
+    const float2 rotatedPos = float2((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y);
+    switch (shape) {
+        case 0:
+        default:
+            return baseColor;
+        case 1:
+            return DrawRectangle(baseColor, rotatedPos, fillPos, fillSize, fillColor, gapSize, outlineSize, outlineColor, anchorOffset);
+        case 2:
+            return DrawEllipse(baseColor, rotatedPos, fillPos, fillSize, fillColor, gapSize, outlineSize, outlineColor, anchorOffset, section);
+        case 3:
+            return DrawTriangle(baseColor, rotatedPos, fillPos, fillSize, fillColor, gapSize, outlineSize, outlineColor, anchorOffset);
+    }
+}
+
 float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
     if (UseAntialiasing) discard;
-    float4 color = float4(1, 1, 1, 0);
-    color = DrawEllipse(
+    
+    float4 color = float4(0,0,0,0);
+    if (ShowDebug) color = DebugColor;
+
+    color = DrawShape(
+        Shape1,
         color,
         pos + 0.5f,
         float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f) + Offset + Offset1,
@@ -230,7 +313,7 @@ float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : 
         GapSize1,
         OutlineSize1,
         OutlineColor1,
-        radians(Rotation1),
+        Rotation1,
         Anchor1,
         Section1
     );
@@ -239,8 +322,12 @@ float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : 
 
 float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
     if (!UseAntialiasing) discard;
-    float4 color = float4(1, 1, 1, 0);
-    color = DrawEllipse(
+    
+    float4 color = float4(0,0,0,0);
+    if (ShowDebug) color = DebugColor;
+    
+    color = DrawShape(
+        Shape1,
         color,
         pos + 0.5f,
         float2(BUFFER_WIDTH, BUFFER_HEIGHT) + Offset * 2.0f + Offset1 * 2.0f,
@@ -249,7 +336,7 @@ float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD
         GapSize1 * 2.0f,
         OutlineSize1 * 2.0f,
         OutlineColor1,
-        radians(Rotation1),
+        Rotation1,
         Anchor1,
         Section1
     );
