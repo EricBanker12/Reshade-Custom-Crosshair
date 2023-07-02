@@ -65,6 +65,25 @@ uniform float4 Color1 <
     ui_category = "Shape 1";
 > = float4(0,1,0,0.9);
 
+uniform float GapWidth1 <
+    ui_type = "slider";
+    ui_label = "Gap Width";
+    ui_min = 0;
+    ui_max = 1000;
+    ui_step = 1.0;
+    ui_category = "Shape 1";
+    ui_spacing = 2;
+> = 0;
+
+uniform float GapHeight1 <
+    ui_type = "slider";
+    ui_label = "Gap Height";
+    ui_min = 0;
+    ui_max = 1000;
+    ui_category = "Shape 1";
+    ui_step = 1.0;
+> = 0;
+
 uniform float OutlineWidth1 <
     ui_type = "slider";
     ui_label = "Outline Width";
@@ -309,19 +328,21 @@ float4 DrawRect(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSiz
     return baseColor;
 }
 
-float4 DrawEllipse(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float outlineWidth, float4 outlineColor, float rotation, int anchor, float2 section) {
+float4 DrawEllipse(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineWidth, float4 outlineColor, float rotation, int anchor, float2 section) {
     const float2 anchorOffset = GetAnchorOffset(anchor);
     const float2 rotatedPos = float2((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y);
     const float2 centeredPos = float2(rotatedPos.x - fillPos.x - fillSize.x * (0.5 - anchorOffset.x), rotatedPos.y  - fillPos.y - fillSize.y * (0.5 - anchorOffset.y));
     const float centeredAngle = degrees(atan2(centeredPos.y, centeredPos.x)) + 180.0;
     
     if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0, 2) <= 1)
-        if (centeredAngle >= section.x && centeredAngle <= section.y)
-            return lerp(baseColor, fillColor, fillColor.a);
+        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0, 2) > 1)
+            if (centeredAngle >= section.x && (centeredAngle < section.y || section.y == 360))
+                return lerp(baseColor, fillColor, fillColor.a);
     
     if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0 + outlineWidth, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0 + outlineWidth, 2) <= 1)
-        if (centeredAngle >= section.x && centeredAngle <= section.y)
-            return lerp(baseColor, outlineColor, outlineColor.a);
+        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0 - outlineWidth, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0 - outlineWidth, 2) > 1)
+            if (centeredAngle >= section.x && centeredAngle < section.y || section.y == 360)
+                return lerp(baseColor, outlineColor, outlineColor.a);
 
     return baseColor;
 }
@@ -335,6 +356,7 @@ float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : 
         float2(BUFFER_WIDTH / 2.0, BUFFER_HEIGHT / 2.0) + float2(HorizontalOffset, VerticalOffset) + float2(HorizontalOffset1, VerticalOffset1),
         float2(Width1, Height1),
         Color1,
+        float2(GapWidth1, GapHeight1),
         OutlineWidth1,
         OutlineColor1,
         radians(Rotation1),
