@@ -1,34 +1,37 @@
 #include "ReShadeUI.fxh";
 
-uniform float HorizontalOffset <
-    ui_type = "slider";
-	ui_min = BUFFER_WIDTH / -2.0f;
-    ui_max = BUFFER_WIDTH / 2.0f;
-    ui_step = 1.0f;
-    ui_label = "X Offset";
-	ui_tooltip = "Horizontal offset for the crosshair relative to the window center or mouse cursor.";
-> = float(0);
+// Main Settings
 
-uniform float VerticalOffset <
-    ui_type = "slider";
-	ui_min = BUFFER_HEIGHT / -2.0f;
-    ui_max = BUFFER_HEIGHT / 2.0f;
+uniform float2 Offset <
+    ui_type = "drag";
+	ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+    ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
     ui_step = 1.0f;
-    ui_label = "Y Offset";
-	ui_tooltip = "Vertical offset for the crosshair relative to the window center or mouse cursor.";
-> = float(0);
+    ui_label = "Offset";
+	ui_tooltip = "Horizontal and Vertical offset for the crosshair relative to the window center or mouse cursor.";
+    ui_category = "Main";
+    ui_category_closed = false;
+> = float2(0, 0);
 
 uniform bool UseAntialiasing <
     ui_label = "Use Antialiasing";
-    ui_tooltip = "Applies low preset SMAA.";
+    ui_tooltip = "Applies 4x SSAA.";
+    ui_category = "Main";
 > = false;
 
 uniform bool FollowCursor <
     ui_label = "Follow Cursor";
     ui_tooltip = "Apply crosshair relative to mouse cursor instead of the window center.";
+    ui_category = "Main";
 > = false;
 
 uniform float2 MousePoint < source = "mousepoint"; >;
+
+uniform bool ShowDebug <
+    ui_label = "Show Debug";
+    ui_tooltip = "Render only crosshair.";
+    ui_category = "Main";
+> = false;
 
 // Shape 1
 
@@ -40,59 +43,40 @@ uniform int Shape1 <
     ui_category_closed = true;
 > = 1;
 
-uniform float Width1 <
-    ui_type = "slider";
-    ui_label = "Fill Width";
+uniform float2 FillSize1 <
+    ui_type = "drag";
+    ui_label = "Fill Size";
     ui_min = 0;
     ui_max = 1000;
     ui_step = 1.0f;
     ui_category = "Shape 1";
     ui_spacing = 2;
-> = 20;
+> = float2(20,3);
 
-uniform float Height1 <
-    ui_type = "slider";
-    ui_label = "Fill Height";
-    ui_min = 0;
-    ui_max = 1000;
-    ui_category = "Shape 1";
-    ui_step = 1.0f;
-> = 3;
-
-uniform float4 Color1 <
-    ui_type = "color";
-    ui_label = "Fill Color";
-    ui_category = "Shape 1";
-> = float4(0, 1, 0, 0.9f);
-
-uniform float GapWidth1 <
-    ui_type = "slider";
-    ui_label = "Gap Width";
+uniform float2 GapSize1 <
+    ui_type = "drag";
+    ui_label = "Gap Size";
     ui_min = 0;
     ui_max = 1000;
     ui_step = 1.0f;
     ui_category = "Shape 1";
-    ui_spacing = 2;
-> = 0;
+> = float2(0,0);
 
-uniform float GapHeight1 <
-    ui_type = "slider";
-    ui_label = "Gap Height";
-    ui_min = 0;
-    ui_max = 1000;
-    ui_category = "Shape 1";
-    ui_step = 1.0f;
-> = 0;
-
-uniform float OutlineWidth1 <
-    ui_type = "slider";
-    ui_label = "Outline Width";
+uniform float OutlineSize1 <
+    ui_type = "drag";
+    ui_label = "Outline Size";
     ui_min = 0;
     ui_max = 200.0f;
     ui_step = 1.0f;
     ui_category = "Shape 1";
-    ui_spacing = 2;
 > = 1;
+
+uniform float4 FillColor1 <
+    ui_type = "color";
+    ui_label = "Fill Color";
+    ui_category = "Shape 1";
+    ui_spacing = 2;
+> = float4(0, 1, 0, 0.9f);
 
 uniform float4 OutlineColor1 <
     ui_type = "color";
@@ -108,26 +92,19 @@ uniform int Anchor1 <
     ui_spacing = 2;
 > = 3;
 
-uniform float HorizontalOffset1 <
-    ui_type = "slider";
-    ui_label = "X Offset";
-    ui_min = BUFFER_WIDTH / -2.0f;
-    ui_max = BUFFER_WIDTH / 2.0f;
+uniform float2 Offset1 <
+    ui_type = "drag";
+	ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+    ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
     ui_step = 1.0f;
+    ui_label = "Offset";
+	ui_tooltip = "Horizontal and Vertical offset for the crosshair relative to the window center or mouse cursor.";
     ui_category = "Shape 1";
-> = 5;
-
-uniform float VerticalOffset1 <
-    ui_type = "slider";
-    ui_label = "Y Offset";
-    ui_min = BUFFER_HEIGHT / -2.0f;
-    ui_max = BUFFER_HEIGHT / 2.0f;
-    ui_step = 1.0f;
-    ui_category = "Shape 1";
-> = 0;
+    ui_category_closed = false;
+> = float2(5, 0);
 
 uniform float Rotation1 <
-    ui_type = "slider";
+    ui_type = "drag";
     ui_label = "Rotation";
     ui_min = 0;
     ui_max = 360;
@@ -135,145 +112,27 @@ uniform float Rotation1 <
     ui_category = "Shape 1";
 > = 0;
 
-// uniform float Skew1 <
-//     ui_type = "slider";
-//     ui_label = "Skew";
-//     ui_tooltip = "This only applies to Triangles.";
-//     ui_min = -500;
-//     ui_max = 500;
-//     ui_step = 1.0f;
-//     ui_category = "Shape 1";
-//     ui_spacing = 2;
-// > = 0;
-
-uniform float SectionStart1 <
-    ui_type = "slider";
-    ui_label = "Section Start";
-    ui_tooltip = "This only applies to Ellipses.";
+uniform float2 Section1 <
+    ui_type = "drag";
+    ui_label = "Section";
+    ui_tooltip = "The section of an Ellipse to render in degrees.";
     ui_min = 0;
     ui_max = 360;
     ui_step = 1.0f;
     ui_category = "Shape 1";
-> = 0;
-
-uniform float SectionEnd1 <
-    ui_type = "slider";
-    ui_label = "Section End";
-    ui_tooltip = "This only applies to Ellipses.";
-    ui_min = 0;
-    ui_max = 360;
-    ui_step = 1.0f;
-    ui_category = "Shape 1";
-> = 360;
+> = float2(0,360);
 
 // uniform float2 MouseDelta < source = "mousedelta"; >;
 // uniform float FrameTime < source = "frametime"; >;
 // uniform bool SpaceBar <source = "key"; keycode = 0x20; mode = ""; >;
 
-// SMAA
+texture overlayTarget < pooled = true; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+sampler overlaySampler { Texture = overlayTarget;};
 
-#define SMAA_RT_METRICS float4(BUFFER_RCP_WIDTH, BUFFER_RCP_HEIGHT, BUFFER_WIDTH, BUFFER_HEIGHT)
-#define SMAA_PRESET_LOW
-#define SMAA_HLSL_3
+texture overlayTargetSSAA < pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
+sampler overlaySamplerSSAA { Texture = overlayTargetSSAA;};
 
 #include "ReShade.fxh";
-#include "SMAA.fxh";
-
-// smaa textures
-
-texture edgesTex < pooled = true; > {
-	Width = BUFFER_WIDTH;
-	Height = BUFFER_HEIGHT;
-	Format = RG8;
-};
-texture blendTex < pooled = true; > {
-	Width = BUFFER_WIDTH;
-	Height = BUFFER_HEIGHT;
-	Format = RGBA8;
-};
-texture areaTex < source = "AreaTex.png"; > {
-	Width = 160;
-	Height = 560;
-	Format = RG8;
-};
-texture searchTex < source = "SearchTex.png"; > {
-	Width = 64;
-	Height = 16;
-	Format = R8;
-};
-
-// smaa samplers
-
-sampler colorGammaSampler {
-	Texture = ReShade::BackBufferTex;
-	AddressU = Clamp; AddressV = Clamp;
-	MipFilter = Point; MinFilter = Linear; MagFilter = Linear;
-	SRGBTexture = false;
-};
-sampler colorLinearSampler {
-	Texture = ReShade::BackBufferTex;
-	AddressU = Clamp; AddressV = Clamp;
-	MipFilter = Point; MinFilter = Linear; MagFilter = Linear;
-	SRGBTexture = true;
-};
-sampler edgesSampler {
-	Texture = edgesTex;
-	AddressU = Clamp; AddressV = Clamp;
-	MipFilter = Linear; MinFilter = Linear; MagFilter = Linear;
-	SRGBTexture = false;
-};
-sampler blendSampler {
-	Texture = blendTex;
-	AddressU = Clamp; AddressV = Clamp;
-	MipFilter = Linear; MinFilter = Linear; MagFilter = Linear;
-	SRGBTexture = false;
-};
-sampler areaSampler {
-	Texture = areaTex;
-	AddressU = Clamp; AddressV = Clamp; AddressW = Clamp;
-	MipFilter = Linear; MinFilter = Linear; MagFilter = Linear;
-	SRGBTexture = false;
-};
-sampler searchSampler {
-	Texture = searchTex;
-	AddressU = Clamp; AddressV = Clamp; AddressW = Clamp;
-	MipFilter = Point; MinFilter = Point; MagFilter = Point;
-	SRGBTexture = false;
-};
-
-// smaa vertex shaders
-
-void SMAAEdgeDetectionWrapVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD0, out float4 offset[3] : TEXCOORD1) {
-    if (!UseAntialiasing) discard;
-	PostProcessVS(id, position, texcoord);
-    SMAAEdgeDetectionVS(texcoord, offset);
-}
-void SMAABlendingWeightCalculationWrapVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD0, out float2 pixcoord : TEXCOORD1, out float4 offset[3] : TEXCOORD2) {
-    if (!UseAntialiasing) discard;
-	PostProcessVS(id, position, texcoord);
-	SMAABlendingWeightCalculationVS(texcoord, pixcoord, offset);
-}
-void SMAANeighborhoodBlendingWrapVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD0, out float4 offset : TEXCOORD1) {
-    if (!UseAntialiasing) discard;
-	PostProcessVS(id, position, texcoord);
-	SMAANeighborhoodBlendingVS(texcoord, offset);
-}
-
-// smaa pixel shaders
-
-float2 SMAAEdgeDetectionWrapPS(float4 position : SV_Position, float2 texcoord : TEXCOORD0, float4 offset[3] : TEXCOORD1) : SV_Target {
-        if (!UseAntialiasing) discard;
-        return SMAAColorEdgeDetectionPS(texcoord, offset, colorGammaSampler);
-}
-float4 SMAABlendingWeightCalculationWrapPS(float4 position : SV_Position, float2 texcoord : TEXCOORD0, float2 pixcoord : TEXCOORD1, float4 offset[3] : TEXCOORD2) : SV_Target {
-    if (!UseAntialiasing) discard;
-	return SMAABlendingWeightCalculationPS(texcoord, pixcoord, offset, edgesSampler, areaSampler, searchSampler, 0.0f);
-}
-
-float3 SMAANeighborhoodBlendingWrapPS(float4 position : SV_Position, float2 texcoord : TEXCOORD0, float4 offset : TEXCOORD1) : SV_Target {
-    if (!UseAntialiasing) discard;
-	return SMAANeighborhoodBlendingPS(texcoord, -offset, colorLinearSampler, blendSampler).rgb;
-}
 
 /*
 To Do:
@@ -360,53 +219,75 @@ float4 DrawEllipse(float4 baseColor, float4 basePos, float2 fillPos, float2 fill
 }
 
 float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-    // Draw a rectangle in the middle of the screen
-    float4 color = tex2D(ReShade::BackBuffer, texCoord);
+    if (UseAntialiasing) discard;
+    float4 color = float4(1, 1, 1, 0);
     color = DrawEllipse(
         color,
         pos + 0.5f,
-        float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f) + float2(HorizontalOffset, VerticalOffset) + float2(HorizontalOffset1, VerticalOffset1),
-        float2(Width1, Height1),
-        Color1,
-        float2(GapWidth1, GapHeight1),
-        OutlineWidth1,
+        float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f) + Offset + Offset1,
+        FillSize1,
+        FillColor1,
+        GapSize1,
+        OutlineSize1,
         OutlineColor1,
         radians(Rotation1),
         Anchor1,
-        float2(SectionStart1, SectionEnd1)
+        Section1
     );
     return color;
 }
 
+float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    if (!UseAntialiasing) discard;
+    float4 color = float4(1, 1, 1, 0);
+    color = DrawEllipse(
+        color,
+        pos + 0.5f,
+        float2(BUFFER_WIDTH, BUFFER_HEIGHT) + Offset * 2.0f + Offset1 * 2.0f,
+        FillSize1 * 2.0f,
+        FillColor1,
+        GapSize1 * 2.0f,
+        OutlineSize1 * 2.0f,
+        OutlineColor1,
+        radians(Rotation1),
+        Anchor1,
+        Section1
+    );
+    return color;
+}
+
+float4 PS_final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    // Draw a rectangle in the middle of the screen
+    const float4 color = tex2D(ReShade::BackBuffer, texCoord);
+    if (!UseAntialiasing) {
+        const float4 overlay = tex2D(overlaySampler, texCoord);
+        if (ShowDebug) return overlay;
+        return lerp(color, overlay, overlay.a);
+    }
+    else {
+        const float4 overlay1 = tex2D(overlaySamplerSSAA, texCoord);
+        const float4 overlay2 = tex2D(overlaySamplerSSAA, texCoord + BUFFER_PIXEL_SIZE * float2(1,0));
+        const float4 overlay3 = tex2D(overlaySamplerSSAA, texCoord + BUFFER_PIXEL_SIZE * float2(0,1));
+        const float4 overlay4 = tex2D(overlaySamplerSSAA, texCoord + BUFFER_PIXEL_SIZE * float2(1,1));
+        const float4 overlayAvg = (overlay1 + overlay2 + overlay3 + overlay4) / 4;
+        if (ShowDebug) return overlayAvg;
+        return lerp(color, overlayAvg, overlayAvg.a);
+    }
+}
+
 technique CustomCrosshair {
-    pass CustomCrosshair {
+    pass overlay {
         VertexShader = PostProcessVS;
         PixelShader = PS_CustomCrosshair;
+        RenderTarget = overlayTarget;
     }
-    // SMAA passes
-    pass EdgeDetectionPass {
-        VertexShader = SMAAEdgeDetectionWrapVS;
-        PixelShader = SMAAEdgeDetectionWrapPS;
-        RenderTarget = edgesTex;
-        ClearRenderTargets = true;
-        StencilEnable = true;
-        StencilPass = REPLACE;
-        StencilRef = 1;
+    pass overlaySSAA {
+        VertexShader = PostProcessVS;
+        PixelShader = PS_CustomCrosshairSSAA;
+        RenderTarget = overlayTargetSSAA;
     }
-    pass BlendWeightCalculationPass {
-        VertexShader = SMAABlendingWeightCalculationWrapVS;
-        PixelShader = SMAABlendingWeightCalculationWrapPS;
-        RenderTarget = blendTex;
-        ClearRenderTargets = true;
-        StencilEnable = true;
-        StencilPass = KEEP;
-        StencilFunc = EQUAL;
-        StencilRef = 1;
-    }
-    pass NeighborhoodBlendingPass {
-        VertexShader = SMAANeighborhoodBlendingWrapVS;
-        PixelShader = SMAANeighborhoodBlendingWrapPS;
-        StencilEnable = false;
-        SRGBWriteEnable = true;
+    pass final {
+        VertexShader = PostProcessVS;
+        PixelShader = PS_final;
     }
 }
