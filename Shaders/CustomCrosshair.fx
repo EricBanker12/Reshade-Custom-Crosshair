@@ -2,18 +2,18 @@
 
 uniform float HorizontalOffset <
     ui_type = "slider";
-	ui_min = BUFFER_WIDTH / -2.0;
-    ui_max = BUFFER_WIDTH / 2.0;
-    ui_step = 1.0;
+	ui_min = BUFFER_WIDTH / -2.0f;
+    ui_max = BUFFER_WIDTH / 2.0f;
+    ui_step = 1.0f;
     ui_label = "X Offset";
 	ui_tooltip = "Horizontal offset for the crosshair relative to the window center or mouse cursor.";
 > = float(0);
 
 uniform float VerticalOffset <
     ui_type = "slider";
-	ui_min = BUFFER_HEIGHT / -2.0;
-    ui_max = BUFFER_HEIGHT / 2.0;
-    ui_step = 1.0;
+	ui_min = BUFFER_HEIGHT / -2.0f;
+    ui_max = BUFFER_HEIGHT / 2.0f;
+    ui_step = 1.0f;
     ui_label = "Y Offset";
 	ui_tooltip = "Vertical offset for the crosshair relative to the window center or mouse cursor.";
 > = float(0);
@@ -45,7 +45,7 @@ uniform float Width1 <
     ui_label = "Fill Width";
     ui_min = 0;
     ui_max = 1000;
-    ui_step = 1.0;
+    ui_step = 1.0f;
     ui_category = "Shape 1";
     ui_spacing = 2;
 > = 20;
@@ -56,21 +56,21 @@ uniform float Height1 <
     ui_min = 0;
     ui_max = 1000;
     ui_category = "Shape 1";
-    ui_step = 1.0;
+    ui_step = 1.0f;
 > = 3;
 
 uniform float4 Color1 <
     ui_type = "color";
     ui_label = "Fill Color";
     ui_category = "Shape 1";
-> = float4(0,1,0,0.9);
+> = float4(0, 1, 0, 0.9f);
 
 uniform float GapWidth1 <
     ui_type = "slider";
     ui_label = "Gap Width";
     ui_min = 0;
     ui_max = 1000;
-    ui_step = 1.0;
+    ui_step = 1.0f;
     ui_category = "Shape 1";
     ui_spacing = 2;
 > = 0;
@@ -81,15 +81,15 @@ uniform float GapHeight1 <
     ui_min = 0;
     ui_max = 1000;
     ui_category = "Shape 1";
-    ui_step = 1.0;
+    ui_step = 1.0f;
 > = 0;
 
 uniform float OutlineWidth1 <
     ui_type = "slider";
     ui_label = "Outline Width";
     ui_min = 0;
-    ui_max = 200.0;
-    ui_step = 1.0;
+    ui_max = 200.0f;
+    ui_step = 1.0f;
     ui_category = "Shape 1";
     ui_spacing = 2;
 > = 1;
@@ -98,7 +98,7 @@ uniform float4 OutlineColor1 <
     ui_type = "color";
     ui_label = "Outline Color";
     ui_category = "Shape 1";
-> = float4(0,0,0,0.9);
+> = float4(0, 0, 0, 0.9f);
 
 uniform int Anchor1 <
     ui_type = "combo";
@@ -111,18 +111,18 @@ uniform int Anchor1 <
 uniform float HorizontalOffset1 <
     ui_type = "slider";
     ui_label = "X Offset";
-    ui_min = BUFFER_WIDTH / -2.0;
-    ui_max = BUFFER_WIDTH / 2.0;
-    ui_step = 1.0;
+    ui_min = BUFFER_WIDTH / -2.0f;
+    ui_max = BUFFER_WIDTH / 2.0f;
+    ui_step = 1.0f;
     ui_category = "Shape 1";
 > = 5;
 
 uniform float VerticalOffset1 <
     ui_type = "slider";
     ui_label = "Y Offset";
-    ui_min = BUFFER_HEIGHT / -2.0;
-    ui_max = BUFFER_HEIGHT / 2.0;
-    ui_step = 1.0;
+    ui_min = BUFFER_HEIGHT / -2.0f;
+    ui_max = BUFFER_HEIGHT / 2.0f;
+    ui_step = 1.0f;
     ui_category = "Shape 1";
 > = 0;
 
@@ -131,7 +131,7 @@ uniform float Rotation1 <
     ui_label = "Rotation";
     ui_min = 0;
     ui_max = 360;
-    ui_step = 1.0;
+    ui_step = 1.0f;
     ui_category = "Shape 1";
 > = 0;
 
@@ -141,20 +141,30 @@ uniform float Rotation1 <
 //     ui_tooltip = "This only applies to Triangles.";
 //     ui_min = -500;
 //     ui_max = 500;
-//     ui_step = 1.0;
+//     ui_step = 1.0f;
 //     ui_category = "Shape 1";
 //     ui_spacing = 2;
 // > = 0;
 
-uniform float2 Section1 <
+uniform float SectionStart1 <
     ui_type = "slider";
-    ui_label = "Section";
+    ui_label = "Section Start";
     ui_tooltip = "This only applies to Ellipses.";
     ui_min = 0;
     ui_max = 360;
-    ui_step = 1.0;
+    ui_step = 1.0f;
     ui_category = "Shape 1";
-> = float2(0,360);
+> = 0;
+
+uniform float SectionEnd1 <
+    ui_type = "slider";
+    ui_label = "Section End";
+    ui_tooltip = "This only applies to Ellipses.";
+    ui_min = 0;
+    ui_max = 360;
+    ui_step = 1.0f;
+    ui_category = "Shape 1";
+> = 360;
 
 // uniform float2 MouseDelta < source = "mousedelta"; >;
 // uniform float FrameTime < source = "frametime"; >;
@@ -257,7 +267,7 @@ float2 SMAAEdgeDetectionWrapPS(float4 position : SV_Position, float2 texcoord : 
 }
 float4 SMAABlendingWeightCalculationWrapPS(float4 position : SV_Position, float2 texcoord : TEXCOORD0, float2 pixcoord : TEXCOORD1, float4 offset[3] : TEXCOORD2) : SV_Target {
     if (!UseAntialiasing) discard;
-	return SMAABlendingWeightCalculationPS(texcoord, pixcoord, offset, edgesSampler, areaSampler, searchSampler, 0.0);
+	return SMAABlendingWeightCalculationPS(texcoord, pixcoord, offset, edgesSampler, areaSampler, searchSampler, 0.0f);
 }
 
 float3 SMAANeighborhoodBlendingWrapPS(float4 position : SV_Position, float2 texcoord : TEXCOORD0, float4 offset : TEXCOORD1) : SV_Target {
@@ -285,23 +295,23 @@ float2 GetAnchorOffset(int anchor) {
     switch (anchor) {
         default:
         case 0: // Top Left
-            return float2(0,0);
+            return float2(0, 0);
         case 1: // Top Center
-            return float2(0.5,0);
+            return float2(0.5f, 0);
         case 2: // Top Right
-            return float2(1.0,0);
+            return float2(1.0f, 0);
         case 3: // Center Left
-            return float2(0,0.5);
+            return float2(0, 0.5f);
         case 4: // Center
-            return float2(0.5,0.5);
+            return float2(0.5f, 0.5f);
         case 5: // Center Right
-            return float2(1.0,0.5);
+            return float2(1.0f, 0.5f);
         case 6: // Bottom Left
-            return float2(0,1.0);
+            return float2(0, 1.0f);
         case 7: // Bottom Center
-            return float2(0.5,1.0);
+            return float2(0.5f, 1.0f);
         case 8: //Bottom Right
-            return float2(1.0,1.0);
+            return float2(1.0f, 1.0f);
     }
 }
 
@@ -314,13 +324,13 @@ float4 DrawRect(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSiz
     
     const float2 rotatedPos = float2((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y);
     const float2 fillStartPos = fillPos - fillSize * anchorOffset;
-    const float2 fillEndPos = fillPos + fillSize * (float2(1,1) - anchorOffset);
+    const float2 fillEndPos = fillPos + fillSize * (float2(1, 1) - anchorOffset);
     if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) {
         return lerp(baseColor, fillColor, fillColor.a);
     }
     
     const float2 outlineStartPos = fillPos - fillSize * anchorOffset - outlineWidth;
-    const float2 outlineEndPos = fillPos + fillSize * (float2(1,1) - anchorOffset) + outlineWidth;
+    const float2 outlineEndPos = fillPos + fillSize * (float2(1, 1) - anchorOffset) + outlineWidth;
     if (rotatedPos.x >= outlineStartPos.x && rotatedPos.x < outlineEndPos.x && rotatedPos.y >= outlineStartPos.y && rotatedPos.y < outlineEndPos.y) {
         return lerp(baseColor, outlineColor, outlineColor.a);
     }
@@ -331,17 +341,19 @@ float4 DrawRect(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSiz
 float4 DrawEllipse(float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineWidth, float4 outlineColor, float rotation, int anchor, float2 section) {
     const float2 anchorOffset = GetAnchorOffset(anchor);
     const float2 rotatedPos = float2((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y);
-    const float2 centeredPos = float2(rotatedPos.x - fillPos.x - fillSize.x * (0.5 - anchorOffset.x), rotatedPos.y  - fillPos.y - fillSize.y * (0.5 - anchorOffset.y));
-    const float centeredAngle = degrees(atan2(centeredPos.y, centeredPos.x)) + 180.0;
+    const float2 centeredPos = float2(rotatedPos.x - fillPos.x - fillSize.x * (0.5f - anchorOffset.x), rotatedPos.y  - fillPos.y - fillSize.y * (0.5f - anchorOffset.y));
+    const float centeredAngle = degrees(atan2(centeredPos.y, centeredPos.x)) + 180.0f;
     
-    if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0, 2) <= 1)
-        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0, 2) > 1)
+    if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0f, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0f, 2) <= 1)
+        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0f, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0f, 2) > 1)
             if (centeredAngle >= section.x && (centeredAngle < section.y || section.y == 360))
                 return lerp(baseColor, fillColor, fillColor.a);
     
-    if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0 + outlineWidth, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0 + outlineWidth, 2) <= 1)
-        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0 - outlineWidth, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0 - outlineWidth, 2) > 1)
-            if (centeredAngle >= section.x && centeredAngle < section.y || section.y == 360)
+    const float outlinedDist = distance(centeredPos, float2(0, 0));
+    const float outlinedAngle = degrees(atan(outlineWidth / outlinedDist));
+    if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0f + outlineWidth, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0f + outlineWidth, 2) <= 1)
+        if (gapSize.x == 0 || gapSize.y == 0 || pow(centeredPos.x, 2) / pow(gapSize.x / 2.0f - outlineWidth, 2) + pow(centeredPos.y, 2) / pow(gapSize.y / 2.0f - outlineWidth, 2) > 1)
+            if (outlinedDist < outlineWidth || (centeredAngle >= section.x - outlinedAngle || centeredAngle < section.y - 360.0f + outlinedAngle) && (centeredAngle < section.y + outlinedAngle || centeredAngle >= 360.0f + section.x - outlinedAngle))
                 return lerp(baseColor, outlineColor, outlineColor.a);
 
     return baseColor;
@@ -352,8 +364,8 @@ float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : 
     float4 color = tex2D(ReShade::BackBuffer, texCoord);
     color = DrawEllipse(
         color,
-        pos + 0.5,
-        float2(BUFFER_WIDTH / 2.0, BUFFER_HEIGHT / 2.0) + float2(HorizontalOffset, VerticalOffset) + float2(HorizontalOffset1, VerticalOffset1),
+        pos + 0.5f,
+        float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f) + float2(HorizontalOffset, VerticalOffset) + float2(HorizontalOffset1, VerticalOffset1),
         float2(Width1, Height1),
         Color1,
         float2(GapWidth1, GapHeight1),
@@ -361,7 +373,7 @@ float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : 
         OutlineColor1,
         radians(Rotation1),
         Anchor1,
-        Section1
+        float2(SectionStart1, SectionEnd1)
     );
     return color;
 }
