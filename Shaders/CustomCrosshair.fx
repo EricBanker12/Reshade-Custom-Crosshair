@@ -257,21 +257,49 @@ float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fil
         if (gapSize.x == 0 || gapSize.y == 0 || !((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0)))
             return lerp(baseColor, fillColor, fillColor.a);
 
-    // Zoom based outlining, looks great but not compatible with gap offset
-    if (outlineSize > 0) {
-        AP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - A;
-        BP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - B;
-        CP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - C;
+    // // Zoom based outlining, looks great but not compatible with gap offset
+    // if (outlineSize > 0) {
+    //     AP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - A;
+    //     BP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - B;
+    //     CP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - C;
 
-        float gapOutlineFactor = 
-        DP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - D;
-        EP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - E;
-        FP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - F;
+    //     float gapOutlineFactor = 
+    //     DP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - D;
+    //     EP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - E;
+    //     FP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - F;
 
-        if ((AB.x * AP.y - AB.y * AP.x > 0) == (BC.x * BP.y - BC.y * BP.x > 0) && (AB.x * AP.y - AB.y * AP.x > 0) == (CA.x * CP.y - CA.y * CP.x > 0))
-            if (gapSize.x == 0 || gapSize.y == 0 || !((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0)))
-                return lerp(baseColor, outlineColor, outlineColor.a);
-    }
+    //     if ((AB.x * AP.y - AB.y * AP.x > 0) == (BC.x * BP.y - BC.y * BP.x > 0) && (AB.x * AP.y - AB.y * AP.x > 0) == (CA.x * CP.y - CA.y * CP.x > 0))
+    //         if (gapSize.x == 0 || gapSize.y == 0 || !((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0)))
+    //             return lerp(baseColor, outlineColor, outlineColor.a);
+    // }
+
+    const float2 H = A + outlineSize * float2(-max(fillSize.x / fillSize.y, sqrt(2)), 1);
+    const float2 I = B + outlineSize * float2(0, -max(fillSize.y / fillSize.x, 2));
+    const float2 J = C + outlineSize * float2(max(fillSize.x / fillSize.y, sqrt(2)), 1);
+    
+    const float2 HP = basePos - H;
+    const float2 IP = basePos - I;
+    const float2 JP = basePos - J;
+
+    const float2 HI = I - H;
+    const float2 IJ = J - I;
+    const float2 JH = H - J;
+
+    const float2 K = D - outlineSize * float2(-max(gapSize.x / gapSize.y, sqrt(2)), 1);
+    const float2 L = E - outlineSize * float2(0, -max(gapSize.y / gapSize.x, 2));
+    const float2 M = F - outlineSize * float2(max(gapSize.x / gapSize.y, sqrt(2)), 1);
+    
+    const float2 KP = basePos - K;
+    const float2 LP = basePos - L;
+    const float2 MP = basePos - M;
+
+    const float2 KL = L - K;
+    const float2 LM = M - L;
+    const float2 MK = K - M;
+    
+    if ((HI.x * HP.y - HI.y * HP.x > 0) == (IJ.x * IP.y - IJ.y * IP.x > 0) && (HI.x * HP.y - HI.y * HP.x > 0) == (JH.x * JP.y - JH.y * JP.x > 0))
+        if (gapSize.x == 0 || gapSize.y == 0 || outlineSize >= gapSize.y / 3 || outlineSize >= gapSize.x / 2 || !((KL.x * KP.y - KL.y * KP.x > 0) == (LM.x * LP.y - LM.y * LP.x > 0) && (KL.x * KP.y - KL.y * KP.x > 0) == (MK.x * MP.y - MK.y * MP.x > 0)))
+            return lerp(baseColor, outlineColor, outlineColor.a);
 
     return baseColor;
 }
