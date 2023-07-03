@@ -17,7 +17,7 @@ uniform bool UseAntialiasing <
     ui_label = "Use Antialiasing";
     ui_tooltip = "Applies 4x SSAA.";
     ui_category = "Main";
-> = false;
+> = true;
 
 uniform bool FollowCursor <
     ui_label = "Follow Cursor";
@@ -107,10 +107,19 @@ uniform float2 Offset1 <
     ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
     ui_step = 1.0f;
     ui_label = "Offset";
-	ui_tooltip = "Horizontal and Vertical offset for the crosshair relative to the window center or mouse cursor.";
+	ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
     ui_category = "Shape 1";
-    ui_category_closed = false;
 > = float2(5, 0);
+
+uniform float2 GapOffset1 <
+    ui_type = "drag";
+	ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+    ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+    ui_step = 1.0f;
+    ui_label = "Gap Offset";
+	ui_tooltip = "Horizontal and Vertical offset for the gap relative to the shape center.";
+    ui_category = "Shape 1";
+> = float2(0, 0);
 
 uniform float Rotation1 <
     ui_type = "drag";
@@ -217,28 +226,28 @@ float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fill
     return baseColor;
 }
 
-float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineSize, float4 outlineColor, float2 anchorOffset) {
+float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float2 anchorOffset) {
     const float2 center = float2(fillPos.x + fillSize.x * (0.5f - anchorOffset.x), fillPos.y - fillSize.y * anchorOffset.y + fillSize.y * 2.0 / 3.0);
-
+    
     const float2 A = float2 (center.x - fillSize.x / 2.0, center.y + fillSize.y / 3.0);
     const float2 B = float2 (center.x, center.y - fillSize.y * 2.0 / 3.0);
     const float2 C = float2 (center.x + fillSize.x / 2.0, center.y + fillSize.y / 3.0);
     
-    const float2 AP = basePos - A;
-    const float2 BP = basePos - B;
-    const float2 CP = basePos - C;
+    float2 AP = basePos - A;
+    float2 BP = basePos - B;
+    float2 CP = basePos - C;
 
     const float2 AB = B - A;
     const float2 BC = C - B;
     const float2 CA = A - C;
 
-    const float2 D = float2 (center.x - gapSize.x / 2.0, center.y + gapSize.y / 3.0);
-    const float2 E = float2 (center.x, center.y - gapSize.y * 2.0 / 3.0);
-    const float2 F = float2 (center.x + gapSize.x / 2.0, center.y + gapSize.y / 3.0);
+    const float2 D = float2 (center.x - gapSize.x / 2.0, center.y + gapSize.y / 3.0) + gapOffset;
+    const float2 E = float2 (center.x, center.y - gapSize.y * 2.0 / 3.0) + gapOffset;
+    const float2 F = float2 (center.x + gapSize.x / 2.0, center.y + gapSize.y / 3.0) + gapOffset;
     
-    const float2 DP = basePos - D;
-    const float2 EP = basePos - E;
-    const float2 FP = basePos - F;
+    float2 DP = basePos - D;
+    float2 EP = basePos - E;
+    float2 FP = basePos - F;
 
     const float2 DE = E - D;
     const float2 EF = F - E;
@@ -248,39 +257,26 @@ float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fil
         if (gapSize.x == 0 || gapSize.y == 0 || !((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0)))
             return lerp(baseColor, fillColor, fillColor.a);
 
-    const float2 H = A + outlineSize * float2(-3, 1);
-    const float2 I = B + outlineSize * float2(0, -2);
-    const float2 J = C + outlineSize * float2(3, 1);
-    
-    const float2 HP = basePos - H;
-    const float2 IP = basePos - I;
-    const float2 JP = basePos - J;
+    // Zoom based outlining, looks great but not compatible with gap offset
+    if (outlineSize > 0) {
+        AP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - A;
+        BP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - B;
+        CP = basePos + (center - basePos) * 2 * outlineSize / (min(fillSize.x, fillSize.y) + 2 * outlineSize) - C;
 
-    const float2 HI = I - H;
-    const float2 IJ = J - I;
-    const float2 JH = H - J;
+        float gapOutlineFactor = 
+        DP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - D;
+        EP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - E;
+        FP = basePos - (center - basePos) * 2 * outlineSize / max(min(gapSize.x, gapSize.y) - 2 * outlineSize, 1) - F;
 
-    const float2 K = D - outlineSize * float2(-3, 1);
-    const float2 L = E - outlineSize * float2(0, -2);
-    const float2 M = F - outlineSize * float2(3, 1);
-    
-    const float2 KP = basePos - K;
-    const float2 LP = basePos - L;
-    const float2 MP = basePos - M;
-
-    const float2 KL = L - K;
-    const float2 LM = M - L;
-    const float2 MK = K - M;
-    
-    if ((HI.x * HP.y - HI.y * HP.x > 0) == (IJ.x * IP.y - IJ.y * IP.x > 0) && (HI.x * HP.y - HI.y * HP.x > 0) == (JH.x * JP.y - JH.y * JP.x > 0))
-        if (gapSize.x == 0 || gapSize.y == 0 || !((KL.x * KP.y - KL.y * KP.x > 0) == (LM.x * LP.y - LM.y * LP.x > 0) && (KL.x * KP.y - KL.y * KP.x > 0) == (MK.x * MP.y - MK.y * MP.x > 0)))
-            return lerp(baseColor, outlineColor, outlineColor.a);
+        if ((AB.x * AP.y - AB.y * AP.x > 0) == (BC.x * BP.y - BC.y * BP.x > 0) && (AB.x * AP.y - AB.y * AP.x > 0) == (CA.x * CP.y - CA.y * CP.x > 0))
+            if (gapSize.x == 0 || gapSize.y == 0 || !((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0)))
+                return lerp(baseColor, outlineColor, outlineColor.a);
+    }
 
     return baseColor;
-
 }
 
-float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float outlineSize, float4 outlineColor, float rotation, int anchor, float2 section) {
+float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float rotation, int anchor, float2 section) {
     rotation = radians(rotation);
     const float2 anchorOffset = GetAnchorOffset(anchor);
     const float2 rotatedPos = float2((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y);
@@ -293,15 +289,15 @@ float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, fl
         case 2:
             return DrawEllipse(baseColor, rotatedPos, fillPos, fillSize, fillColor, gapSize, outlineSize, outlineColor, anchorOffset, section);
         case 3:
-            return DrawTriangle(baseColor, rotatedPos, fillPos, fillSize, fillColor, gapSize, outlineSize, outlineColor, anchorOffset);
+            return DrawTriangle(baseColor, rotatedPos, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchorOffset);
     }
 }
 
 float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
     if (UseAntialiasing) discard;
     
-    float4 color = float4(0,0,0,0);
-    if (ShowDebug) color = DebugColor;
+    float4 color = float4(tex2D(ReShade::BackBuffer, texCoord).rgb, 0);
+    if (ShowDebug) color = float4(DebugColor.rgb, 0);
 
     color = DrawShape(
         Shape1,
@@ -311,6 +307,7 @@ float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : 
         FillSize1,
         FillColor1,
         GapSize1,
+        GapOffset1,
         OutlineSize1,
         OutlineColor1,
         Rotation1,
@@ -323,8 +320,8 @@ float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : 
 float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
     if (!UseAntialiasing) discard;
     
-    float4 color = float4(0,0,0,0);
-    if (ShowDebug) color = DebugColor;
+    float4 color = float4(tex2D(ReShade::BackBuffer, texCoord).rgb, 0);
+    if (ShowDebug) color = float4(DebugColor.rgb, 0);
     
     color = DrawShape(
         Shape1,
@@ -334,6 +331,7 @@ float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD
         FillSize1 * 2.0f,
         FillColor1,
         GapSize1 * 2.0f,
+        GapOffset1 * 2.0f,
         OutlineSize1 * 2.0f,
         OutlineColor1,
         Rotation1,
@@ -346,20 +344,17 @@ float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD
 float4 PS_final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
     // Draw a rectangle in the middle of the screen
     const float4 color = tex2D(ReShade::BackBuffer, texCoord);
-    if (!UseAntialiasing) {
-        const float4 overlay = tex2D(overlaySampler, texCoord);
-        if (ShowDebug) return overlay;
-        return lerp(color, overlay, overlay.a);
-    }
-    else {
-        const float4 overlay1 = tex2D(overlaySamplerSSAA, texCoord);
-        const float4 overlay2 = tex2D(overlaySamplerSSAA, texCoord + BUFFER_PIXEL_SIZE * float2(1,0));
-        const float4 overlay3 = tex2D(overlaySamplerSSAA, texCoord + BUFFER_PIXEL_SIZE * float2(0,1));
-        const float4 overlay4 = tex2D(overlaySamplerSSAA, texCoord + BUFFER_PIXEL_SIZE * float2(1,1));
-        const float4 overlayAvg = (overlay1 + overlay2 + overlay3 + overlay4) / 4;
-        if (ShowDebug) return overlayAvg;
-        return lerp(color, overlayAvg, overlayAvg.a);
-    }
+    
+    float4 overlay;
+    if (UseAntialiasing) 
+        overlay = tex2D(overlaySamplerSSAA, texCoord);
+    else
+        overlay = tex2D(overlaySampler, texCoord);
+    
+    if (ShowDebug)
+        return overlay;
+    
+    return lerp(color, overlay, overlay.a);
 }
 
 technique CustomCrosshair {
