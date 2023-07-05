@@ -1,4 +1,4 @@
-#include "ReShadeUI.fxh";
+#include "ReShadeUI.fxh"
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Debug
@@ -109,50 +109,15 @@
         ui_category_closed = true;
     > = 3;
 
-    uniform float2 Offset1 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(5, 0);
-
     uniform float2 FillSize1 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(10,2);
-
-    // uniform float4 FillColor1 <
-    //     ui_type = "color";
-    //     ui_label = "Fill Color";
-    //     ui_category = "Crosshair";
-    //    ui_category_closed = true;
-    // > = float4(1, 1, 1, 0.9f);
-
-    // uniform float OutlineSize1 <
-    //     ui_type = "drag";
-    //     ui_label = "Outline Size";
-    //     ui_min = 0;
-    //     ui_max = 200.0f;
-    //     ui_step = 1.0f;
-    //     ui_category = "Crosshair";
-    //    ui_category_closed = true;
-    // > = 1.0f;
-
-    // uniform float4 OutlineColor1 <
-    //     ui_type = "color";
-    //     ui_label = "Outline Color";
-    //     ui_category = "Crosshair";
-    //    ui_category_closed = true;
-    // > = float4(0, 0, 0, 0.9f);
 
     uniform float2 GapSize1 <
         ui_type = "drag";
@@ -163,6 +128,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset1 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(5, 0);
 
     uniform float2 GapOffset1 <
         ui_type = "drag";
@@ -207,6 +183,30 @@
         ui_category_closed = true;
     > = float2(0,360);
 
+    // uniform float4 FillColor1 <
+    //     ui_type = "color";
+    //     ui_label = "Fill Color";
+    //     ui_category = "Crosshair";
+    //    ui_category_closed = true;
+    // > = float4(1, 1, 1, 0.9f);
+
+    // uniform float OutlineSize1 <
+    //     ui_type = "drag";
+    //     ui_label = "Outline Size";
+    //     ui_min = 0;
+    //     ui_max = 200.0f;
+    //     ui_step = 1.0f;
+    //     ui_category = "Crosshair";
+    //    ui_category_closed = true;
+    // > = 1.0f;
+
+    // uniform float4 OutlineColor1 <
+    //     ui_type = "color";
+    //     ui_label = "Outline Color";
+    //     ui_category = "Crosshair";
+    //    ui_category_closed = true;
+    // > = float4(0, 0, 0, 0.9f);
+
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 2
 // ------------------------------------------------------------------------------------------------------------------------
@@ -234,20 +234,9 @@
         ui_category_closed = true;
     > = 1;
 
-    uniform float2 Offset2 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 5);
-
     uniform float2 FillSize2 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -264,6 +253,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset2 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 5);
 
     uniform float2 GapOffset2 <
         ui_type = "drag";
@@ -335,20 +335,9 @@
         ui_category_closed = true;
     > = 5;
 
-    uniform float2 Offset3 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(-5, 0);
-
     uniform float2 FillSize3 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -365,6 +354,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset3 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(-5, 0);
 
     uniform float2 GapOffset3 <
         ui_type = "drag";
@@ -436,20 +436,9 @@
         ui_category_closed = true;
     > = 7;
 
-    uniform float2 Offset4 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, -5);
-
     uniform float2 FillSize4 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -466,6 +455,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset4 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, -5);
 
     uniform float2 GapOffset4 <
         ui_type = "drag";
@@ -537,20 +537,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset5 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize5 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -567,6 +556,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset5 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset5 <
         ui_type = "drag";
@@ -638,20 +638,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset6 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize6 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -668,6 +657,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset6 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset6 <
         ui_type = "drag";
@@ -739,20 +739,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset7 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize7 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -769,6 +758,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset7 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset7 <
         ui_type = "drag";
@@ -840,20 +840,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset8 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize8 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -870,6 +859,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset8 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset8 <
         ui_type = "drag";
@@ -941,20 +941,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset9 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize9 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -971,6 +960,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset9 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset9 <
         ui_type = "drag";
@@ -1042,20 +1042,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset10 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize10 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -1072,6 +1061,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset10 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset10 <
         ui_type = "drag";
@@ -1143,20 +1143,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset11 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize11 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -1173,6 +1162,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset11 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset11 <
         ui_type = "drag";
@@ -1244,20 +1244,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset12 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize12 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -1274,6 +1263,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset12 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset12 <
         ui_type = "drag";
@@ -1345,20 +1345,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset13 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize13 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -1375,6 +1364,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset13 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset13 <
         ui_type = "drag";
@@ -1446,20 +1446,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset14 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize14 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -1476,6 +1465,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset14 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset14 <
         ui_type = "drag";
@@ -1547,20 +1547,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset15 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize15 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -1577,6 +1566,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset15 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset15 <
         ui_type = "drag";
@@ -1648,20 +1648,9 @@
         ui_category_closed = true;
     > = 4;
 
-    uniform float2 Offset16 <
-        ui_type = "drag";
-        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
-        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-        ui_step = 1.0f;
-        ui_label = "Offset";
-        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
-        ui_category = "Crosshair";
-        ui_category_closed = true;
-    > = float2(0, 0);
-
     uniform float2 FillSize16 <
         ui_type = "drag";
-        ui_label = "Fill Size";
+        ui_label = "Size";
         ui_min = 1;
         ui_max = 1000;
         ui_step = 1.0f;
@@ -1678,6 +1667,17 @@
         ui_category = "Crosshair";
         ui_category_closed = true;
     > = float2(0,0);
+
+    uniform float2 Offset16 <
+        ui_type = "drag";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
+        ui_category = "Crosshair";
+        ui_category_closed = true;
+    > = float2(0, 0);
 
     uniform float2 GapOffset16 <
         ui_type = "drag";
@@ -2077,6 +2077,207 @@
     > = false;
 
 // ------------------------------------------------------------------------------------------------------------------------
+// UI Detection > Detector 6
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Detector6 <
+        ui_label = "Detector 6";
+        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform float3 DetectorColor6 <
+        ui_type = "color";
+        ui_label = "Color";
+        ui_tooltip = "Color to match for detection.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float3(1, 1, 1);
+
+    uniform float3 DetectorThreshold6 <
+        ui_type = "drag";
+        ui_label = "Threshold";
+        ui_tooltip = "Color matching threshold for the detector for Red, Green, and Blue respectively.";
+        ui_min = 0.0f;
+        ui_max = 255.0f;
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float3(15,15,15);
+
+    uniform float2 DetectorSize6 <
+        ui_type = "drag";
+        ui_label = "Size";
+        ui_tooltip = "Width and height for within the detector will match.";
+        ui_min = float2(1,1);
+        ui_max = float2(1000,1000);
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float2(2,2);
+
+    uniform float2 DetectorOffset6 <
+        ui_type = "drag";
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and vertical offset for the detector relative to the window center.";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float2(0,0);
+
+    uniform bool DetectorFollowCursor6 <
+        ui_label = "Follow Cursor";
+        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = false;
+
+    uniform bool DetectorInverted6 <
+        ui_label = "Inverted Matching";
+        ui_tooltip = "Inverse the matched and not matched states.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = false;
+
+// ------------------------------------------------------------------------------------------------------------------------
+// UI Detection > Detector 7
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Detector7 <
+        ui_label = "Detector 7";
+        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform float3 DetectorColor7 <
+        ui_type = "color";
+        ui_label = "Color";
+        ui_tooltip = "Color to match for detection.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float3(1, 1, 1);
+
+    uniform float3 DetectorThreshold7 <
+        ui_type = "drag";
+        ui_label = "Threshold";
+        ui_tooltip = "Color matching threshold for the detector for Red, Green, and Blue respectively.";
+        ui_min = 0.0f;
+        ui_max = 255.0f;
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float3(15,15,15);
+
+    uniform float2 DetectorSize7 <
+        ui_type = "drag";
+        ui_label = "Size";
+        ui_tooltip = "Width and height for within the detector will match.";
+        ui_min = float2(1,1);
+        ui_max = float2(1000,1000);
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float2(2,2);
+
+    uniform float2 DetectorOffset7 <
+        ui_type = "drag";
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and vertical offset for the detector relative to the window center.";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float2(0,0);
+
+    uniform bool DetectorFollowCursor7 <
+        ui_label = "Follow Cursor";
+        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = false;
+
+    uniform bool DetectorInverted7 <
+        ui_label = "Inverted Matching";
+        ui_tooltip = "Inverse the matched and not matched states.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = false;
+
+// ------------------------------------------------------------------------------------------------------------------------
+// UI Detection > Detector 8
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Detector8 <
+        ui_label = "Detector 8";
+        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform float3 DetectorColor8 <
+        ui_type = "color";
+        ui_label = "Color";
+        ui_tooltip = "Color to match for detection.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float3(1, 1, 1);
+
+    uniform float3 DetectorThreshold8 <
+        ui_type = "drag";
+        ui_label = "Threshold";
+        ui_tooltip = "Color matching threshold for the detector for Red, Green, and Blue respectively.";
+        ui_min = 0.0f;
+        ui_max = 255.0f;
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float3(15,15,15);
+
+    uniform float2 DetectorSize8 <
+        ui_type = "drag";
+        ui_label = "Size";
+        ui_tooltip = "Width and height for within the detector will match.";
+        ui_min = float2(1,1);
+        ui_max = float2(1000,1000);
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float2(2,2);
+
+    uniform float2 DetectorOffset8 <
+        ui_type = "drag";
+        ui_label = "Offset";
+        ui_tooltip = "Horizontal and vertical offset for the detector relative to the window center.";
+        ui_min = float2(BUFFER_WIDTH / -2.0f, BUFFER_HEIGHT / -2.0f);
+        ui_max = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+        ui_step = 1.0f;
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = float2(0,0);
+
+    uniform bool DetectorFollowCursor8 <
+        ui_label = "Follow Cursor";
+        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = false;
+
+    uniform bool DetectorInverted8 <
+        ui_label = "Inverted Matching";
+        ui_tooltip = "Inverse the matched and not matched states.";
+        ui_category = "UI Detection";
+        ui_category_closed = true;
+    > = false;
+
+// ------------------------------------------------------------------------------------------------------------------------
 // Hotkeys
 // ------------------------------------------------------------------------------------------------------------------------
 
@@ -2096,11 +2297,11 @@
     /*
     To Do:
 
-    - Make rectangle outer outline have rounded corners or give triangles sharp corners
-    - Fix weird triangle inner and outer overlay overlap issue
-    - option to use png image layer instead of shape
-    - hotkey enable/disable shapes
-    - hotkey animated transformations
+    - Make rectangle outer outline have rounded corners or give triangles sharp corners - use two rectangles as mask for eachother
+    - Fix weird triangle inner and outer overlay overlap issue - draw rectangle masked by gap and outline
+    - option to use png image layer instead of shape - see https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/Layer.fx
+    - hotkey enable/disable shapes - might be easier to duplicate fx file for switching between different crosshairs
+    - hotkey animated transformations - likely too expensive unless pre-rendered - could use overlay LoD for frames?
 
     */
 
@@ -2108,20 +2309,20 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture detectorTarget <pooled = true; > { Width = 3; Height = 1; Format = R8; };
-    sampler detectorSampler { Texture = detectorTarget; };
+    texture detectorTexture <pooled = true; > { Width = 8; Height = 1; Format = R8; };
+    sampler detectorSampler { Texture = detectorTexture; };
 
-    texture overlayTarget <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    sampler overlaySampler { Texture = overlayTarget;};
+    texture overlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+    sampler overlaySampler { Texture = overlayTexture;};
 
-    texture overlayTargetSSAAx4 <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
-    sampler overlaySamplerSSAAx4 { Texture = overlayTargetSSAAx4;};
+    texture overlayTextureSSAA <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
+    sampler overlaySamplerSSAAx4 { Texture = overlayTextureSSAA;};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Imports
 // ------------------------------------------------------------------------------------------------------------------------
 
-    #include "ReShade.fxh";
+    #include "ReShade.fxh"
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Functions
@@ -2506,38 +2707,61 @@
         return inverted;
     }
 
+    bool DetectorMatchAll(float2 pos, float2 size, float3 detectorColor, float3 detectorThreshold, bool inverted) {
+        const int2 pixelCount = int2(round(size.x), round(size.y));
+        float4 color;
+        
+        for (int y = 0; y < pixelCount.y; y++)
+            for (int x = 0; x < pixelCount.x; x++) {
+                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (pos + float2(x,y)));
+                if (!DetectorMatch(color, detectorColor, detectorThreshold, inverted))
+                    return false;
+            }
+        
+        return true;
+    }
+
 // ------------------------------------------------------------------------------------------------------------------------
 // Pixel Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
     float PS_UIDetect(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        float4 color;
-        if (pos.x == 0.5f && Detector1) {
-            if (DetectorFollowCursor1)
-                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (MousePoint + DetectorOffset1));
-            else
-                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (CenterPoint + DetectorOffset1));
-
-            if (DetectorMatch(color, DetectorColor1, DetectorThreshold1, DetectorInverted1))
-                return 1.0f;
-        }
-        if (pos.x == 1.5f && Detector2) {
-            if (DetectorFollowCursor2)
-                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (MousePoint + DetectorOffset2));
-            else
-                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (CenterPoint + DetectorOffset2));
-
-            if (DetectorMatch(color, DetectorColor2, DetectorThreshold2, DetectorInverted2))
-                return 1.0f;
-        }
-        if (pos.x == 2.5f && Detector3) {
-            if (DetectorFollowCursor3)
-                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (MousePoint + DetectorOffset3));
-            else
-                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (CenterPoint + DetectorOffset3));
-
-            if (DetectorMatch(color, DetectorColor3, DetectorThreshold3, DetectorInverted3))
-                return 1.0f;
+        const int pixelNumber = round(pos.x - PixelOffset.x) + 1;
+        switch (pixelNumber) {
+            case 1:
+                if (Detector1 && DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1))
+                    return 1.0f;
+                break;
+            case 2:
+                if (Detector2 && DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2))
+                    return 1.0f;
+                break;
+            case 3:
+                if (Detector3 && DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3))
+                    return 1.0f;
+                break;
+            case 4:
+                if (Detector4 && DetectorMatchAll((DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4 - PixelOffset, DetectorSize4, DetectorColor4, DetectorThreshold4, DetectorInverted4))
+                    return 1.0f;
+                break;
+            case 5:
+                if (Detector5 && DetectorMatchAll((DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5 - PixelOffset, DetectorSize5, DetectorColor5, DetectorThreshold5, DetectorInverted5))
+                    return 1.0f;
+                break;
+            case 6:
+                if (Detector6 && DetectorMatchAll((DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6 - PixelOffset, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorInverted6))
+                    return 1.0f;
+                break;
+            case 7:
+                if (Detector7 && DetectorMatchAll((DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7 - PixelOffset, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorInverted7))
+                    return 1.0f;
+                break;
+            case 8:
+                if (Detector8 && DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8))
+                    return 1.0f;
+                break;
+            default:
+                return 0.0f;
         }
 
         return 0.0f;
@@ -2568,23 +2792,38 @@
         if (ShowDebug)
             return overlay;
 
-        if (Detector1 || Detector2 || Detector3) {
-            bool detectorMatched1 = false;
-            bool detectorMatched2 = false;
-            bool detectorMatched3 = false;
-            bool showOverlay = true;
+        if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
+            bool detectorMatches[8];
+            bool showOverlay;
 
-            if (Detector1) detectorMatched1 = tex2D(detectorSampler, (PixelOffset + float2(0, 0)) / 3.0f).r > 0.0f;
-            if (Detector2) detectorMatched2 = tex2D(detectorSampler, (PixelOffset + float2(1, 0)) / 3.0f).r > 0.0f;
-            if (Detector3) detectorMatched3 = tex2D(detectorSampler, (PixelOffset + float2(2, 0)) / 3.0f).r > 0.0f;
+            if (Detector1) detectorMatches[0] = tex2D(detectorSampler, (PixelOffset + float2(0, 0)) / 8.0f).r > 0.0f;
+            if (Detector2) detectorMatches[1] = tex2D(detectorSampler, (PixelOffset + float2(1, 0)) / 8.0f).r > 0.0f;
+            if (Detector3) detectorMatches[2] = tex2D(detectorSampler, (PixelOffset + float2(2, 0)) / 8.0f).r > 0.0f;
+            if (Detector4) detectorMatches[3] = tex2D(detectorSampler, (PixelOffset + float2(3, 0)) / 8.0f).r > 0.0f;
+            if (Detector5) detectorMatches[4] = tex2D(detectorSampler, (PixelOffset + float2(4, 0)) / 8.0f).r > 0.0f;
+            if (Detector6) detectorMatches[5] = tex2D(detectorSampler, (PixelOffset + float2(5, 0)) / 8.0f).r > 0.0f;
+            if (Detector7) detectorMatches[6] = tex2D(detectorSampler, (PixelOffset + float2(6, 0)) / 8.0f).r > 0.0f;
+            if (Detector8) detectorMatches[7] = tex2D(detectorSampler, (PixelOffset + float2(7, 0)) / 8.0f).r > 0.0f;
 
             if (DetectorBehavior == 1) { // OR
-                if (!detectorMatched1 && !detectorMatched2 && !detectorMatched3)
-                    showOverlay = false;
+                showOverlay = false;
+                for (int i = 0; i < 8; i++) {
+                    if (detectorMatches[i]) {
+                        showOverlay = true;
+                        break;
+                    }
+                }
             }
             else { // AND
-                if ((Detector1 && !detectorMatched1) || (Detector2 && !detectorMatched2) || (Detector3 && !detectorMatched3))
-                    showOverlay = false;
+                showOverlay = true;
+                if (Detector1) showOverlay = showOverlay && detectorMatches[0];
+                if (Detector2) showOverlay = showOverlay && detectorMatches[1];
+                if (Detector3) showOverlay = showOverlay && detectorMatches[2];
+                if (Detector4) showOverlay = showOverlay && detectorMatches[3];
+                if (Detector5) showOverlay = showOverlay && detectorMatches[4];
+                if (Detector6) showOverlay = showOverlay && detectorMatches[5];
+                if (Detector7) showOverlay = showOverlay && detectorMatches[6];
+                if (Detector8) showOverlay = showOverlay && detectorMatches[7];
             }
 
             if (showOverlay) {
@@ -2597,18 +2836,43 @@
                 
                 if (Detector1) {
                     detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
-                    outlineColor = detectorMatched1 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawEllipse(color, pos.xy, detectorPos, float2(6,6), float4(DetectorColor1, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4), float2(0.0f, 360.0f));
+                    outlineColor = detectorMatches[0] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize1, float4(DetectorColor1, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector2) {
                     detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
-                    outlineColor = detectorMatched2 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawEllipse(color, pos.xy, detectorPos, float2(6,6), float4(DetectorColor2, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4), float2(0.0f, 360.0f));
+                    outlineColor = detectorMatches[1] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize2, float4(DetectorColor2, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector3) {
                     detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
-                    outlineColor = detectorMatched3 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawEllipse(color, pos.xy, detectorPos, float2(6,6), float4(DetectorColor3, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4), float2(0.0f, 360.0f));
+                    outlineColor = detectorMatches[2] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize3, float4(DetectorColor3, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
+                }
+                if (Detector4) {
+                    detectorPos = (DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4;
+                    outlineColor = detectorMatches[3] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize4, float4(DetectorColor4, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
+                }
+                if (Detector5) {
+                    detectorPos = (DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5;
+                    outlineColor = detectorMatches[4] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize5, float4(DetectorColor5, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
+                }
+                if (Detector6) {
+                    detectorPos = (DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6;
+                    outlineColor = detectorMatches[5] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize6, float4(DetectorColor6, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
+                }
+                if (Detector7) {
+                    detectorPos = (DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7;
+                    outlineColor = detectorMatches[6] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize7, float4(DetectorColor7, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
+                }
+                if (Detector8) {
+                    detectorPos = (DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8;
+                    outlineColor = detectorMatches[7] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize8, float4(DetectorColor8, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
             }
         }
@@ -2633,12 +2897,12 @@
         pass overlaySSAAx4 {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshairSSAAx4;
-            RenderTarget = overlayTargetSSAAx4;
+            RenderTarget = overlayTextureSSAA;
         }
         pass overlay {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshair;
-            RenderTarget = overlayTarget;
+            RenderTarget = overlayTexture;
         }
     }
 
@@ -2649,12 +2913,12 @@
         pass overlaySSAAx4 {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshairSSAAx4;
-            RenderTarget = overlayTargetSSAAx4;
+            RenderTarget = overlayTextureSSAA;
         }
         pass overlay {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshair;
-            RenderTarget = overlayTarget;
+            RenderTarget = overlayTexture;
         }
     }
 
@@ -2665,11 +2929,21 @@
         pass detector {
             VertexShader = PostProcessVS;
             PixelShader = PS_UIDetect;
-            RenderTarget = detectorTarget;
+            RenderTarget = detectorTexture;
             ClearRenderTargets = true;
         }
         pass final {
             VertexShader = PostProcessVS;
             PixelShader = PS_Final;
+        }
+    }
+
+    technique CustomCrosshairUITest <
+        ui_label = "Custom Crosshair UI Test";
+        hidden = true;
+    > {
+        pass detector {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_UIDetect;
         }
     }
