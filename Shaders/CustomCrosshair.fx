@@ -9,6 +9,7 @@ uniform float3 DebugColor <
     ui_label = "Debug Color";
     ui_category = "Debug";
     ui_tooltip = "Background color when Show Debug is enabled.";
+    hidden = true;
 > = float3(1, 1, 1);
 
 uniform bool ShowDebug <
@@ -16,6 +17,7 @@ uniform bool ShowDebug <
     ui_tooltip = "Render only crosshair.";
     ui_category = "Debug";
     ui_category_closed = true;
+    hidden = true;
 > = false;
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -33,18 +35,36 @@ uniform float2 Offset <
     ui_category_closed = true;
 > = float2(0, 0);
 
-uniform int Antialiasing <
-    ui_type = "combo";
-    ui_label = "Antialiasing";
-    ui_tooltip = "Applies Super Sampling Antialiasing. Disable for performance or to use a different AA (i.e. SMAA, FXAA).";
-    ui_items = "None\0SSAA x4\0";
-    // ui_items = "None\0SSAA x4\0SSAA x8\0SSAA x16\0";
+uniform float OutlineSize <
+    ui_type = "drag";
+    ui_label = "Outline Size";
+    ui_min = 0;
+    ui_max = 200.0f;
+    ui_step = 1.0f;
     ui_category = "Crosshair";
-> = 0;
+> = 1.0f;
+
+uniform float4 OutlineColor <
+    ui_type = "color";
+    ui_label = "Outline Color";
+    ui_category = "Crosshair";
+
+> = float4(0, 0, 0, 0.9f);
+uniform float4 FillColor <
+    ui_type = "color";
+    ui_label = "Fill Color";
+    ui_category = "Crosshair";
+> = float4(1, 1, 1, 0.9f);
 
 uniform bool FollowCursor <
     ui_label = "Follow Cursor";
     ui_tooltip = "Apply crosshair relative to mouse cursor instead of the window center.";
+    ui_category = "Crosshair";
+
+> = false;
+uniform bool Antialiasing <
+    ui_label = "Antialiasing";
+    ui_tooltip = "Applies SSAA x4. Disable for performance or to use a different AA (i.e. SMAA, FXAA).";
     ui_category = "Crosshair";
 > = false;
 
@@ -62,9 +82,9 @@ uniform bool ShapeEnabled1 <
 uniform int Shape1 <
     ui_type = "combo";
     ui_label = "Shape";
-    ui_items = "None\0Rectangle\0Triangle\0Ellipse\0";
+    ui_items = "Rectangle\0Triangle\0Ellipse\0";
     ui_category = "Crosshair";
-> = 1;
+> = 0;
 
 uniform int Anchor1 <
     ui_type = "combo";
@@ -92,26 +112,26 @@ uniform float2 FillSize1 <
     ui_category = "Crosshair";
 > = float2(10,3);
 
-uniform float4 FillColor1 <
-    ui_type = "color";
-    ui_label = "Fill Color";
-    ui_category = "Crosshair";
-> = float4(1, 1, 1, 0.9f);
+// uniform float4 FillColor1 <
+//     ui_type = "color";
+//     ui_label = "Fill Color";
+//     ui_category = "Crosshair";
+// > = float4(1, 1, 1, 0.9f);
 
-uniform float OutlineSize1 <
-    ui_type = "drag";
-    ui_label = "Outline Size";
-    ui_min = 0;
-    ui_max = 200.0f;
-    ui_step = 1.0f;
-    ui_category = "Crosshair";
-> = 1.0f;
+// uniform float OutlineSize1 <
+//     ui_type = "drag";
+//     ui_label = "Outline Size";
+//     ui_min = 0;
+//     ui_max = 200.0f;
+//     ui_step = 1.0f;
+//     ui_category = "Crosshair";
+// > = 1.0f;
 
-uniform float4 OutlineColor1 <
-    ui_type = "color";
-    ui_label = "Outline Color";
-    ui_category = "Crosshair";
-> = float4(0, 0, 0, 0.9f);
+// uniform float4 OutlineColor1 <
+//     ui_type = "color";
+//     ui_label = "Outline Color";
+//     ui_category = "Crosshair";
+// > = float4(0, 0, 0, 0.9f);
 
 uniform float2 GapSize1 <
     ui_type = "drag";
@@ -174,9 +194,9 @@ uniform bool ShapeEnabled2 <
 uniform int Shape2 <
     ui_type = "combo";
     ui_label = "Shape";
-    ui_items = "None\0Rectangle\0Triangle\0Ellipse\0";
+    ui_items = "Rectangle\0Triangle\0Ellipse\0";
     ui_category = "Crosshair";
-> = 1;
+> = 0;
 
 uniform int Anchor2 <
     ui_type = "combo";
@@ -204,26 +224,26 @@ uniform float2 FillSize2 <
     ui_category = "Crosshair";
 > = float2(3,10);
 
-uniform float4 FillColor2 <
-    ui_type = "color";
-    ui_label = "Fill Color";
-    ui_category = "Crosshair";
-> = float4(1, 1, 1, 0.9f);
+// uniform float4 FillColor2 <
+//     ui_type = "color";
+//     ui_label = "Fill Color";
+//     ui_category = "Crosshair";
+// > = float4(1, 1, 1, 0.9f);
 
-uniform float OutlineSize2 <
-    ui_type = "drag";
-    ui_label = "Outline Size";
-    ui_min = 0;
-    ui_max = 200.0f;
-    ui_step = 1.0f;
-    ui_category = "Crosshair";
-> = 1.0f;
+// uniform float OutlineSize2 <
+//     ui_type = "drag";
+//     ui_label = "Outline Size";
+//     ui_min = 0;
+//     ui_max = 200.0f;
+//     ui_step = 1.0f;
+//     ui_category = "Crosshair";
+// > = 1.0f;
 
-uniform float4 OutlineColor2 <
-    ui_type = "color";
-    ui_label = "Outline Color";
-    ui_category = "Crosshair";
-> = float4(0, 0, 0, 0.9f);
+// uniform float4 OutlineColor2 <
+//     ui_type = "color";
+//     ui_label = "Outline Color";
+//     ui_category = "Crosshair";
+// > = float4(0, 0, 0, 0.9f);
 
 uniform float2 GapSize2 <
     ui_type = "drag";
@@ -286,9 +306,9 @@ uniform bool ShapeEnabled3 <
 uniform int Shape3 <
     ui_type = "combo";
     ui_label = "Shape";
-    ui_items = "None\0Rectangle\0Triangle\0Ellipse\0";
+    ui_items = "Rectangle\0Triangle\0Ellipse\0";
     ui_category = "Crosshair";
-> = 1;
+> = 0;
 
 uniform int Anchor3 <
     ui_type = "combo";
@@ -316,26 +336,26 @@ uniform float2 FillSize3 <
     ui_category = "Crosshair";
 > = float2(10,3);
 
-uniform float4 FillColor3 <
-    ui_type = "color";
-    ui_label = "Fill Color";
-    ui_category = "Crosshair";
-> = float4(1, 1, 1, 0.9f);
+// uniform float4 FillColor3 <
+//     ui_type = "color";
+//     ui_label = "Fill Color";
+//     ui_category = "Crosshair";
+// > = float4(1, 1, 1, 0.9f);
 
-uniform float OutlineSize3 <
-    ui_type = "drag";
-    ui_label = "Outline Size";
-    ui_min = 0;
-    ui_max = 200.0f;
-    ui_step = 1.0f;
-    ui_category = "Crosshair";
-> = 1.0f;
+// uniform float OutlineSize3 <
+//     ui_type = "drag";
+//     ui_label = "Outline Size";
+//     ui_min = 0;
+//     ui_max = 200.0f;
+//     ui_step = 1.0f;
+//     ui_category = "Crosshair";
+// > = 1.0f;
 
-uniform float4 OutlineColor3 <
-    ui_type = "color";
-    ui_label = "Outline Color";
-    ui_category = "Crosshair";
-> = float4(0, 0, 0, 0.9f);
+// uniform float4 OutlineColor3 <
+//     ui_type = "color";
+//     ui_label = "Outline Color";
+//     ui_category = "Crosshair";
+// > = float4(0, 0, 0, 0.9f);
 
 uniform float2 GapSize3 <
     ui_type = "drag";
@@ -398,9 +418,9 @@ uniform bool ShapeEnabled4 <
 uniform int Shape4 <
     ui_type = "combo";
     ui_label = "Shape";
-    ui_items = "None\0Rectangle\0Triangle\0Ellipse\0";
+    ui_items = "Rectangle\0Triangle\0Ellipse\0";
     ui_category = "Crosshair";
-> = 1;
+> = 0;
 
 uniform int Anchor4 <
     ui_type = "combo";
@@ -428,26 +448,26 @@ uniform float2 FillSize4 <
     ui_category = "Crosshair";
 > = float2(3,10);
 
-uniform float4 FillColor4 <
-    ui_type = "color";
-    ui_label = "Fill Color";
-    ui_category = "Crosshair";
-> = float4(1, 1, 1, 0.9f);
+// uniform float4 FillColor4 <
+//     ui_type = "color";
+//     ui_label = "Fill Color";
+//     ui_category = "Crosshair";
+// > = float4(1, 1, 1, 0.9f);
 
-uniform float OutlineSize4 <
-    ui_type = "drag";
-    ui_label = "Outline Size";
-    ui_min = 0;
-    ui_max = 200.0f;
-    ui_step = 1.0f;
-    ui_category = "Crosshair";
-> = 1.0f;
+// uniform float OutlineSize4 <
+//     ui_type = "drag";
+//     ui_label = "Outline Size";
+//     ui_min = 0;
+//     ui_max = 200.0f;
+//     ui_step = 1.0f;
+//     ui_category = "Crosshair";
+// > = 1.0f;
 
-uniform float4 OutlineColor4 <
-    ui_type = "color";
-    ui_label = "Outline Color";
-    ui_category = "Crosshair";
-> = float4(0, 0, 0, 0.9f);
+// uniform float4 OutlineColor4 <
+//     ui_type = "color";
+//     ui_label = "Outline Color";
+//     ui_category = "Crosshair";
+// > = float4(0, 0, 0, 0.9f);
 
 uniform float2 GapSize4 <
     ui_type = "drag";
@@ -510,16 +530,16 @@ uniform bool ShapeEnabled5 <
 uniform int Shape5 <
     ui_type = "combo";
     ui_label = "Shape";
-    ui_items = "None\0Rectangle\0Triangle\0Ellipse\0";
+    ui_items = "Rectangle\0Triangle\0Ellipse\0";
     ui_category = "Crosshair";
-> = 1;
+> = 0;
 
 uniform int Anchor5 <
     ui_type = "combo";
     ui_label = "Anchor";
     ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
     ui_category = "Crosshair";
-> = 3;
+> = 4;
 
 uniform float2 Offset5 <
     ui_type = "drag";
@@ -529,7 +549,7 @@ uniform float2 Offset5 <
     ui_label = "Offset";
 	ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
     ui_category = "Crosshair";
-> = float2(5, 0);
+> = float2(0, 0);
 
 uniform float2 FillSize5 <
     ui_type = "drag";
@@ -538,28 +558,28 @@ uniform float2 FillSize5 <
     ui_max = 1000;
     ui_step = 1.0f;
     ui_category = "Crosshair";
-> = float2(10,3);
+> = float2(3,3);
 
-uniform float4 FillColor5 <
-    ui_type = "color";
-    ui_label = "Fill Color";
-    ui_category = "Crosshair";
-> = float4(1, 1, 1, 0.9f);
+// uniform float4 FillColor5 <
+//     ui_type = "color";
+//     ui_label = "Fill Color";
+//     ui_category = "Crosshair";
+// > = float4(1, 1, 1, 0.9f);
 
-uniform float OutlineSize5 <
-    ui_type = "drag";
-    ui_label = "Outline Size";
-    ui_min = 0;
-    ui_max = 200.0f;
-    ui_step = 1.0f;
-    ui_category = "Crosshair";
-> = 1.0f;
+// uniform float OutlineSize5 <
+//     ui_type = "drag";
+//     ui_label = "Outline Size";
+//     ui_min = 0;
+//     ui_max = 200.0f;
+//     ui_step = 1.0f;
+//     ui_category = "Crosshair";
+// > = 1.0f;
 
-uniform float4 OutlineColor5 <
-    ui_type = "color";
-    ui_label = "Outline Color";
-    ui_category = "Crosshair";
-> = float4(0, 0, 0, 0.9f);
+// uniform float4 OutlineColor5 <
+//     ui_type = "color";
+//     ui_label = "Outline Color";
+//     ui_category = "Crosshair";
+// > = float4(0, 0, 0, 0.9f);
 
 uniform float2 GapSize5 <
     ui_type = "drag";
@@ -622,16 +642,16 @@ uniform bool ShapeEnabled6 <
 uniform int Shape6 <
     ui_type = "combo";
     ui_label = "Shape";
-    ui_items = "None\0Rectangle\0Triangle\0Ellipse\0";
+    ui_items = "Rectangle\0Triangle\0Ellipse\0";
     ui_category = "Crosshair";
-> = 1;
+> = 0;
 
 uniform int Anchor6 <
     ui_type = "combo";
     ui_label = "Anchor";
     ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
     ui_category = "Crosshair";
-> = 3;
+> = 4;
 
 uniform float2 Offset6 <
     ui_type = "drag";
@@ -641,7 +661,7 @@ uniform float2 Offset6 <
     ui_label = "Offset";
 	ui_tooltip = "Horizontal and Vertical offset for the shape relative to the window center or mouse cursor.";
     ui_category = "Crosshair";
-> = float2(5, 0);
+> = float2(0, 0);
 
 uniform float2 FillSize6 <
     ui_type = "drag";
@@ -650,28 +670,28 @@ uniform float2 FillSize6 <
     ui_max = 1000;
     ui_step = 1.0f;
     ui_category = "Crosshair";
-> = float2(10,3);
+> = float2(3,3);
 
-uniform float4 FillColor6 <
-    ui_type = "color";
-    ui_label = "Fill Color";
-    ui_category = "Crosshair";
-> = float4(1, 1, 1, 0.9f);
+// uniform float4 FillColor6 <
+//     ui_type = "color";
+//     ui_label = "Fill Color";
+//     ui_category = "Crosshair";
+// > = float4(1, 1, 1, 0.9f);
 
-uniform float OutlineSize6 <
-    ui_type = "drag";
-    ui_label = "Outline Size";
-    ui_min = 0;
-    ui_max = 200.0f;
-    ui_step = 1.0f;
-    ui_category = "Crosshair";
-> = 1.0f;
+// uniform float OutlineSize6 <
+//     ui_type = "drag";
+//     ui_label = "Outline Size";
+//     ui_min = 0;
+//     ui_max = 200.0f;
+//     ui_step = 1.0f;
+//     ui_category = "Crosshair";
+// > = 1.0f;
 
-uniform float4 OutlineColor6 <
-    ui_type = "color";
-    ui_label = "Outline Color";
-    ui_category = "Crosshair";
-> = float4(0, 0, 0, 0.9f);
+// uniform float4 OutlineColor6 <
+//     ui_type = "color";
+//     ui_label = "Outline Color";
+//     ui_category = "Crosshair";
+// > = float4(0, 0, 0, 0.9f);
 
 uniform float2 GapSize6 <
     ui_type = "drag";
@@ -909,11 +929,6 @@ uniform float2 MousePoint < source = "mousepoint"; >;
 /*
 To Do:
 
-UI Detection:
-Set position and color (height, width, color, threshold, anchor, position)
-Show Detector (red border = no match; green border = match)
-Invert Detector
-
 Performance optimizations:
 Move shape variables and math into uniform globals to prevent recalculating every pixel
 
@@ -989,8 +1004,16 @@ float4 DrawColor(float4 baseColor, float4 newColor) {
 float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float2 anchorOffset) {
     const float2 fillStartPos = fillPos - fillSize * anchorOffset;
     const float2 fillEndPos = fillStartPos + fillSize;
+
+    if (basePos.x < fillStartPos.x - outlineSize
+        || basePos.y < fillStartPos.y - outlineSize
+            || basePos.x > fillEndPos.x + outlineSize
+                || basePos.y > fillEndPos.y + outlineSize)
+        return baseColor;
+
     const float2 gapStartPos = fillStartPos + fillSize / 2.0 - gapSize / 2.0f + gapOffset;
     const float2 gapEndPos = gapStartPos + gapSize;
+    
     if (basePos.x >= fillStartPos.x && basePos.x < fillEndPos.x && basePos.y >= fillStartPos.y && basePos.y < fillEndPos.y)
         if (gapSize.x == 0 || gapSize.y == 0 || basePos.x < gapStartPos.x || basePos.x >= gapEndPos.x || basePos.y < gapStartPos.y || basePos.y >= gapEndPos.y)
             return DrawColor(baseColor, fillColor);
@@ -1011,10 +1034,17 @@ float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fi
 }
 
 float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float2 anchorOffset, float2 section) {
-    if (fillSize.x < 1 || fillSize.y < 1 || section.x >= section.y || section.y <= section.x)
+    if (section.x >= section.y || section.y <= section.x)
         return baseColor;
     
     const float2 centerPos = float2(fillPos.x + fillSize.x * (0.5f - anchorOffset.x), fillPos.y + fillSize.y * (0.5f - anchorOffset.y));
+
+    if (basePos.x < centerPos.x - fillSize.x / 2.0f - outlineSize
+        || basePos.y < centerPos.y - fillSize.y / 2.0f - outlineSize
+            || basePos.x > centerPos.x + fillSize.x / 2.0f + outlineSize
+                || basePos.y > centerPos.y + fillSize.y / 2.0f + outlineSize)
+        return baseColor;
+
     const float2 centeredPos = basePos - centerPos;
     const float centeredAngle = degrees(atan2(centeredPos.y, centeredPos.x)) + 180.0f;
     const float2 gappedPos = centeredPos + gapOffset;
@@ -1060,6 +1090,12 @@ float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fil
     const float2 A = float2 (centerPos.x - fillSize.x / 2.0 * (1 + skew / 90.0f), centerPos.y + fillSize.y / 3.0);
     const float2 B = float2 (centerPos.x + fillSize.x * skew / 90.0f, centerPos.y - fillSize.y * 2.0 / 3.0);
     const float2 C = float2 (centerPos.x + fillSize.x / 2.0 * (1 - skew / 90.0f), centerPos.y + fillSize.y / 3.0);
+
+    if (basePos.x < min(A.x, B.x) - outlineSize
+        || basePos.y < B.y - outlineSize
+            || basePos.x > max(C.x, B.x) + outlineSize
+                || basePos.y > C.y + outlineSize)
+        return baseColor;
     
     // // Debugging skew
     // const float2 avgCenter = (A + B + C) / 3.0f;
@@ -1256,47 +1292,26 @@ float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fil
 }
 
 float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float rotation, int anchor, float2 section, float skew) {
-    switch (Antialiasing) {
-        case 0:
-        default:
-            break;
-        case 1:
+    if (Antialiasing) {
             fillPos *= 2.0f;
             fillSize *= 2.0f;
             gapSize *= 2.0f;
             gapOffset *= 2.0f;
             outlineSize *= 2.0f;
-            break;
-        case 2:
-            fillPos *= 3.0f;
-            fillSize *= 3.0f;
-            gapSize *= 3.0f;
-            gapOffset *= 3.0f;
-            outlineSize *= 3.0f;
-            break;
-        case 3:
-            fillPos *= 4.0f;
-            fillSize *= 4.0f;
-            gapSize *= 4.0f;
-            gapOffset *= 4.0f;
-            outlineSize *= 4.0f;
-            break;
     }
 
     if (rotation > 0) {
-        rotation = radians(rotation);
-        basePos = float4((basePos.x - fillPos.x) * cos(-rotation) - (basePos.y - fillPos.y) * sin(-rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(-rotation) + (basePos.y - fillPos.y) * cos(-rotation) + fillPos.y, 0, 0);
+        rotation = -radians(rotation);
+        basePos = float4((basePos.x - fillPos.x) * cos(rotation) - (basePos.y - fillPos.y) * sin(rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(rotation) + (basePos.y - fillPos.y) * cos(rotation) + fillPos.y, 0, 0);
     }
     
     switch (shape) {
-        case 0:
         default:
-            return baseColor;
-        case 1:
+        case 0:
             return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, GetAnchorOffset(anchor));
-        case 2:
+        case 1:
             return DrawTriangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, GetAnchorOffset(anchor), skew);
-        case 3:
+        case 2:
             return DrawEllipse(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, GetAnchorOffset(anchor), section);
     }
 }
@@ -1316,22 +1331,26 @@ float4 DrawShapes(float4 color, float4 pos) {
     const bool detectorMatched1 = tex2D(detectorSampler, float2(0, 0) / 3.0f).r > 0.0f;
     const bool detectorMatched2 = tex2D(detectorSampler, float2(1, 0) / 3.0f).r > 0.0f;
     const bool detectorMatched3 = tex2D(detectorSampler, float2(2, 0) / 3.0f).r > 0.0f;
-    
-    if (ShowDetectors) {
+
+
+    if (ShowDetectors && (Detector1 || Detector2 || Detector3)) {
+        float2 detectorPos;
+        float4 outlineColor;
+        
         if (Detector1) {
-            const float2 detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
-            const float4 outlineColor = detectorMatched1 ? float4(0,1,0,1) : float4(1,0,0,1);
-            color = DrawShape(3, color, pos, detectorPos, float2(6,6), float4(DetectorColor1, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 0.0f, 4, float2(0.0f, 360.0f), 0.0f);
+            detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
+            outlineColor = detectorMatched1 ? float4(0,1,0,1) : float4(1,0,0,1);
+            color = DrawShape(2, color, pos, detectorPos, float2(6,6), float4(DetectorColor1, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 0.0f, 4, float2(0.0f, 360.0f), 0.0f);
         }
         if (Detector2) {
-            const float2 detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
-            const float4 outlineColor = detectorMatched2 ? float4(0,1,0,1) : float4(1,0,0,1);
-            color = DrawShape(3, color, pos, detectorPos, float2(6,6), float4(DetectorColor2, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 0.0f, 4, float2(0.0f, 360.0f), 0.0f);
+            detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
+            outlineColor = detectorMatched2 ? float4(0,1,0,1) : float4(1,0,0,1);
+            color = DrawShape(2, color, pos, detectorPos, float2(6,6), float4(DetectorColor2, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 0.0f, 4, float2(0.0f, 360.0f), 0.0f);
         }
         if (Detector3) {
-            const float2 detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
-            const float4 outlineColor = detectorMatched3 ? float4(0,1,0,1) : float4(1,0,0,1);
-            color = DrawShape(3, color, pos, detectorPos, float2(6,6), float4(DetectorColor3, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 0.0f, 4, float2(0.0f, 360.0f), 0.0f);
+            detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
+            outlineColor = detectorMatched3 ? float4(0,1,0,1) : float4(1,0,0,1);
+            color = DrawShape(2, color, pos, detectorPos, float2(6,6), float4(DetectorColor3, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 0.0f, 4, float2(0.0f, 360.0f), 0.0f);
         }
     }
 
@@ -1347,20 +1366,20 @@ float4 DrawShapes(float4 color, float4 pos) {
     }
 
     if (FollowCursor) {
-        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, MousePoint + Offset + Offset1, FillSize1, FillColor1, GapSize1, GapOffset1, OutlineSize1, OutlineColor1, Rotation1, Anchor1, Section1, Skew1);
-        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, MousePoint + Offset + Offset2, FillSize2, FillColor2, GapSize2, GapOffset2, OutlineSize2, OutlineColor2, Rotation2, Anchor2, Section2, Skew2);
-        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, MousePoint + Offset + Offset3, FillSize3, FillColor3, GapSize3, GapOffset3, OutlineSize3, OutlineColor3, Rotation3, Anchor3, Section3, Skew3);
-        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, MousePoint + Offset + Offset4, FillSize4, FillColor4, GapSize4, GapOffset4, OutlineSize4, OutlineColor4, Rotation4, Anchor4, Section4, Skew4);
-        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, MousePoint + Offset + Offset5, FillSize5, FillColor5, GapSize5, GapOffset5, OutlineSize5, OutlineColor5, Rotation5, Anchor5, Section5, Skew5);
-        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, MousePoint + Offset + Offset6, FillSize6, FillColor6, GapSize6, GapOffset6, OutlineSize6, OutlineColor6, Rotation6, Anchor6, Section6, Skew6);
+        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, MousePoint + Offset + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1);
+        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, MousePoint + Offset + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2);
+        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, MousePoint + Offset + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3);
+        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, MousePoint + Offset + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4);
+        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, MousePoint + Offset + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5);
+        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, MousePoint + Offset + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6);
     }
     else {
-        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset + Offset1, FillSize1, FillColor1, GapSize1, GapOffset1, OutlineSize1, OutlineColor1, Rotation1, Anchor1, Section1, Skew1);
-        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset + Offset2, FillSize2, FillColor2, GapSize2, GapOffset2, OutlineSize2, OutlineColor2, Rotation2, Anchor2, Section2, Skew2);
-        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset + Offset3, FillSize3, FillColor3, GapSize3, GapOffset3, OutlineSize3, OutlineColor3, Rotation3, Anchor3, Section3, Skew3);
-        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset + Offset4, FillSize4, FillColor4, GapSize4, GapOffset4, OutlineSize4, OutlineColor4, Rotation4, Anchor4, Section4, Skew4);
-        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset + Offset5, FillSize5, FillColor5, GapSize5, GapOffset5, OutlineSize5, OutlineColor5, Rotation5, Anchor5, Section5, Skew5);
-        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset + Offset6, FillSize6, FillColor6, GapSize6, GapOffset6, OutlineSize6, OutlineColor6, Rotation6, Anchor6, Section6, Skew6);
+        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1);
+        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2);
+        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3);
+        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4);
+        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5);
+        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6);
     }
 
     return color;
@@ -1417,18 +1436,6 @@ float4 PS_CustomCrosshairSSAAx4(float4 pos: SV_POSITION, float2 texCoord: TEXCOO
     return DrawShapes(float4(tex2D(ReShade::BackBuffer, texCoord).rgb, 0), pos);
 }
 
-// float4 PS_CustomCrosshairSSAAx8(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-//     if (Antialiasing != 3) discard;
-    
-//     return DrawShapes(float4(tex2D(ReShade::BackBuffer, texCoord).rgb, 0), pos);
-// }
-
-// float4 PS_CustomCrosshairSSAAx16(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-//     if (Antialiasing != 3) discard;
-    
-//     return DrawShapes(float4(tex2D(ReShade::BackBuffer, texCoord).rgb, 0), pos);
-// }
-
 float4 PS_final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
     float4 overlay;
     switch (Antialiasing) {
@@ -1443,37 +1450,6 @@ float4 PS_final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET 
                 + tex2D(overlaySamplerSSAAx4, texCoord + BUFFER_PIXEL_SIZE / 2.0f * float2(1, 1))
                 ) / 4;
             break;
-        // case 2:
-        //     overlay = (tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(0, 0))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(1, 0))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(2, 0))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(0, 1))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(1, 1))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(2, 1))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(0, 2))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(1, 2))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 3.0f * float2(2, 2))
-        //         ) / 9;
-        //     break;
-        // case 3:
-        //     overlay = (tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(0, 0))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(1, 0))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(2, 0))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(3, 0))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(0, 1))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(1, 1))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(2, 1))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(3, 1))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(0, 2))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(1, 2))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(2, 2))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(3, 2))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(0, 3))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(1, 3))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(2, 3))
-        //         + tex2D(overlaySamplerSSAAx16, texCoord + BUFFER_PIXEL_SIZE / 4.0f * float2(3, 3))
-        //         ) / 16;
-        //     break;
     }
     
     if (ShowDebug)
@@ -1486,11 +1462,9 @@ float4 PS_final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET 
 // Techniques
 // ------------------------------------------------------------------------------------------------------------------------
 
-technique CustomCrosshair {
-    // pass test {
-    //     VertexShader = PostProcessVS;
-    //     PixelShader = PS_UIDetect;
-    // }
+technique CustomCrosshair <
+    ui_label = "Custom Crosshair";
+> {
     pass detector {
         VertexShader = PostProcessVS;
         PixelShader = PS_UIDetect;
@@ -1507,16 +1481,6 @@ technique CustomCrosshair {
         PixelShader = PS_CustomCrosshairSSAAx4;
         RenderTarget = overlayTargetSSAAx4;
     }
-    // pass overlaySSAAx8 {
-    //     VertexShader = PostProcessVS;
-    //     PixelShader = PS_CustomCrosshairSSAAx8;
-    //     RenderTarget = overlayTargetSSAAx8;
-    // }
-    // pass overlaySSAAx16 {
-    //     VertexShader = PostProcessVS;
-    //     PixelShader = PS_CustomCrosshairSSAAx16;
-    //     RenderTarget = overlayTargetSSAAx16;
-    // }
     pass final {
         VertexShader = PostProcessVS;
         PixelShader = PS_final;
