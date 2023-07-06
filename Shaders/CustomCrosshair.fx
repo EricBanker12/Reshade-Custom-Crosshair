@@ -2454,8 +2454,21 @@
                 || basePos.x > max(C.x, B.x) + outlineSize
                     || basePos.y > C.y + outlineSize)
             return baseColor;
+        
+        // // Debugging skew
+        // const float2 avgCenter = (A + B + C) / 3.0f;
+        // if (distance(basePos, centerPos) <= 3) return float4(1,0,0,1);
+        // if (distance(basePos, avgCenter) <= 3) return float4(0,0,1,1);
+        
+        const float2 AP = basePos - A;
+        const float2 BP = basePos - B;
+        const float2 CP = basePos - C;
 
-        const bool inTriangle = ((B - A).x * (basePos - A).y - (B - A).y * (basePos - A).x > 0) == ((C - B).x * (basePos - B).y - (C - B).y * (basePos - B).x > 0) && ((B - A).x * (basePos - A).y - (B - A).y * (basePos - A).x > 0) == ((A - C).x * (basePos - C).y - (A - C).y * (basePos - C).x > 0);
+        const float2 AB = B - A;
+        const float2 BC = C - B;
+        const float2 CA = A - C;
+
+        const bool inTriangle = (AB.x * AP.y - AB.y * AP.x > 0) == (BC.x * BP.y - BC.y * BP.x > 0) && (AB.x * AP.y - AB.y * AP.x > 0) == (CA.x * CP.y - CA.y * CP.x > 0);
         bool inTriangleGap = false;
 
         float rotation;
@@ -2464,11 +2477,19 @@
         float2 fillEndPos;
 
         if (gapSize.x > 0 && gapSize.y > 0) {
-            const float2 D = float2(centerPos.x - gapSize.x / 2.0 * (1 + skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
-            const float2 E = float2(centerPos.x + gapSize.x * skew / 90.0f, centerPos.y - gapSize.y * 2.0 / 3.0) + gapOffset;
-            const float2 F = float2(centerPos.x + gapSize.x / 2.0 * (1 - skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
+            const float2 D = float2 (centerPos.x - gapSize.x / 2.0 * (1 + skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
+            const float2 E = float2 (centerPos.x + gapSize.x * skew / 90.0f, centerPos.y - gapSize.y * 2.0 / 3.0) + gapOffset;
+            const float2 F = float2 (centerPos.x + gapSize.x / 2.0 * (1 - skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
             
-            inTriangleGap = ((E - D).x * (basePos - D).y - (E - D).y * (basePos - D).x > 0) == ((F - E).x * (basePos - E).y - (F - E).y * (basePos - E).x > 0) && ((E - D).x * (basePos - D).y - (E - D).y * (basePos - D).x > 0) == ((D - F).x * (basePos - F).y - (D - F).y * (basePos - F).x > 0);
+            const float2 DP = basePos - D;
+            const float2 EP = basePos - E;
+            const float2 FP = basePos - F;
+
+            const float2 DE = E - D;
+            const float2 EF = F - E;
+            const float2 FD = D - F;
+            
+            inTriangleGap = ((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0));
             
             // inside fill with gap
             if (inTriangle && !inTriangleGap) 
@@ -2504,16 +2525,67 @@
 
             // inside outline intersection with outside outline
             if (!inTriangle && inTriangleGap && outlineSize > 0) {
+                // get slope: y1 - y2 = mx1 + b - mx2 - b | m = (y1 - y2) / (x1 - x2)
+                const float ACm = (C.y - A.y) / (C.x - A.x);
+                const float ABm = (B.y - A.y) / (B.x - A.x);
+                const float BCm = (C.y - B.y) / (C.x - B.x);
+                const float DFm = (F.y - D.y) / (F.x - D.x);
+                const float DEm = (E.y - D.y) / (E.x - D.x);
+                const float EFm = (F.y - E.y) / (F.x - E.x);
                 
-                const float2 ACDE = float2(((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (E.y - D.y) / (E.x - D.x)), (C.y - A.y) / (C.x - A.x) * ((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (E.y - D.y) / (E.x - D.x)) + (A.y - (C.y - A.y) / (C.x - A.x) * A.x));
-                const float2 ACEF = float2(((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (F.y - E.y) / (F.x - E.x)), (C.y - A.y) / (C.x - A.x) * ((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (F.y - E.y) / (F.x - E.x)) + (A.y - (C.y - A.y) / (C.x - A.x) * A.x));
+                // get y intercept: y = mx + b | b = y - mx
+                const float ACb = A.y - ACm * A.x;
+                const float ABb = A.y - ABm * A.x;
+                const float BCb = B.y - BCm * B.x;
+                const float DFb = D.y - DFm * D.x;
+                const float DEb = D.y - DEm * D.x;
+                const float EFb = E.y - EFm * E.x;
+                
+                // find intersect
+                const float2 ACDE = float2((DEb - ACb) / (ACm - DEm), ACm * (DEb - ACb) / (ACm - DEm) + ACb);
+                const float2 ACEF = float2((EFb - ACb) / (ACm - EFm), ACm * (EFb - ACb) / (ACm - EFm) + ACb);
                 // AC cannot intersect DF, always parallel
-                const float2 ABDF = float2(((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - D.y) / (F.x - D.x)), (B.y - A.y) / (B.x - A.x) * ((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - D.y) / (F.x - D.x)) + (A.y - (B.y - A.y) / (B.x - A.x) * A.x));
-                const float2 ABDE = float2(((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (E.y - D.y) / (E.x - D.x)), (B.y - A.y) / (B.x - A.x) * ((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (E.y - D.y) / (E.x - D.x)) + (A.y - (B.y - A.y) / (B.x - A.x) * A.x));
-                const float2 ABEF = float2(((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - E.y) / (F.x - E.x)), (B.y - A.y) / (B.x - A.x) * ((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - E.y) / (F.x - E.x)) + (A.y - (B.y - A.y) / (B.x - A.x) * A.x));
-                const float2 BCDF = float2(((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - D.y) / (F.x - D.x)), (C.y - B.y) / (C.x - B.x) * ((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - D.y) / (F.x - D.x)) + (B.y - (C.y - B.y) / (C.x - B.x) * B.x));
-                const float2 BCDE = float2(((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (E.y - D.y) / (E.x - D.x)), (C.y - B.y) / (C.x - B.x) * ((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (E.y - D.y) / (E.x - D.x)) + (B.y - (C.y - B.y) / (C.x - B.x) * B.x));
-                const float2 BCEF = float2(((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - E.y) / (F.x - E.x)), (C.y - B.y) / (C.x - B.x) * ((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - E.y) / (F.x - E.x)) + (B.y - (C.y - B.y) / (C.x - B.x) * B.x));
+                const float2 ABDF = float2((DFb - ABb) / (ABm - DFm), ABm * (DFb - ABb) / (ABm - DFm) + ABb);
+                const float2 ABDE = float2((DEb - ABb) / (ABm - DEm), ABm * (DEb - ABb) / (ABm - DEm) + ABb);
+                const float2 ABEF = float2((EFb - ABb) / (ABm - EFm), ABm * (EFb - ABb) / (ABm - EFm) + ABb);
+                const float2 BCDF = float2((DFb - BCb) / (BCm - DFm), BCm * (DFb - BCb) / (BCm - DFm) + BCb);
+                const float2 BCDE = float2((DEb - BCb) / (BCm - DEm), BCm * (DEb - BCb) / (BCm - DEm) + BCb);
+                const float2 BCEF = float2((EFb - BCb) / (BCm - EFm), BCm * (EFb - BCb) / (BCm - EFm) + BCb);
+
+                // // debugging visualizer
+                // outlineColor = float4(1,0,0,1);
+
+                // // if (distance(basePos, float2(basePos.x, EFm * basePos.x + EFb)) <= outlineSize)
+                // //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
+
+                // if (distance(basePos, A) <= outlineSize)
+                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
+                // if (distance(basePos, B) <= outlineSize)
+                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
+                // if (distance(basePos, C) <= outlineSize)
+                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
+                // if (distance(basePos, D) <= outlineSize)
+                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
+                // if (distance(basePos, E) <= outlineSize)
+                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
+                // if (distance(basePos, F) <= outlineSize)
+                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
+                // if (distance(basePos, ACDE) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                // if (distance(basePos, ACEF) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                // if (distance(basePos, ABDF) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                // if (distance(basePos, ABDE) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                // if (distance(basePos, ABEF) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                // if (distance(basePos, BCDF) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                // if (distance(basePos, BCDE) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                // if (distance(basePos, BCEF) <= outlineSize)
+                //     return lerp(baseColor, outlineColor, outlineColor.a);
                 
                 // test intersect
                 if (distance(basePos, ACDE) <= outlineSize && dot(ACDE - A, C - A) >= 0 && dot(ACDE - A, C - A) < dot(C - A, C - A) && dot(ACDE - E, D - E) >= 0 && dot(ACDE - E, D - E) < dot(D - E, D - E)) 
