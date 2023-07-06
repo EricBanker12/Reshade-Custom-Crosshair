@@ -150,16 +150,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section1 <
+    uniform float Slice1 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
     // uniform float4 FillColor1 <
     //     ui_type = "color";
@@ -275,16 +275,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section2 <
+    uniform float Slice2 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 3
@@ -376,16 +376,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section3 <
+    uniform float Slice3 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 4
@@ -477,16 +477,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section4 <
+    uniform float Slice4 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 5
@@ -578,16 +578,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section5 <
+    uniform float Slice5 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 6
@@ -679,16 +679,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section6 <
+    uniform float Slice6 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 7
@@ -780,16 +780,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section7 <
+    uniform float Slice7 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 8
@@ -881,16 +881,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section8 <
+    uniform float Slice8 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 9
@@ -982,16 +982,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section9 <
+    uniform float Slice9 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 10
@@ -1083,16 +1083,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section10 <
+    uniform float Slice10 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 11
@@ -1184,16 +1184,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section11 <
+    uniform float Slice11 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 12
@@ -1285,16 +1285,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section12 <
+    uniform float Slice12 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 13
@@ -1386,16 +1386,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section13 <
+    uniform float Slice13 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 14
@@ -1487,16 +1487,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section14 <
+    uniform float Slice14 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 15
@@ -1588,16 +1588,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section15 <
+    uniform float Slice15 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 16
@@ -1689,16 +1689,16 @@
         ui_category_closed = true;
     > = 0.0f;
 
-    uniform float2 Section16 <
+    uniform float Slice16 <
         ui_type = "drag";
-        ui_label = "Section";
+        ui_label = "Slice";
         ui_tooltip = "The section of an Ellipse to render in degrees. No effect on Rectangles or Triangles.";
         ui_min = 0;
         ui_max = 360;
         ui_step = 1.0f;
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = float2(0,360);
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // UI Detection
@@ -1718,7 +1718,7 @@
         ui_tooltip = "Show detectors for ease of configuration.";
         ui_category = "UI Detection";
         ui_category_closed = true;
-    > = false;
+    > = true;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // UI Detection > Detector 1
@@ -1755,7 +1755,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -1822,7 +1822,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -1889,7 +1889,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -1956,7 +1956,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -2023,7 +2023,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -2090,7 +2090,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -2157,7 +2157,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -2224,7 +2224,7 @@
         ui_label = "Size";
         ui_tooltip = "Width and height for within the detector will match.";
         ui_min = float2(1,1);
-        ui_max = float2(1000,1000);
+        ui_max = float2(100,100);
         ui_step = 1.0f;
         ui_category = "UI Detection";
         ui_category_closed = true;
@@ -2265,18 +2265,18 @@
 
     static const float2 CenterPoint = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
     static const float2 PixelOffset = float2(0.5f, 0.5f);
+    static const float2 anchorOffsets[9] = {float2(0.5f, 0.5f), float2(0, 0.5f), float2(-0.5f, 0.5f), float2(0.5f, 0), float2(0, 0), float2(-0.5f, 0), float2(0.5f, -0.5f), float2(0, -0.5f), float2(-0.5f, -0.5f)};
 
+    // uniform float FrameTime < source = "frametime"; >;
+    uniform float Time < source = "timer"; >;
+    uniform bool OverlayOpen < source = "overlay_open"; >;
     uniform float2 MousePoint < source = "mousepoint"; >;
 
-    // uniform float2 MouseDelta < source = "mousedelta"; >;
-    // uniform float FrameTime < source = "frametime"; >;
     // uniform bool SpaceBar <source = "key"; keycode = 0x20; mode = ""; >;
+    // uniform bool left_mouse_button_down < source = "mousebutton"; keycode = 0; mode = ""; >;
 
     /*
     To Do:
-
-    - Make rectangle outer outline have rounded corners or give triangles sharp corners - use two rectangles as mask for eachother
-    - Fix weird triangle inner and outer overlay overlap issue - draw rectangle masked by gap and outline
     - option to use png image layer instead of shape - see https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/Layer.fx
     - hotkey enable/disable shapes - might be easier to duplicate fx file for switching between different crosshairs
     - hotkey animated transformations - likely too expensive unless pre-rendered - could use overlay LoD for frames?
@@ -2303,171 +2303,131 @@
     #include "ReShade.fxh"
 
 // ------------------------------------------------------------------------------------------------------------------------
-// Struct
+// Structs
 // ------------------------------------------------------------------------------------------------------------------------
-
-struct Shape {
-    int shape; float2 fillPos; float2 fillSize; float4 fillColor; float2 gapSize; float2 gapOffset; float outlineSize; float4 outlineColor; float rotation; int anchor; float2 section; float skew;
-};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Functions
 // ------------------------------------------------------------------------------------------------------------------------
-    Shape CreateShape(int shape, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float rotation, int anchor, float2 section, float skew) {
-        Shape createShape;
-        createShape.shape = shape;
-        createShape.fillPos = fillPos;
-        createShape.fillSize = fillSize;
-        createShape.fillColor = fillColor;
-        createShape.gapSize = gapSize;
-        createShape.gapOffset = gapOffset;
-        createShape.outlineSize = outlineSize;
-        createShape.outlineColor = outlineColor;
-        createShape.rotation = rotation;
-        createShape.anchor = anchor;
-        createShape.section = section;
-        createShape.skew = skew;
-        return createShape;
+    // https://iquilezles.org/articles/distfunctions2d/
+    float sdBox( in float2 p, in float2 b )
+    {
+        float2 d = abs(p)-b;
+        return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
     }
 
-    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor) {
-        float2 anchorOffset;
-        switch (anchor) {
-            default:
-            case 0: // Top Left
-                anchorOffset = float2(0, 0);
-                break;
-            case 1: // Top Center
-                anchorOffset = float2(0.5f, 0);
-                break;
-            case 2: // Top Right
-                anchorOffset = float2(1.0f, 0);
-                break;
-            case 3: // Center Left
-                anchorOffset = float2(0, 0.5f);
-                break;
-            case 4: // Center
-                anchorOffset = float2(0.5f, 0.5f);
-                break;
-            case 5: // Center Right
-                anchorOffset = float2(1.0f, 0.5f);
-                break;
-            case 6: // Bottom Left
-                anchorOffset = float2(0, 1.0f);
-                break;
-            case 7: // Bottom Center
-                anchorOffset = float2(0.5f, 1.0f);
-                break;
-            case 8: //Bottom Right
-                anchorOffset = float2(1.0f, 1.0f);
-                break;
+    float sdPie( in float2 p, in float2 c, in float r )
+    {
+        p.x = abs(p.x);
+        float l = length(p) - r;
+        float m = length(p-c*clamp(dot(p,c),0.0,r)); // c=sin/cos of aperture
+        return max(l,m*sign(c.y*p.x-c.x*p.y));
+    }
+
+    float sdEllipse( in float2 p, in float2 ab )
+    {
+        if (ab.x == ab.y) return length(p) - ab.x;
+        
+        p = abs(p);
+        if( p.x > p.y ) {p=p.yx;ab=ab.yx;}
+        float l = ab.y*ab.y - ab.x*ab.x;
+        float m = ab.x*p.x/l;
+        float m2 = m*m; 
+        float n = ab.y*p.y/l;
+        float n2 = n*n; 
+        float c = (m2+n2-1.0)/3.0;
+        float c3 = c*c*c;
+        float q = c3 + m2*n2*2.0;
+        float d = c3 + m2*n2;
+        float g = m + m*n2;
+        float co;
+        if (d < 0.0f)
+        {
+            float h = acos(q/c3)/3.0;
+            float s = cos(h);
+            float t = sin(h)*sqrt(3.0);
+            float rx = sqrt( -c*(s + t + 2.0) + m2 );
+            float ry = sqrt( -c*(s - t + 2.0) + m2 );
+            co = (ry+sign(l)*rx+abs(g)/(rx*ry)- m)/2.0;
         }
+        else
+        {
+            float h = 2.0*m*n*sqrt( d );
+            float s = sign(q+h)*pow(abs(q+h), 1.0/3.0);
+            float u = sign(q-h)*pow(abs(q-h), 1.0/3.0);
+            float rx = -s - u - c*4.0 + 2.0*m2;
+            float ry = (s - u)*sqrt(3.0);
+            float rm = sqrt( rx*rx + ry*ry );
+            co = (ry/sqrt(rm-rx)+2.0*g/rm-m)/2.0;
+        }
+        float2 r = ab * float2(co, sqrt(1.0-co*co));
+        return length(r-p) * sign(p.y-r.y);
+    }
 
-        const float2 fillStartPos = fillPos - fillSize * anchorOffset;
-        const float2 fillEndPos = fillStartPos + fillSize;
+    float sdTriangle( in float2 p, in float2 p0, in float2 p1, in float2 p2 )
+    {
+        float2 e0 = p1-p0, e1 = p2-p1, e2 = p0-p2;
+        float2 v0 = p -p0, v1 = p -p1, v2 = p -p2;
+        float2 pq0 = v0 - e0*clamp( dot(v0,e0)/dot(e0,e0), 0.0, 1.0 );
+        float2 pq1 = v1 - e1*clamp( dot(v1,e1)/dot(e1,e1), 0.0, 1.0 );
+        float2 pq2 = v2 - e2*clamp( dot(v2,e2)/dot(e2,e2), 0.0, 1.0 );
+        float s = sign( e0.x*e2.y - e0.y*e2.x );
+        float2 d = min(min(float2(dot(pq0,pq0), s*(v0.x*e0.y-v0.y*e0.x)),
+                        float2(dot(pq1,pq1), s*(v1.x*e1.y-v1.y*e1.x))),
+                        float2(dot(pq2,pq2), s*(v2.x*e2.y-v2.y*e2.x)));
+        return -sqrt(d.x)*sign(d.y);
+    }
+    
+    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor) {
+        const float2 center = fillPos + fillSize * anchorOffsets[anchor];
+        const float sdFill = sdBox(basePos - center, fillSize / 2.0f);
 
-        if (basePos.x < fillStartPos.x - outlineSize
-            || basePos.y < fillStartPos.y - outlineSize
-                || basePos.x > fillEndPos.x + outlineSize
-                    || basePos.y > fillEndPos.y + outlineSize)
-            return baseColor;
-
-        const float2 gapStartPos = fillStartPos + fillSize / 2.0 - gapSize / 2.0f + gapOffset;
-        const float2 gapEndPos = gapStartPos + gapSize;
-        
-        if (basePos.x >= fillStartPos.x && basePos.x < fillEndPos.x && basePos.y >= fillStartPos.y && basePos.y < fillEndPos.y)
-            if (gapSize.x == 0 || gapSize.y == 0 || basePos.x < gapStartPos.x || basePos.x >= gapEndPos.x || basePos.y < gapStartPos.y || basePos.y >= gapEndPos.y)
-                if (baseColor.a > 0.0f && fillColor.a < 1.0f) { return lerp(baseColor, fillColor, fillColor.a); } else { return fillColor; }
-        
-        if (outlineSize > 0)
-            if (basePos.x >= fillStartPos.x - outlineSize && basePos.x < fillEndPos.x + outlineSize && basePos.y >= fillStartPos.y - outlineSize && basePos.y < fillEndPos.y + outlineSize)
-                if (gapSize.x == 0
-                    || gapSize.y == 0
-                        || outlineSize >= gapSize.x / 2
-                            || outlineSize >= gapSize.y / 2
-                                || basePos.x < gapStartPos.x + outlineSize
-                                    || basePos.x >= gapEndPos.x - outlineSize
-                                        || basePos.y < gapStartPos.y + outlineSize
-                                            || basePos.y >= gapEndPos.y - outlineSize)
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
+        if (gapSize.x > 0 && gapSize.y > 0) {
+            gapSize /= 2.0f;
+            const float sdGap = sdBox(basePos - center - gapOffset, gapSize);
+            if (sdFill <= 0 && sdGap > 0) return lerp(fillColor, baseColor, baseColor.a);
+            if (sdFill <= outlineSize && sdGap > -outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
+        }
+        else {
+            if (sdFill <= 0) return lerp(fillColor, baseColor, baseColor.a);
+            if (sdFill <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
+        }
 
         return baseColor;
     }
 
-    float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor, float2 section) {
-        if (section.x >= section.y || section.y <= section.x)
-            return baseColor;
+    float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor, float slice) {
+        const float2 center = fillPos + fillSize * anchorOffsets[anchor];
+        fillSize /= 2.0f;
+        const float sdFill = sdEllipse(basePos - center, fillSize);
 
-        float2 anchorOffset;
-        switch (anchor) {
-            default:
-            case 0: // Top Left
-                anchorOffset = float2(0, 0);
-                break;
-            case 1: // Top Center
-                anchorOffset = float2(0.5f, 0);
-                break;
-            case 2: // Top Right
-                anchorOffset = float2(1.0f, 0);
-                break;
-            case 3: // Center Left
-                anchorOffset = float2(0, 0.5f);
-                break;
-            case 4: // Center
-                anchorOffset = float2(0.5f, 0.5f);
-                break;
-            case 5: // Center Right
-                anchorOffset = float2(1.0f, 0.5f);
-                break;
-            case 6: // Bottom Left
-                anchorOffset = float2(0, 1.0f);
-                break;
-            case 7: // Bottom Center
-                anchorOffset = float2(0.5f, 1.0f);
-                break;
-            case 8: //Bottom Right
-                anchorOffset = float2(1.0f, 1.0f);
-                break;
+        if (gapSize.x > 0 && gapSize.y > 0) {
+            gapSize /= 2.0f;
+            const float sdGap = sdEllipse(basePos - center - gapOffset, gapSize);
+            
+            if (slice > 0) {
+                slice = radians(180.0f - slice / 2.0f);
+                const float sdSlice = sdPie(basePos - center, float2(sin(slice), cos(slice)), max(fillSize.x, fillSize.y));
+
+                if (sdFill <= 0 && sdGap > 0 && sdSlice <= 0) return lerp(fillColor, baseColor, baseColor.a);
+                if (sdFill <= outlineSize && sdGap > -outlineSize && sdSlice <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
+            }
+            else {
+                if (sdFill <= 0 && sdGap > 0) return lerp(fillColor, baseColor, baseColor.a);
+                if (sdFill <= outlineSize && sdGap > -outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
+            }
         }
-        
-        const float2 centerPos = float2(fillPos.x + fillSize.x * (0.5f - anchorOffset.x), fillPos.y + fillSize.y * (0.5f - anchorOffset.y));
+        else {
+            if (slice > 0) {
+                slice = radians(180.0f - slice / 2.0f);
+                const float sdSlice = sdPie(basePos - center, float2(sin(slice), cos(slice)), max(fillSize.x, fillSize.y));
 
-        if (basePos.x < centerPos.x - fillSize.x / 2.0f - outlineSize
-            || basePos.y < centerPos.y - fillSize.y / 2.0f - outlineSize
-                || basePos.x > centerPos.x + fillSize.x / 2.0f + outlineSize
-                    || basePos.y > centerPos.y + fillSize.y / 2.0f + outlineSize)
-            return baseColor;
-
-        const float2 centeredPos = basePos - centerPos;
-        const float centeredAngle = degrees(atan2(centeredPos.y, centeredPos.x)) + 180.0f;
-        const float2 gappedPos = centeredPos + gapOffset;
-        if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0f, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0f, 2) <= 1)
-            if (gapSize.x < 1 || gapSize.y < 1 || (gapSize.x > 0 && gapSize.y > 0 && pow(gappedPos.x, 2) / pow(gapSize.x / 2.0f, 2) + pow(gappedPos.y, 2) / pow(gapSize.y / 2.0f, 2) > 1))
-                if (centeredAngle >= section.x && (centeredAngle < section.y || section.y == 360))
-                    if (baseColor.a > 0.0f && fillColor.a < 1.0f) { return lerp(baseColor, fillColor, fillColor.a); } else { return fillColor; }
-
-        if (outlineSize > 0) {
-            if (pow(centeredPos.x, 2) / pow(fillSize.x / 2.0f + outlineSize, 2) + pow(centeredPos.y, 2) / pow(fillSize.y / 2.0f + outlineSize, 2) <= 1) {
-                if (gapSize.x < 1 || gapSize.y < 1 || outlineSize >= gapSize.x / 2 || outlineSize >= gapSize.y / 2 || (gapSize.x > 0 && gapSize.y > 0 && pow(gappedPos.x, 2) / pow(gapSize.x / 2.0f - outlineSize, 2) + pow(gappedPos.y, 2) / pow(gapSize.y / 2.0f - outlineSize, 2) > 1)) {
-                    if (centeredAngle >= section.x && (centeredAngle < section.y || section.y == 360)) 
-                        if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                    else if (section.x > 0 || section.y < 360) {
-                        float2 rotatedPos = float2((basePos.x - centerPos.x) * cos(-radians(section.x)) - (basePos.y - centerPos.y) * sin(-radians(section.x)) + centerPos.x, (basePos.x - centerPos.x) * sin(-radians(section.x)) + (basePos.y - centerPos.y) * cos(-radians(section.x)) + centerPos.y);
-                        float2 fillStartPos = centerPos - float2(fillPos.x + outlineSize, 0);
-                        float2 fillEndPos = centerPos + float2(0, outlineSize);
-                        if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                            if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                        
-                        rotatedPos = float2((basePos.x - centerPos.x) * cos(-radians(section.y)) - (basePos.y - centerPos.y) * sin(-radians(section.y)) + centerPos.x, (basePos.x - centerPos.x) * sin(-radians(section.y)) + (basePos.y - centerPos.y) * cos(-radians(section.y)) + centerPos.y);
-                        fillStartPos = centerPos - float2(fillPos.x + outlineSize, outlineSize);
-                        fillEndPos = centerPos;
-                        if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                            if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                        
-                        if (pow(centeredPos.x, 2) + pow(centeredPos.y, 2) < pow(outlineSize, 2)) 
-                            if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                    }
-                }
+                if (sdFill <= 0 && sdSlice <= 0) return lerp(fillColor, baseColor, baseColor.a);
+                if (sdFill <= outlineSize && sdSlice <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
+            }
+            else {
+                if (sdFill <= 0) return lerp(fillColor, baseColor, baseColor.a);
+                if (sdFill <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
             }
         }
 
@@ -2475,205 +2435,34 @@ struct Shape {
     }
 
     float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor, float skew) {
-        float2 anchorOffset;
-        switch (anchor) {
-            default:
-            case 0: // Top Left
-                anchorOffset = float2(0, 0);
-                break;
-            case 1: // Top Center
-                anchorOffset = float2(0.5f, 0);
-                break;
-            case 2: // Top Right
-                anchorOffset = float2(1.0f, 0);
-                break;
-            case 3: // Center Left
-                anchorOffset = float2(0, 2.0f / 3.0f);
-                break;
-            case 4: // Center
-                anchorOffset = float2(0.5f, 2.0f / 3.0f);
-                break;
-            case 5: // Center Right
-                anchorOffset = float2(1.0f, 2.0f / 3.0f);
-                break;
-            case 6: // Bottom Left
-                anchorOffset = float2(0, 1.0f);
-                break;
-            case 7: // Bottom Center
-                anchorOffset = float2(0.5f, 1.0f);
-                break;
-            case 8: //Bottom Right
-                anchorOffset = float2(1.0f, 1.0f);
-                break;
-        }
-        
-        const float2 centerPos = float2(fillPos.x + fillSize.x * (0.5f - anchorOffset.x), fillPos.y + fillSize.y * (2.0f / 3.0f - anchorOffset.y));
+        // float2 anchorOffsets[9] = {float2(0.5f, 0.67f), float2(0, 0.67f), float2(-0.5f, 0.67f), float2(0.5f, 0), float2(0, 0), float2(-0.5f, 0f), float2(0.5f, -0.33f), float2(0, -0.33f), float2(-0.5f, -0.33f)};
+        float2 anchorOffset = anchorOffsets[anchor];
+        if (anchorOffset.y != 0.0f) anchorOffset.y += 1.0f / 6.0f;
 
-        const float2 A = float2 (centerPos.x - fillSize.x / 2.0 * (1 + skew / 90.0f), centerPos.y + fillSize.y / 3.0);
-        const float2 B = float2 (centerPos.x + fillSize.x * skew / 90.0f, centerPos.y - fillSize.y * 2.0 / 3.0);
-        const float2 C = float2 (centerPos.x + fillSize.x / 2.0 * (1 - skew / 90.0f), centerPos.y + fillSize.y / 3.0);
-
-        if (basePos.x < min(A.x, B.x) - outlineSize
-            || basePos.y < B.y - outlineSize
-                || basePos.x > max(C.x, B.x) + outlineSize
-                    || basePos.y > C.y + outlineSize)
-            return baseColor;
-        
-        const float2 AP = basePos - A;
-        const float2 BP = basePos - B;
-        const float2 CP = basePos - C;
-
-        const float2 AB = B - A;
-        const float2 BC = C - B;
-        const float2 CA = A - C;
-
-        const bool inTriangle = (AB.x * AP.y - AB.y * AP.x > 0) == (BC.x * BP.y - BC.y * BP.x > 0) && (AB.x * AP.y - AB.y * AP.x > 0) == (CA.x * CP.y - CA.y * CP.x > 0);
-        bool inTriangleGap = false;
-
-        float rotation;
-        float2 rotatedPos;
-        float2 fillStartPos;
-        float2 fillEndPos;
+        const float2 center = fillPos + fillSize * anchorOffset;
+        float2 A = float2 (-fillSize.x / 2.0f * (1 + skew / 90.0f), fillSize.y / 3.0f);
+        float2 B = float2 (fillSize.x * skew / 90.0f, -fillSize.y * 2.0f / 3.0f);
+        float2 C = float2 (fillSize.x / 2.0f * (1 - skew / 90.0f), fillSize.y / 3.0f);
+        const float sdFill = sdTriangle(basePos - center, A, B, C);
 
         if (gapSize.x > 0 && gapSize.y > 0) {
-            const float2 D = float2 (centerPos.x - gapSize.x / 2.0 * (1 + skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
-            const float2 E = float2 (centerPos.x + gapSize.x * skew / 90.0f, centerPos.y - gapSize.y * 2.0 / 3.0) + gapOffset;
-            const float2 F = float2 (centerPos.x + gapSize.x / 2.0 * (1 - skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
-            
-            const float2 DP = basePos - D;
-            const float2 EP = basePos - E;
-            const float2 FP = basePos - F;
+            A = float2 (-gapSize.x / 2.0f * (1 + skew / 90.0f), gapSize.y / 3.0f);
+            B = float2 (gapSize.x * skew / 90.0f, -gapSize.y * 2.0f / 3.0f);
+            C = float2 (gapSize.x / 2.0f * (1 - skew / 90.0f), gapSize.y / 3.0f);
+            const float sdGap = sdTriangle(basePos - center - gapOffset, A, B, C);
 
-            const float2 DE = E - D;
-            const float2 EF = F - E;
-            const float2 FD = D - F;
-            
-            inTriangleGap = ((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0));
-            
-            // inside fill with gap
-            if (inTriangle && !inTriangleGap) 
-                if (baseColor.a > 0.0f && fillColor.a < 1.0f) { return lerp(baseColor, fillColor, fillColor.a); } else { return fillColor; }
-
-            // inside outline
-            if (inTriangle && inTriangleGap && outlineSize > 0) {
-                rotation = 0;
-                rotatedPos = float2((basePos.x - D.x) * cos(-rotation) - (basePos.y - D.y) * sin(-rotation) + D.x, (basePos.x - D.x) * sin(-rotation) + (basePos.y - D.y) * cos(-rotation) + D.y);
-                fillStartPos = D + float2(0, -outlineSize);
-                fillEndPos = D + float2(F.x - D.x, 0);
-                if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-
-                rotation = atan(gapSize.y / (F.x - E.x));
-                if (skew <= 30)
-                    rotation += radians(180);
-                rotatedPos = float2((basePos.x - F.x) * cos(-rotation) - (basePos.y - F.y) * sin(-rotation) + F.x, (basePos.x - F.x) * sin(-rotation) + (basePos.y - F.y) * cos(-rotation) + F.y);
-                fillStartPos = F + float2(0, -outlineSize);
-                fillEndPos = F + float2(distance(F,E), 0);
-                if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-
-                rotation = atan(gapSize.y / (D.x - E.x));
-                if (skew > -30)
-                    rotation += radians(180);
-                rotatedPos = float2((basePos.x - D.x) * cos(-rotation) - (basePos.y - D.y) * sin(-rotation) + D.x, (basePos.x - D.x) * sin(-rotation) + (basePos.y - D.y) * cos(-rotation) + D.y);
-                fillStartPos = D - float2(distance(E,D), outlineSize);
-                fillEndPos = D + float2(0, 0);
-                if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-            }
-
-            // inside outline intersection with outside outline
-            if (!inTriangle && inTriangleGap && outlineSize > 0) {
-                // get slope: y1 - y2 = mx1 + b - mx2 - b | m = (y1 - y2) / (x1 - x2)
-                const float ACm = (C.y - A.y) / (C.x - A.x);
-                const float ABm = (B.y - A.y) / (B.x - A.x);
-                const float BCm = (C.y - B.y) / (C.x - B.x);
-                const float DFm = (F.y - D.y) / (F.x - D.x);
-                const float DEm = (E.y - D.y) / (E.x - D.x);
-                const float EFm = (F.y - E.y) / (F.x - E.x);
-                
-                // get y intercept: y = mx + b | b = y - mx
-                const float ACb = A.y - ACm * A.x;
-                const float ABb = A.y - ABm * A.x;
-                const float BCb = B.y - BCm * B.x;
-                const float DFb = D.y - DFm * D.x;
-                const float DEb = D.y - DEm * D.x;
-                const float EFb = E.y - EFm * E.x;
-                
-                // find intersect
-                const float2 ACDE = float2((DEb - ACb) / (ACm - DEm), ACm * (DEb - ACb) / (ACm - DEm) + ACb);
-                const float2 ACEF = float2((EFb - ACb) / (ACm - EFm), ACm * (EFb - ACb) / (ACm - EFm) + ACb);
-                // AC cannot intersect DF, always parallel
-                const float2 ABDF = float2((DFb - ABb) / (ABm - DFm), ABm * (DFb - ABb) / (ABm - DFm) + ABb);
-                const float2 ABDE = float2((DEb - ABb) / (ABm - DEm), ABm * (DEb - ABb) / (ABm - DEm) + ABb);
-                const float2 ABEF = float2((EFb - ABb) / (ABm - EFm), ABm * (EFb - ABb) / (ABm - EFm) + ABb);
-                const float2 BCDF = float2((DFb - BCb) / (BCm - DFm), BCm * (DFb - BCb) / (BCm - DFm) + BCb);
-                const float2 BCDE = float2((DEb - BCb) / (BCm - DEm), BCm * (DEb - BCb) / (BCm - DEm) + BCb);
-                const float2 BCEF = float2((EFb - BCb) / (BCm - EFm), BCm * (EFb - BCb) / (BCm - EFm) + BCb);
-                
-                // test intersect
-                if (distance(basePos, ACDE) <= outlineSize && dot(ACDE - A, C - A) >= 0 && dot(ACDE - A, C - A) < dot(C - A, C - A) && dot(ACDE - E, D - E) >= 0 && dot(ACDE - E, D - E) < dot(D - E, D - E)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                if (distance(basePos, ACEF) <= outlineSize && dot(ACEF - A, C - A) >= 0 && dot(ACEF - A, C - A) < dot(C - A, C - A) && dot(ACEF - F, E - F) >= 0 && dot(ACEF - F, E - F) < dot(E - F, E - F)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                if (distance(basePos, ABDF) <= outlineSize && dot(ABDF - A, B - A) >= 0 && dot(ABDF - A, B - A) < dot(B - A, B - A) && dot(ABDF - F, D - F) >= 0 && dot(ABDF - F, D - F) < dot(D - F, D - F)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                if (distance(basePos, ABDE) <= outlineSize && dot(ABDE - A, B - A) >= 0 && dot(ABDE - A, B - A) < dot(B - A, B - A) && dot(ABDE - E, D - E) >= 0 && dot(ABDE - E, D - E) < dot(D - E, D - E)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                if (distance(basePos, ABEF) <= outlineSize && dot(ABEF - A, B - A) >= 0 && dot(ABEF - A, B - A) < dot(B - A, B - A) && dot(ABEF - E, F - E) >= 0 && dot(ABEF - E, F - E) < dot(F - E, F - E)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                if (distance(basePos, BCDF) <= outlineSize && dot(BCDF - B, C - B) >= 0 && dot(BCDF - B, C - B) < dot(C - B, C - B) && dot(BCDF - F, D - F) >= 0 && dot(BCDF - F, D - F) < dot(D - F, D - F)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                if (distance(basePos, BCDE) <= outlineSize && dot(BCDE - B, C - B) >= 0 && dot(BCDE - B, C - B) < dot(C - B, C - B) && dot(BCDE - E, D - E) >= 0 && dot(BCDE - E, D - E) < dot(D - E, D - E)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-                if (distance(basePos, BCEF) <= outlineSize && dot(BCEF - B, C - B) >= 0 && dot(BCEF - B, C - B) < dot(C - B, C - B) && dot(BCEF - E, F - E) >= 0 && dot(BCEF - E, F - E) < dot(F - E, F - E)) 
-                    if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-            }
+            if (sdFill <= 0 && sdGap > 0) return lerp(fillColor, baseColor, baseColor.a);
+            if (sdFill <= outlineSize && sdGap > -outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
         }
-
-        // inside fill with no gap
-        if (inTriangle && !inTriangleGap) 
-            if (baseColor.a > 0.0f && fillColor.a < 1.0f) { return lerp(baseColor, fillColor, fillColor.a); } else { return fillColor; }
-        
-        // outside outline
-        if (!inTriangle && !inTriangleGap && outlineSize > 0) {
-            if (distance(basePos, A) < outlineSize) 
-                if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-            if (distance(basePos, B) < outlineSize) 
-                if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-            if (distance(basePos, C) < outlineSize) 
-                if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-
-            rotation = 0;
-            rotatedPos = float2((basePos.x - A.x) * cos(-rotation) - (basePos.y - A.y) * sin(-rotation) + A.x, (basePos.x - A.x) * sin(-rotation) + (basePos.y - A.y) * cos(-rotation) + A.y);
-            fillStartPos = A;
-            fillEndPos = A + float2(C.x - A.x, outlineSize);
-            if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-
-            rotation = atan(fillSize.y / (C.x - B.x));
-            if (skew <= 30)
-                rotation += radians(180);
-            rotatedPos = float2((basePos.x - C.x) * cos(-rotation) - (basePos.y - C.y) * sin(-rotation) + C.x, (basePos.x - C.x) * sin(-rotation) + (basePos.y - C.y) * cos(-rotation) + C.y);
-            fillStartPos = C;
-            fillEndPos = C + float2(distance(C,B), outlineSize);
-            if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
-
-            rotation = atan(fillSize.y / (A.x - B.x));
-            if (skew > -30)
-                rotation += radians(180);
-            rotatedPos = float2((basePos.x - A.x) * cos(-rotation) - (basePos.y - A.y) * sin(-rotation) + A.x, (basePos.x - A.x) * sin(-rotation) + (basePos.y - A.y) * cos(-rotation) + A.y);
-            fillStartPos = A - float2(distance(B,A), 0);
-            fillEndPos = A + float2(0, outlineSize);
-            if (rotatedPos.x >= fillStartPos.x && rotatedPos.x < fillEndPos.x && rotatedPos.y >= fillStartPos.y && rotatedPos.y < fillEndPos.y) 
-                if (baseColor.a > 0.0f && outlineColor.a < 1.0f) { return lerp(baseColor, outlineColor, outlineColor.a); } else { return outlineColor; }
+        else {
+            if (sdFill <= 0) return lerp(fillColor, baseColor, baseColor.a);
+            if (sdFill <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
         }
 
         return baseColor;
     }
 
-    float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float rotation, int anchor, float2 section, float skew) {
+    float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float rotation, int anchor, float slice, float skew) {
         if (Antialiasing) {
                 fillPos *= 2.0f;
                 fillSize *= 2.0f;
@@ -2687,32 +2476,66 @@ struct Shape {
             basePos = float4((basePos.x - fillPos.x) * cos(rotation) - (basePos.y - fillPos.y) * sin(rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(rotation) + (basePos.y - fillPos.y) * cos(rotation) + fillPos.y, 0, 0);
         }
         
-        switch (shape) {
-            default:
-            case 0:
-                return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor);
-            case 1:
-                return DrawTriangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor, skew);
-            case 2:
-                return DrawEllipse(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor, section);
-        }
+        if (shape == 1) return DrawTriangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor, skew);
+        if (shape == 2) return DrawEllipse(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor, slice);
+        return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor);
     }
 
-    bool DetectorMatchAll(float2 pos, float2 size, float3 detectorColor, float3 detectorThreshold, bool inverted) {
-        const int2 pixelCount = int2(round(size.x), round(size.y));
-        float4 color;
+    float DetectorMatchAll(float2 pos, float2 size, float3 detectorColor, float3 detectorThreshold, bool inverted) {
+        detectorThreshold = detectorThreshold / 255.0f;
         
-        for (int y = 0; y < pixelCount.y; y++) {
-            for (int x = 0; x < pixelCount.x; x++) {
-                color = tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(x,y)), 0, 0));
-                if (abs(color.r - detectorColor.r) <= detectorThreshold.r / 255.0f && abs(color.g - detectorColor.g) <= detectorThreshold.g / 255.0f && abs(color.b - detectorColor.b) <= detectorThreshold.b / 255.0f) {
-                    if (inverted) return false;
-                }
-                else return false;
-            }
+        float3 color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, 0)), 0, 0)).rgb - detectorColor.rgb);
+        bool matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+        if (inverted && matched) return 0.0f;
+        if (!matched && !inverted) return 0.0f;
+
+        if (size.x > 2) {
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, 0) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
+
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, 0) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
         }
-        
-        return true;
+
+        if (size.y > 2) {
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, -1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
+
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, 1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
+        }
+
+        if (size.x > 2 && size.y > 2) {
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, -1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
+
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, -1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
+
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, 1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
+
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, 1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (inverted && matched) return 0.0f;
+            if (!matched && !inverted) return 0.0f;
+        }
+
+        return 1.0f;
     }
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -2720,95 +2543,41 @@ struct Shape {
 // ------------------------------------------------------------------------------------------------------------------------
 
     float PS_UIDetect(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        const int pixelNumber = round(pos.x - PixelOffset.x) + 1;
-        switch (pixelNumber) {
-            case 1:
-                if (Detector1 && DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1))
-                    return 1.0f;
-                break;
-            case 2:
-                if (Detector2 && DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2))
-                    return 1.0f;
-                break;
-            case 3:
-                if (Detector3 && DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3))
-                    return 1.0f;
-                break;
-            case 4:
-                if (Detector4 && DetectorMatchAll((DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4 - PixelOffset, DetectorSize4, DetectorColor4, DetectorThreshold4, DetectorInverted4))
-                    return 1.0f;
-                break;
-            case 5:
-                if (Detector5 && DetectorMatchAll((DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5 - PixelOffset, DetectorSize5, DetectorColor5, DetectorThreshold5, DetectorInverted5))
-                    return 1.0f;
-                break;
-            case 6:
-                if (Detector6 && DetectorMatchAll((DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6 - PixelOffset, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorInverted6))
-                    return 1.0f;
-                break;
-            case 7:
-                if (Detector7 && DetectorMatchAll((DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7 - PixelOffset, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorInverted7))
-                    return 1.0f;
-                break;
-            case 8:
-                if (Detector8 && DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8))
-                    return 1.0f;
-                break;
-            default:
-                return 0.0f;
-        }
-
+        const int pixelNumber = round(texCoord.x * 8 + PixelOffset.x);
+        // const int pixelNumber = round(pos.x + PixelOffset.x);
+        if (pixelNumber == 1 && Detector1) return DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1);
+        if (pixelNumber == 2 && Detector2) return DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2);
+        if (pixelNumber == 3 && Detector3) return DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3);
+        if (pixelNumber == 4 && Detector4) return DetectorMatchAll((DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4 - PixelOffset, DetectorSize4, DetectorColor4, DetectorThreshold4, DetectorInverted4);
+        if (pixelNumber == 5 && Detector5) return DetectorMatchAll((DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5 - PixelOffset, DetectorSize5, DetectorColor5, DetectorThreshold5, DetectorInverted5);
+        if (pixelNumber == 6 && Detector6) return DetectorMatchAll((DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6 - PixelOffset, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorInverted6);
+        if (pixelNumber == 7 && Detector7) return DetectorMatchAll((DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7 - PixelOffset, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorInverted7);
+        if (pixelNumber == 8 && Detector8) return DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8);
         return 0.0f;
     }
 
-    float4 PS_CustomCrosshairSSAAx4(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (!Antialiasing) discard;
 
         float4 color = float4(OutlineColor.rgb, 0);
         if (OutlineSize < 1) color = float4(FillColor.rgb, 0);
 
-
-        const float2 crosshairPos = (FollowCursor ? MousePoint : CenterPoint) + Offset;
-        // if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1);
-        // if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2);
-        // if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3);
-        // if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4);
-        // if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5);
-        // if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6);
-        // if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7);
-        // if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8);
-        // if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9);
-        // if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10);
-        // if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11);
-        // if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12);
-        // if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13);
-        // if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14);
-        // if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15);
-        // if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16);
-
-        // Somehow this drastically reduces compile time compared to the above. By starting with iterating over an empty array, and only adding to it in runtime, we can forcefully skip compiler optimizations.
-        Shape shapes[16];
-        int shapeCount = 0;
-        if (ShapeEnabled1) { shapes[shapeCount++] = CreateShape(Shape1, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1); }
-        if (ShapeEnabled2) { shapes[shapeCount++] = CreateShape(Shape2, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2); }
-        if (ShapeEnabled3) { shapes[shapeCount++] = CreateShape(Shape3, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3); }
-        if (ShapeEnabled4) { shapes[shapeCount++] = CreateShape(Shape4, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4); }
-        if (ShapeEnabled5) { shapes[shapeCount++] = CreateShape(Shape5, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5); }
-        if (ShapeEnabled6) { shapes[shapeCount++] = CreateShape(Shape6, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6); }
-        if (ShapeEnabled7) { shapes[shapeCount++] = CreateShape(Shape7, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7); }
-        if (ShapeEnabled8) { shapes[shapeCount++] = CreateShape(Shape8, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8); }
-        if (ShapeEnabled9) { shapes[shapeCount++] = CreateShape(Shape9, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9); }
-        if (ShapeEnabled10) { shapes[shapeCount++] = CreateShape(Shape10, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10); }
-        if (ShapeEnabled11) { shapes[shapeCount++] = CreateShape(Shape11, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11); }
-        if (ShapeEnabled12) { shapes[shapeCount++] = CreateShape(Shape12, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12); }
-        if (ShapeEnabled13) { shapes[shapeCount++] = CreateShape(Shape13, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13); }
-        if (ShapeEnabled14) { shapes[shapeCount++] = CreateShape(Shape14, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14); }
-        if (ShapeEnabled15) { shapes[shapeCount++] = CreateShape(Shape15, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15); }
-        if (ShapeEnabled16) { shapes[shapeCount++] = CreateShape(Shape16, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16); }
-
-        for (int i = 0; i < shapeCount; i++) {
-            color = DrawShape(shapes[i].shape, color, pos, shapes[i].fillPos, shapes[i].fillSize, shapes[i].fillColor, shapes[i].gapSize, shapes[i].gapOffset, shapes[i].outlineSize, shapes[i].outlineColor, shapes[i].rotation, shapes[i].anchor, shapes[i].section, shapes[i].skew);
-        }
+        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Slice1, Skew1);
+        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Slice2, Skew2);
+        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Slice3, Skew3);
+        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Slice4, Skew4);
+        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Slice5, Skew5);
+        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Slice6, Skew6);
+        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Slice7, Skew7);
+        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Slice8, Skew8);
+        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Slice9, Skew9);
+        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Slice10, Skew10);
+        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Slice11, Skew11);
+        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Slice12, Skew12);
+        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Slice13, Skew13);
+        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Slice14, Skew14);
+        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Slice15, Skew15);
+        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Slice16, Skew16);
 
         return color;
     }
@@ -2825,30 +2594,22 @@ struct Shape {
             float4 color = float4(OutlineColor.rgb, 0);
             if (OutlineSize < 1) color = float4(FillColor.rgb, 0);
 
-            const float2 crosshairPos = (FollowCursor ? MousePoint : CenterPoint) + Offset;
-
-            Shape shapes[16];
-            int shapeCount = 0;
-            if (ShapeEnabled1) { shapes[shapeCount++] = CreateShape(Shape1, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1); }
-            if (ShapeEnabled2) { shapes[shapeCount++] = CreateShape(Shape2, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2); }
-            if (ShapeEnabled3) { shapes[shapeCount++] = CreateShape(Shape3, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3); }
-            if (ShapeEnabled4) { shapes[shapeCount++] = CreateShape(Shape4, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4); }
-            if (ShapeEnabled5) { shapes[shapeCount++] = CreateShape(Shape5, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5); }
-            if (ShapeEnabled6) { shapes[shapeCount++] = CreateShape(Shape6, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6); }
-            if (ShapeEnabled7) { shapes[shapeCount++] = CreateShape(Shape7, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7); }
-            if (ShapeEnabled8) { shapes[shapeCount++] = CreateShape(Shape8, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8); }
-            if (ShapeEnabled9) { shapes[shapeCount++] = CreateShape(Shape9, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9); }
-            if (ShapeEnabled10) { shapes[shapeCount++] = CreateShape(Shape10, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10); }
-            if (ShapeEnabled11) { shapes[shapeCount++] = CreateShape(Shape11, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11); }
-            if (ShapeEnabled12) { shapes[shapeCount++] = CreateShape(Shape12, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12); }
-            if (ShapeEnabled13) { shapes[shapeCount++] = CreateShape(Shape13, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13); }
-            if (ShapeEnabled14) { shapes[shapeCount++] = CreateShape(Shape14, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14); }
-            if (ShapeEnabled15) { shapes[shapeCount++] = CreateShape(Shape15, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15); }
-            if (ShapeEnabled16) { shapes[shapeCount++] = CreateShape(Shape16, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16); }
-
-            for (int i = 0; i < shapeCount; i++) {
-                color = DrawShape(shapes[i].shape, color, pos, shapes[i].fillPos, shapes[i].fillSize, shapes[i].fillColor, shapes[i].gapSize, shapes[i].gapOffset, shapes[i].outlineSize, shapes[i].outlineColor, shapes[i].rotation, shapes[i].anchor, shapes[i].section, shapes[i].skew);
-            }
+            if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Slice1, Skew1);
+            if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Slice2, Skew2);
+            if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Slice3, Skew3);
+            if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Slice4, Skew4);
+            if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Slice5, Skew5);
+            if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Slice6, Skew6);
+            if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Slice7, Skew7);
+            if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Slice8, Skew8);
+            if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Slice9, Skew9);
+            if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Slice10, Skew10);
+            if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Slice11, Skew11);
+            if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Slice12, Skew12);
+            if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Slice13, Skew13);
+            if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Slice14, Skew14);
+            if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Slice15, Skew15);
+            if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Slice16, Skew16);
 
             return color;
         }
@@ -2856,7 +2617,8 @@ struct Shape {
 
     float4 PS_Final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         float4 color = tex2Dlod(ReShade::BackBuffer, float4(texCoord, 0, 0));
-        const float4 overlay = tex2Dlod(overlaySampler, float4(texCoord, 0, 0));
+        const float2 overlayOffset = Offset + FollowCursor ? CenterPoint - MousePoint : 0;
+        const float4 overlay = tex2Dlod(overlaySampler, float4(texCoord + overlayOffset * BUFFER_PIXEL_SIZE, 0, 0));
 
         if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
             bool detectorMatches1;
@@ -2908,47 +2670,50 @@ struct Shape {
             if (ShowDetectors) {
                 float2 detectorPos;
                 float4 outlineColor;
+                float4 detectorColor = float4(0,0,0,0);
                 
                 if (Detector1) {
                     detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
                     outlineColor = detectorMatches1 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize1, float4(DetectorColor1, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize1, float4(DetectorColor1, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
                 if (Detector2) {
                     detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
                     outlineColor = detectorMatches2 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize2, float4(DetectorColor2, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize2, float4(DetectorColor2, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
                 if (Detector3) {
                     detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
                     outlineColor = detectorMatches3 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize3, float4(DetectorColor3, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize3, float4(DetectorColor3, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
                 if (Detector4) {
                     detectorPos = (DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4;
                     outlineColor = detectorMatches4 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize4, float4(DetectorColor4, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize4, float4(DetectorColor4, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
                 if (Detector5) {
                     detectorPos = (DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5;
                     outlineColor = detectorMatches5 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize5, float4(DetectorColor5, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize5, float4(DetectorColor5, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
                 if (Detector6) {
                     detectorPos = (DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6;
                     outlineColor = detectorMatches6 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize6, float4(DetectorColor6, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize6, float4(DetectorColor6, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
                 if (Detector7) {
                     detectorPos = (DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7;
                     outlineColor = detectorMatches7 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize7, float4(DetectorColor7, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize7, float4(DetectorColor7, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
                 if (Detector8) {
                     detectorPos = (DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8;
                     outlineColor = detectorMatches8 ? float4(0,1,0,1) : float4(1,0,0,1);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize8, float4(DetectorColor8, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
+                    detectorColor = DrawRectangle(detectorColor, pos.xy, detectorPos, DetectorSize8, float4(DetectorColor8, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, 4);
                 }
+
+                color = lerp(color, detectorColor, detectorColor.a);
             }
         }
         else {
@@ -2969,9 +2734,9 @@ struct Shape {
         enabled = true;
         timeout = 1;
     > {
-        pass overlaySSAAx4 {
+        pass overlaySSAA {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAAx4;
+            PixelShader = PS_CustomCrosshairSSAA;
             RenderTarget = overlayTextureSSAA;
         }
         pass overlay {
@@ -2983,12 +2748,12 @@ struct Shape {
 
     technique CustomCrosshairSetup <
         ui_label = "Custom Crosshair Setup";
-        ui_tooltip = "Apply Crosshair config changes to \"Custom Crosshair.\"";
-        timeout = 1;
+        ui_tooltip = "Enable to apply config changes to \"Custom Crosshair.\"\n"
+                        "Disable for performance";
     > {
-        pass overlaySSAAx4 {
+        pass overlaySSAA {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAAx4;
+            PixelShader = PS_CustomCrosshairSSAA;
             RenderTarget = overlayTextureSSAA;
         }
         pass overlay {
@@ -3000,7 +2765,7 @@ struct Shape {
 
     technique CustomCrosshair <
         ui_label = "Custom Crosshair";
-        ui_tooltip = "Enable \"Custom Crosshair Setup\" to apply Crosshair config changes.";
+        ui_tooltip = "Enable \"Custom Crosshair Setup\" to apply config changes.";
     > {
         pass detector {
             VertexShader = PostProcessVS;
@@ -3011,5 +2776,15 @@ struct Shape {
         pass final {
             VertexShader = PostProcessVS;
             PixelShader = PS_Final;
+        }
+    }
+
+    technique CustomCrosshairDetectorDebug <
+        ui_label = "Custom Crosshair Detector Debug";
+        hidden = true;
+    > {
+        pass detector {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_UIDetect;
         }
     }
