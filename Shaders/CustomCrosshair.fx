@@ -2454,21 +2454,8 @@
                 || basePos.x > max(C.x, B.x) + outlineSize
                     || basePos.y > C.y + outlineSize)
             return baseColor;
-        
-        // // Debugging skew
-        // const float2 avgCenter = (A + B + C) / 3.0f;
-        // if (distance(basePos, centerPos) <= 3) return float4(1,0,0,1);
-        // if (distance(basePos, avgCenter) <= 3) return float4(0,0,1,1);
-        
-        const float2 AP = basePos - A;
-        const float2 BP = basePos - B;
-        const float2 CP = basePos - C;
 
-        const float2 AB = B - A;
-        const float2 BC = C - B;
-        const float2 CA = A - C;
-
-        const bool inTriangle = (AB.x * AP.y - AB.y * AP.x > 0) == (BC.x * BP.y - BC.y * BP.x > 0) && (AB.x * AP.y - AB.y * AP.x > 0) == (CA.x * CP.y - CA.y * CP.x > 0);
+        const bool inTriangle = ((B - A).x * (basePos - A).y - (B - A).y * (basePos - A).x > 0) == ((C - B).x * (basePos - B).y - (C - B).y * (basePos - B).x > 0) && ((B - A).x * (basePos - A).y - (B - A).y * (basePos - A).x > 0) == ((A - C).x * (basePos - C).y - (A - C).y * (basePos - C).x > 0);
         bool inTriangleGap = false;
 
         float rotation;
@@ -2477,19 +2464,11 @@
         float2 fillEndPos;
 
         if (gapSize.x > 0 && gapSize.y > 0) {
-            const float2 D = float2 (centerPos.x - gapSize.x / 2.0 * (1 + skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
-            const float2 E = float2 (centerPos.x + gapSize.x * skew / 90.0f, centerPos.y - gapSize.y * 2.0 / 3.0) + gapOffset;
-            const float2 F = float2 (centerPos.x + gapSize.x / 2.0 * (1 - skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
+            const float2 D = float2(centerPos.x - gapSize.x / 2.0 * (1 + skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
+            const float2 E = float2(centerPos.x + gapSize.x * skew / 90.0f, centerPos.y - gapSize.y * 2.0 / 3.0) + gapOffset;
+            const float2 F = float2(centerPos.x + gapSize.x / 2.0 * (1 - skew / 90.0f), centerPos.y + gapSize.y / 3.0) + gapOffset;
             
-            const float2 DP = basePos - D;
-            const float2 EP = basePos - E;
-            const float2 FP = basePos - F;
-
-            const float2 DE = E - D;
-            const float2 EF = F - E;
-            const float2 FD = D - F;
-            
-            inTriangleGap = ((DE.x * DP.y - DE.y * DP.x > 0) == (EF.x * EP.y - EF.y * EP.x > 0) && (DE.x * DP.y - DE.y * DP.x > 0) == (FD.x * FP.y - FD.y * FP.x > 0));
+            inTriangleGap = ((E - D).x * (basePos - D).y - (E - D).y * (basePos - D).x > 0) == ((F - E).x * (basePos - E).y - (F - E).y * (basePos - E).x > 0) && ((E - D).x * (basePos - D).y - (E - D).y * (basePos - D).x > 0) == ((D - F).x * (basePos - F).y - (D - F).y * (basePos - F).x > 0);
             
             // inside fill with gap
             if (inTriangle && !inTriangleGap) 
@@ -2525,67 +2504,16 @@
 
             // inside outline intersection with outside outline
             if (!inTriangle && inTriangleGap && outlineSize > 0) {
-                // get slope: y1 - y2 = mx1 + b - mx2 - b | m = (y1 - y2) / (x1 - x2)
-                const float ACm = (C.y - A.y) / (C.x - A.x);
-                const float ABm = (B.y - A.y) / (B.x - A.x);
-                const float BCm = (C.y - B.y) / (C.x - B.x);
-                const float DFm = (F.y - D.y) / (F.x - D.x);
-                const float DEm = (E.y - D.y) / (E.x - D.x);
-                const float EFm = (F.y - E.y) / (F.x - E.x);
                 
-                // get y intercept: y = mx + b | b = y - mx
-                const float ACb = A.y - ACm * A.x;
-                const float ABb = A.y - ABm * A.x;
-                const float BCb = B.y - BCm * B.x;
-                const float DFb = D.y - DFm * D.x;
-                const float DEb = D.y - DEm * D.x;
-                const float EFb = E.y - EFm * E.x;
-                
-                // find intersect
-                const float2 ACDE = float2((DEb - ACb) / (ACm - DEm), ACm * (DEb - ACb) / (ACm - DEm) + ACb);
-                const float2 ACEF = float2((EFb - ACb) / (ACm - EFm), ACm * (EFb - ACb) / (ACm - EFm) + ACb);
+                const float2 ACDE = float2(((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (E.y - D.y) / (E.x - D.x)), (C.y - A.y) / (C.x - A.x) * ((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (E.y - D.y) / (E.x - D.x)) + (A.y - (C.y - A.y) / (C.x - A.x) * A.x));
+                const float2 ACEF = float2(((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (F.y - E.y) / (F.x - E.x)), (C.y - A.y) / (C.x - A.x) * ((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (C.y - A.y) / (C.x - A.x) * A.x)) / ((C.y - A.y) / (C.x - A.x) - (F.y - E.y) / (F.x - E.x)) + (A.y - (C.y - A.y) / (C.x - A.x) * A.x));
                 // AC cannot intersect DF, always parallel
-                const float2 ABDF = float2((DFb - ABb) / (ABm - DFm), ABm * (DFb - ABb) / (ABm - DFm) + ABb);
-                const float2 ABDE = float2((DEb - ABb) / (ABm - DEm), ABm * (DEb - ABb) / (ABm - DEm) + ABb);
-                const float2 ABEF = float2((EFb - ABb) / (ABm - EFm), ABm * (EFb - ABb) / (ABm - EFm) + ABb);
-                const float2 BCDF = float2((DFb - BCb) / (BCm - DFm), BCm * (DFb - BCb) / (BCm - DFm) + BCb);
-                const float2 BCDE = float2((DEb - BCb) / (BCm - DEm), BCm * (DEb - BCb) / (BCm - DEm) + BCb);
-                const float2 BCEF = float2((EFb - BCb) / (BCm - EFm), BCm * (EFb - BCb) / (BCm - EFm) + BCb);
-
-                // // debugging visualizer
-                // outlineColor = float4(1,0,0,1);
-
-                // // if (distance(basePos, float2(basePos.x, EFm * basePos.x + EFb)) <= outlineSize)
-                // //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
-
-                // if (distance(basePos, A) <= outlineSize)
-                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
-                // if (distance(basePos, B) <= outlineSize)
-                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
-                // if (distance(basePos, C) <= outlineSize)
-                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
-                // if (distance(basePos, D) <= outlineSize)
-                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
-                // if (distance(basePos, E) <= outlineSize)
-                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
-                // if (distance(basePos, F) <= outlineSize)
-                //     return lerp(baseColor, float4(0,0,1,1), outlineColor.a);
-                // if (distance(basePos, ACDE) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
-                // if (distance(basePos, ACEF) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
-                // if (distance(basePos, ABDF) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
-                // if (distance(basePos, ABDE) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
-                // if (distance(basePos, ABEF) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
-                // if (distance(basePos, BCDF) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
-                // if (distance(basePos, BCDE) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
-                // if (distance(basePos, BCEF) <= outlineSize)
-                //     return lerp(baseColor, outlineColor, outlineColor.a);
+                const float2 ABDF = float2(((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - D.y) / (F.x - D.x)), (B.y - A.y) / (B.x - A.x) * ((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - D.y) / (F.x - D.x)) + (A.y - (B.y - A.y) / (B.x - A.x) * A.x));
+                const float2 ABDE = float2(((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (E.y - D.y) / (E.x - D.x)), (B.y - A.y) / (B.x - A.x) * ((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (E.y - D.y) / (E.x - D.x)) + (A.y - (B.y - A.y) / (B.x - A.x) * A.x));
+                const float2 ABEF = float2(((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - E.y) / (F.x - E.x)), (B.y - A.y) / (B.x - A.x) * ((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (A.y - (B.y - A.y) / (B.x - A.x) * A.x)) / ((B.y - A.y) / (B.x - A.x) - (F.y - E.y) / (F.x - E.x)) + (A.y - (B.y - A.y) / (B.x - A.x) * A.x));
+                const float2 BCDF = float2(((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - D.y) / (F.x - D.x)), (C.y - B.y) / (C.x - B.x) * ((D.y - (F.y - D.y) / (F.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - D.y) / (F.x - D.x)) + (B.y - (C.y - B.y) / (C.x - B.x) * B.x));
+                const float2 BCDE = float2(((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (E.y - D.y) / (E.x - D.x)), (C.y - B.y) / (C.x - B.x) * ((D.y - (E.y - D.y) / (E.x - D.x) * D.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (E.y - D.y) / (E.x - D.x)) + (B.y - (C.y - B.y) / (C.x - B.x) * B.x));
+                const float2 BCEF = float2(((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - E.y) / (F.x - E.x)), (C.y - B.y) / (C.x - B.x) * ((E.y - (F.y - E.y) / (F.x - E.x) * E.x) - (B.y - (C.y - B.y) / (C.x - B.x) * B.x)) / ((C.y - B.y) / (C.x - B.x) - (F.y - E.y) / (F.x - E.x)) + (B.y - (C.y - B.y) / (C.x - B.x) * B.x));
                 
                 // test intersect
                 if (distance(basePos, ACDE) <= outlineSize && dot(ACDE - A, C - A) >= 0 && dot(ACDE - A, C - A) < dot(C - A, C - A) && dot(ACDE - E, D - E) >= 0 && dot(ACDE - E, D - E) < dot(D - E, D - E)) 
@@ -2710,10 +2638,10 @@
     bool DetectorMatchAll(float2 pos, float2 size, float3 detectorColor, float3 detectorThreshold, bool inverted) {
         const int2 pixelCount = int2(round(size.x), round(size.y));
         float4 color;
-        
+
         for (int y = 0; y < pixelCount.y; y++)
             for (int x = 0; x < pixelCount.x; x++) {
-                color = tex2D(ReShade::BackBuffer, BUFFER_PIXEL_SIZE * (pos + float2(x,y)));
+                color = tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(x,y)), 0, 0));
                 if (!DetectorMatch(color, detectorColor, detectorThreshold, inverted))
                     return false;
             }
@@ -2770,60 +2698,69 @@
     float4 PS_CustomCrosshairSSAAx4(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (!Antialiasing) discard;
         
-        return DrawShapes(float4(tex2D(ReShade::BackBuffer, texCoord).rgb, 0), pos);
+        return DrawShapes(float4(tex2Dlod(ReShade::BackBuffer, float4(texCoord.xy, 0, 0)).rgb, 0), pos);
     }
 
     float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (Antialiasing)
             return (
-                tex2D(overlaySamplerSSAAx4, ((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 0)) * BUFFER_PIXEL_SIZE / 2.0f)
-                + tex2D(overlaySamplerSSAAx4, ((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 0)) * BUFFER_PIXEL_SIZE / 2.0f)
-                + tex2D(overlaySamplerSSAAx4, ((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 1)) * BUFFER_PIXEL_SIZE / 2.0f)
-                + tex2D(overlaySamplerSSAAx4, ((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 1)) * BUFFER_PIXEL_SIZE / 2.0f)
+                tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 0)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
+                + tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 0)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
+                + tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 1)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
+                + tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 1)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
                 ) / 4.0f;
         else
-            return DrawShapes(float4(tex2D(ReShade::BackBuffer, texCoord).rgb, 0), pos);
+            return DrawShapes(float4(tex2Dlod(ReShade::BackBuffer, float4(texCoord, 0, 0)).rgb, 0), pos);
     }
 
     float4 PS_Final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        float4 color = tex2D(ReShade::BackBuffer, texCoord);
-        const float4 overlay = tex2D(overlaySampler, texCoord);
+        float4 color = tex2Dlod(ReShade::BackBuffer, float4(texCoord, 0, 0));
+        const float4 overlay = tex2Dlod(overlaySampler, float4(texCoord, 0, 0));
 
         if (ShowDebug)
             return overlay;
 
         if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
-            bool detectorMatches[8];
+            bool detectorMatches1;
+            bool detectorMatches2;
+            bool detectorMatches3;
+            bool detectorMatches4;
+            bool detectorMatches5;
+            bool detectorMatches6;
+            bool detectorMatches7;
+            bool detectorMatches8;
             bool showOverlay;
 
-            if (Detector1) detectorMatches[0] = tex2D(detectorSampler, (PixelOffset + float2(0, 0)) / 8.0f).r > 0.0f;
-            if (Detector2) detectorMatches[1] = tex2D(detectorSampler, (PixelOffset + float2(1, 0)) / 8.0f).r > 0.0f;
-            if (Detector3) detectorMatches[2] = tex2D(detectorSampler, (PixelOffset + float2(2, 0)) / 8.0f).r > 0.0f;
-            if (Detector4) detectorMatches[3] = tex2D(detectorSampler, (PixelOffset + float2(3, 0)) / 8.0f).r > 0.0f;
-            if (Detector5) detectorMatches[4] = tex2D(detectorSampler, (PixelOffset + float2(4, 0)) / 8.0f).r > 0.0f;
-            if (Detector6) detectorMatches[5] = tex2D(detectorSampler, (PixelOffset + float2(5, 0)) / 8.0f).r > 0.0f;
-            if (Detector7) detectorMatches[6] = tex2D(detectorSampler, (PixelOffset + float2(6, 0)) / 8.0f).r > 0.0f;
-            if (Detector8) detectorMatches[7] = tex2D(detectorSampler, (PixelOffset + float2(7, 0)) / 8.0f).r > 0.0f;
+            if (Detector1) detectorMatches1 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(0, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector2) detectorMatches2 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(1, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector3) detectorMatches3 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(2, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector4) detectorMatches4 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(3, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector5) detectorMatches5 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(4, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector6) detectorMatches6 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(5, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector7) detectorMatches7 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(6, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector8) detectorMatches8 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(7, 0)) / 8.0f, 0, 0)).r > 0.0f;
 
             if (DetectorBehavior == 1) { // OR
                 showOverlay = false;
-                for (int i = 0; i < 8; i++) {
-                    if (detectorMatches[i]) {
-                        showOverlay = true;
-                        break;
-                    }
-                }
+                if (showOverlay || detectorMatches1) showOverlay = true;
+                if (showOverlay || detectorMatches2) showOverlay = true;
+                if (showOverlay || detectorMatches3) showOverlay = true;
+                if (showOverlay || detectorMatches4) showOverlay = true;
+                if (showOverlay || detectorMatches5) showOverlay = true;
+                if (showOverlay || detectorMatches6) showOverlay = true;
+                if (showOverlay || detectorMatches7) showOverlay = true;
+                if (showOverlay || detectorMatches8) showOverlay = true;
             }
             else { // AND
                 showOverlay = true;
-                if (Detector1) showOverlay = showOverlay && detectorMatches[0];
-                if (Detector2) showOverlay = showOverlay && detectorMatches[1];
-                if (Detector3) showOverlay = showOverlay && detectorMatches[2];
-                if (Detector4) showOverlay = showOverlay && detectorMatches[3];
-                if (Detector5) showOverlay = showOverlay && detectorMatches[4];
-                if (Detector6) showOverlay = showOverlay && detectorMatches[5];
-                if (Detector7) showOverlay = showOverlay && detectorMatches[6];
-                if (Detector8) showOverlay = showOverlay && detectorMatches[7];
+                if (Detector1) showOverlay = showOverlay && detectorMatches1;
+                if (Detector2) showOverlay = showOverlay && detectorMatches2;
+                if (Detector3) showOverlay = showOverlay && detectorMatches3;
+                if (Detector4) showOverlay = showOverlay && detectorMatches4;
+                if (Detector5) showOverlay = showOverlay && detectorMatches5;
+                if (Detector6) showOverlay = showOverlay && detectorMatches6;
+                if (Detector7) showOverlay = showOverlay && detectorMatches7;
+                if (Detector8) showOverlay = showOverlay && detectorMatches8;
             }
 
             if (showOverlay) {
@@ -2836,42 +2773,42 @@
                 
                 if (Detector1) {
                     detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
-                    outlineColor = detectorMatches[0] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches1 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize1, float4(DetectorColor1, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector2) {
                     detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
-                    outlineColor = detectorMatches[1] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches2 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize2, float4(DetectorColor2, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector3) {
                     detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
-                    outlineColor = detectorMatches[2] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches3 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize3, float4(DetectorColor3, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector4) {
                     detectorPos = (DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4;
-                    outlineColor = detectorMatches[3] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches4 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize4, float4(DetectorColor4, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector5) {
                     detectorPos = (DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5;
-                    outlineColor = detectorMatches[4] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches5 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize5, float4(DetectorColor5, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector6) {
                     detectorPos = (DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6;
-                    outlineColor = detectorMatches[5] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches6 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize6, float4(DetectorColor6, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector7) {
                     detectorPos = (DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7;
-                    outlineColor = detectorMatches[6] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches7 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize7, float4(DetectorColor7, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
                 if (Detector8) {
                     detectorPos = (DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8;
-                    outlineColor = detectorMatches[7] ? float4(0,1,0,1) : float4(1,0,0,1);
+                    outlineColor = detectorMatches8 ? float4(0,1,0,1) : float4(1,0,0,1);
                     color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize8, float4(DetectorColor8, 1), float2(0,0), float2(0,0), 1.0f, outlineColor, GetAnchorOffset(4));
                 }
             }
