@@ -2303,8 +2303,33 @@
     #include "ReShade.fxh"
 
 // ------------------------------------------------------------------------------------------------------------------------
+// Struct
+// ------------------------------------------------------------------------------------------------------------------------
+
+struct Shape {
+    int shape; float2 fillPos; float2 fillSize; float4 fillColor; float2 gapSize; float2 gapOffset; float outlineSize; float4 outlineColor; float rotation; int anchor; float2 section; float skew;
+};
+
+// ------------------------------------------------------------------------------------------------------------------------
 // Functions
 // ------------------------------------------------------------------------------------------------------------------------
+    Shape CreateShape(int shape, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float rotation, int anchor, float2 section, float skew) {
+        Shape createShape;
+        createShape.shape = shape;
+        createShape.fillPos = fillPos;
+        createShape.fillSize = fillSize;
+        createShape.fillColor = fillColor;
+        createShape.gapSize = gapSize;
+        createShape.gapOffset = gapOffset;
+        createShape.outlineSize = outlineSize;
+        createShape.outlineColor = outlineColor;
+        createShape.rotation = rotation;
+        createShape.anchor = anchor;
+        createShape.section = section;
+        createShape.skew = skew;
+        return createShape;
+    }
+
     float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor) {
         float2 anchorOffset;
         switch (anchor) {
@@ -2742,23 +2767,48 @@
         float4 color = float4(OutlineColor.rgb, 0);
         if (OutlineSize < 1) color = float4(FillColor.rgb, 0);
 
+
         const float2 crosshairPos = (FollowCursor ? MousePoint : CenterPoint) + Offset;
-        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1);
-        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2);
-        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3);
-        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4);
-        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5);
-        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6);
-        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7);
-        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8);
-        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9);
-        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10);
-        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11);
-        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12);
-        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13);
-        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14);
-        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15);
-        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16);
+        // if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1);
+        // if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2);
+        // if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3);
+        // if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4);
+        // if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5);
+        // if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6);
+        // if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7);
+        // if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8);
+        // if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9);
+        // if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10);
+        // if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11);
+        // if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12);
+        // if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13);
+        // if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14);
+        // if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15);
+        // if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16);
+
+        // Somehow this drastically reduces compile time compared to the above. By starting with iterating over an empty array, and only adding to it in runtime, we can forcefully skip compiler optimizations.
+        Shape shapes[16];
+        int shapeCount = 0;
+        if (ShapeEnabled1) { shapes[shapeCount++] = CreateShape(Shape1, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1); }
+        if (ShapeEnabled2) { shapes[shapeCount++] = CreateShape(Shape2, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2); }
+        if (ShapeEnabled3) { shapes[shapeCount++] = CreateShape(Shape3, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3); }
+        if (ShapeEnabled4) { shapes[shapeCount++] = CreateShape(Shape4, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4); }
+        if (ShapeEnabled5) { shapes[shapeCount++] = CreateShape(Shape5, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5); }
+        if (ShapeEnabled6) { shapes[shapeCount++] = CreateShape(Shape6, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6); }
+        if (ShapeEnabled7) { shapes[shapeCount++] = CreateShape(Shape7, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7); }
+        if (ShapeEnabled8) { shapes[shapeCount++] = CreateShape(Shape8, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8); }
+        if (ShapeEnabled9) { shapes[shapeCount++] = CreateShape(Shape9, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9); }
+        if (ShapeEnabled10) { shapes[shapeCount++] = CreateShape(Shape10, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10); }
+        if (ShapeEnabled11) { shapes[shapeCount++] = CreateShape(Shape11, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11); }
+        if (ShapeEnabled12) { shapes[shapeCount++] = CreateShape(Shape12, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12); }
+        if (ShapeEnabled13) { shapes[shapeCount++] = CreateShape(Shape13, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13); }
+        if (ShapeEnabled14) { shapes[shapeCount++] = CreateShape(Shape14, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14); }
+        if (ShapeEnabled15) { shapes[shapeCount++] = CreateShape(Shape15, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15); }
+        if (ShapeEnabled16) { shapes[shapeCount++] = CreateShape(Shape16, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16); }
+
+        for (int i = 0; i < shapeCount; i++) {
+            color = DrawShape(shapes[i].shape, color, pos, shapes[i].fillPos, shapes[i].fillSize, shapes[i].fillColor, shapes[i].gapSize, shapes[i].gapOffset, shapes[i].outlineSize, shapes[i].outlineColor, shapes[i].rotation, shapes[i].anchor, shapes[i].section, shapes[i].skew);
+        }
 
         return color;
     }
@@ -2776,22 +2826,29 @@
             if (OutlineSize < 1) color = float4(FillColor.rgb, 0);
 
             const float2 crosshairPos = (FollowCursor ? MousePoint : CenterPoint) + Offset;
-            if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1);
-            if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2);
-            if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3);
-            if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4);
-            if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5);
-            if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6);
-            if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7);
-            if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8);
-            if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9);
-            if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10);
-            if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11);
-            if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12);
-            if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13);
-            if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14);
-            if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15);
-            if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16);
+
+            Shape shapes[16];
+            int shapeCount = 0;
+            if (ShapeEnabled1) { shapes[shapeCount++] = CreateShape(Shape1, crosshairPos + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Section1, Skew1); }
+            if (ShapeEnabled2) { shapes[shapeCount++] = CreateShape(Shape2, crosshairPos + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Section2, Skew2); }
+            if (ShapeEnabled3) { shapes[shapeCount++] = CreateShape(Shape3, crosshairPos + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Section3, Skew3); }
+            if (ShapeEnabled4) { shapes[shapeCount++] = CreateShape(Shape4, crosshairPos + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Section4, Skew4); }
+            if (ShapeEnabled5) { shapes[shapeCount++] = CreateShape(Shape5, crosshairPos + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Section5, Skew5); }
+            if (ShapeEnabled6) { shapes[shapeCount++] = CreateShape(Shape6, crosshairPos + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Section6, Skew6); }
+            if (ShapeEnabled7) { shapes[shapeCount++] = CreateShape(Shape7, crosshairPos + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Section7, Skew7); }
+            if (ShapeEnabled8) { shapes[shapeCount++] = CreateShape(Shape8, crosshairPos + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Section8, Skew8); }
+            if (ShapeEnabled9) { shapes[shapeCount++] = CreateShape(Shape9, crosshairPos + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Section9, Skew9); }
+            if (ShapeEnabled10) { shapes[shapeCount++] = CreateShape(Shape10, crosshairPos + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Section10, Skew10); }
+            if (ShapeEnabled11) { shapes[shapeCount++] = CreateShape(Shape11, crosshairPos + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Section11, Skew11); }
+            if (ShapeEnabled12) { shapes[shapeCount++] = CreateShape(Shape12, crosshairPos + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Section12, Skew12); }
+            if (ShapeEnabled13) { shapes[shapeCount++] = CreateShape(Shape13, crosshairPos + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Section13, Skew13); }
+            if (ShapeEnabled14) { shapes[shapeCount++] = CreateShape(Shape14, crosshairPos + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Section14, Skew14); }
+            if (ShapeEnabled15) { shapes[shapeCount++] = CreateShape(Shape15, crosshairPos + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Section15, Skew15); }
+            if (ShapeEnabled16) { shapes[shapeCount++] = CreateShape(Shape16, crosshairPos + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Section16, Skew16); }
+
+            for (int i = 0; i < shapeCount; i++) {
+                color = DrawShape(shapes[i].shape, color, pos, shapes[i].fillPos, shapes[i].fillSize, shapes[i].fillColor, shapes[i].gapSize, shapes[i].gapOffset, shapes[i].outlineSize, shapes[i].outlineColor, shapes[i].rotation, shapes[i].anchor, shapes[i].section, shapes[i].skew);
+            }
 
             return color;
         }
@@ -2910,7 +2967,7 @@
         ui_tooltip = "Apply settings and cache overlay texture.";
         hidden = true;
         enabled = true;
-        timeout = 1000;
+        timeout = 1;
     > {
         pass overlaySSAAx4 {
             VertexShader = PostProcessVS;
@@ -2926,7 +2983,8 @@
 
     technique CustomCrosshairSetup <
         ui_label = "Custom Crosshair Setup";
-        ui_tooltip = "Enable this to apply Crosshair config changes to \"Custom Crosshair.\"\nDisable for performance.";
+        ui_tooltip = "Apply Crosshair config changes to \"Custom Crosshair.\"";
+        timeout = 1;
     > {
         pass overlaySSAAx4 {
             VertexShader = PostProcessVS;
