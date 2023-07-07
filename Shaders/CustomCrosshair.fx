@@ -3,11 +3,14 @@
 // Crosshair
 // ------------------------------------------------------------------------------------------------------------------------
 
-    uniform bool ConfigNotice <
-        ui_label = "To apply changes to the config \nin this section, the technique \n\"Custom Crosshair Setup\" must \nbe enabled.\n ";
+    uniform int ConfigNotice <
+        ui_type = "radio";
+        ui_label = " ";
+        ui_text = "To apply changes to the config in this section,\n"
+                    "enable the technique \"Custom Crosshair Setup\"\n";
         ui_category = "Crosshair";
         ui_category_closed = true;
-    > = false;
+    >;
 
     uniform float4 FillColor <
         ui_type = "color";
@@ -2266,10 +2269,7 @@
     static const float2 CenterPoint = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
     static const float2 PixelOffset = float2(0.5f, 0.5f);
     static const float2 anchorOffsets[9] = {float2(0.5f, 0.5f), float2(0, 0.5f), float2(-0.5f, 0.5f), float2(0.5f, 0), float2(0, 0), float2(-0.5f, 0), float2(0.5f, -0.5f), float2(0, -0.5f), float2(-0.5f, -0.5f)};
-
-    // uniform float FrameTime < source = "frametime"; >;
-    uniform float Time < source = "timer"; >;
-    uniform bool OverlayOpen < source = "overlay_open"; >;
+    
     uniform float2 MousePoint < source = "mousepoint"; >;
 
     // uniform bool SpaceBar <source = "key"; keycode = 0x20; mode = ""; >;
@@ -2287,14 +2287,14 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture detectorTexture <pooled = true; > { Width = 8; Height = 1; Format = R8; };
-    sampler detectorSampler { Texture = detectorTexture; };
+    texture CustomCrosshairDetectorTexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
+    sampler CustomCrosshairDetectorSampler { Texture = CustomCrosshairDetectorTexture; };
 
-    texture overlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    sampler overlaySampler { Texture = overlayTexture;};
+    texture CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+    sampler CustomCrosshairOverlaySampler { Texture = CustomCrosshairOverlayTexture;};
 
-    texture overlayTextureSSAA <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
-    sampler overlaySamplerSSAAx4 { Texture = overlayTextureSSAA;};
+    texture CustomCrosshairOverlaySSAATexture <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
+    sampler CustomCrosshairOverlaySSAASampler { Texture = CustomCrosshairOverlaySSAATexture;};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Imports
@@ -2513,7 +2513,7 @@
             if (!matched && !inverted) return 0.0f;
         }
 
-        if (size.x > 2 && size.y > 2) {
+        if (size.x > 3 && size.y > 3) {
             color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, -1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
             matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (inverted && matched) return 0.0f;
@@ -2544,7 +2544,6 @@
 
     float PS_UIDetect(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         const int pixelNumber = round(texCoord.x * 8 + PixelOffset.x);
-        // const int pixelNumber = round(pos.x + PixelOffset.x);
         if (pixelNumber == 1 && Detector1) return DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1);
         if (pixelNumber == 2 && Detector2) return DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2);
         if (pixelNumber == 3 && Detector3) return DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3);
@@ -2585,10 +2584,10 @@
     float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (Antialiasing)
             return (
-                tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 0)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
-                + tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 0)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
-                + tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 1)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
-                + tex2Dlod(overlaySamplerSSAAx4, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 1)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
+                tex2Dlod(CustomCrosshairOverlaySSAASampler, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 0)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
+                + tex2Dlod(CustomCrosshairOverlaySSAASampler, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 0)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
+                + tex2Dlod(CustomCrosshairOverlaySSAASampler, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(0, 1)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
+                + tex2Dlod(CustomCrosshairOverlaySSAASampler, float4(((pos.xy - PixelOffset) * 2.0f + PixelOffset + float2(1, 1)) * BUFFER_PIXEL_SIZE / 2.0f, 0, 0))
                 ) / 4.0f;
         else {
             float4 color = float4(OutlineColor.rgb, 0);
@@ -2618,7 +2617,7 @@
     float4 PS_Final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         float4 color = tex2Dlod(ReShade::BackBuffer, float4(texCoord, 0, 0));
         const float2 overlayOffset = Offset + FollowCursor ? CenterPoint - MousePoint : 0;
-        const float4 overlay = tex2Dlod(overlaySampler, float4(texCoord + overlayOffset * BUFFER_PIXEL_SIZE, 0, 0));
+        const float4 overlay = tex2Dlod(CustomCrosshairOverlaySampler, float4(texCoord + overlayOffset * BUFFER_PIXEL_SIZE, 0, 0));
 
         if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
             bool detectorMatches1;
@@ -2631,14 +2630,14 @@
             bool detectorMatches8;
             bool showOverlay;
 
-            if (Detector1) detectorMatches1 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(0, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector2) detectorMatches2 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(1, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector3) detectorMatches3 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(2, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector4) detectorMatches4 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(3, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector5) detectorMatches5 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(4, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector6) detectorMatches6 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(5, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector7) detectorMatches7 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(6, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector8) detectorMatches8 = tex2Dlod(detectorSampler, float4((PixelOffset + float2(7, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector1) detectorMatches1 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(0, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector2) detectorMatches2 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(1, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector3) detectorMatches3 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(2, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector4) detectorMatches4 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(3, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector5) detectorMatches5 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(4, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector6) detectorMatches6 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(5, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector7) detectorMatches7 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(6, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector8) detectorMatches8 = tex2Dlod(CustomCrosshairDetectorSampler, float4((PixelOffset + float2(7, 0)) / 8.0f, 0, 0)).r > 0.0f;
 
             if (DetectorBehavior == 1) { // OR
                 showOverlay = false;
@@ -2737,12 +2736,12 @@
         pass overlaySSAA {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshairSSAA;
-            RenderTarget = overlayTextureSSAA;
+            RenderTarget = CustomCrosshairOverlaySSAATexture;
         }
         pass overlay {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshair;
-            RenderTarget = overlayTexture;
+            RenderTarget = CustomCrosshairOverlayTexture;
         }
     }
 
@@ -2754,12 +2753,12 @@
         pass overlaySSAA {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshairSSAA;
-            RenderTarget = overlayTextureSSAA;
+            RenderTarget = CustomCrosshairOverlaySSAATexture;
         }
         pass overlay {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshair;
-            RenderTarget = overlayTexture;
+            RenderTarget = CustomCrosshairOverlayTexture;
         }
     }
 
@@ -2770,8 +2769,7 @@
         pass detector {
             VertexShader = PostProcessVS;
             PixelShader = PS_UIDetect;
-            RenderTarget = detectorTexture;
-            ClearRenderTargets = true;
+            RenderTarget = CustomCrosshairDetectorTexture;
         }
         pass final {
             VertexShader = PostProcessVS;
