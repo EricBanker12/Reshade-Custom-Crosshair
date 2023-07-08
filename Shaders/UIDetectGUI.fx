@@ -679,14 +679,14 @@
             bool detectorMatches8;
             bool showBefore;
 
-            if (Detector1) detectorMatches1 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(0, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector2) detectorMatches2 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(1, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector3) detectorMatches3 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(2, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector4) detectorMatches4 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(3, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector5) detectorMatches5 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(4, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector6) detectorMatches6 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(5, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector7) detectorMatches7 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(6, 0)) / 8.0f, 0, 0)).r > 0.0f;
-            if (Detector8) detectorMatches8 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(7, 0)) / 8.0f, 0, 0)).r > 0.0f;
+            if (Detector1) detectorMatches1 = tex2Dfetch(UIDetectGUISampler, int2(0, 0), 0).r > 0.0f;
+            if (Detector2) detectorMatches2 = tex2Dfetch(UIDetectGUISampler, int2(1, 0), 0).r > 0.0f;
+            if (Detector3) detectorMatches3 = tex2Dfetch(UIDetectGUISampler, int2(2, 0), 0).r > 0.0f;
+            if (Detector4) detectorMatches4 = tex2Dfetch(UIDetectGUISampler, int2(3, 0), 0).r > 0.0f;
+            if (Detector5) detectorMatches5 = tex2Dfetch(UIDetectGUISampler, int2(4, 0), 0).r > 0.0f;
+            if (Detector6) detectorMatches6 = tex2Dfetch(UIDetectGUISampler, int2(5, 0), 0).r > 0.0f;
+            if (Detector7) detectorMatches7 = tex2Dfetch(UIDetectGUISampler, int2(6, 0), 0).r > 0.0f;
+            if (Detector8) detectorMatches8 = tex2Dfetch(UIDetectGUISampler, int2(7, 0), 0).r > 0.0f;
 
             // if (detectorMatches1) return float4(1,0,0,1);
 
@@ -771,14 +771,14 @@
         bool detectorMatches8;
         bool showBefore;
 
-        if (Detector1) detectorMatches1 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(0, 0)) / 8.0f, 0, 0)).r > 0.0f;
-        if (Detector2) detectorMatches2 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(1, 0)) / 8.0f, 0, 0)).r > 0.0f;
-        if (Detector3) detectorMatches3 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(2, 0)) / 8.0f, 0, 0)).r > 0.0f;
-        if (Detector4) detectorMatches4 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(3, 0)) / 8.0f, 0, 0)).r > 0.0f;
-        if (Detector5) detectorMatches5 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(4, 0)) / 8.0f, 0, 0)).r > 0.0f;
-        if (Detector6) detectorMatches6 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(5, 0)) / 8.0f, 0, 0)).r > 0.0f;
-        if (Detector7) detectorMatches7 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(6, 0)) / 8.0f, 0, 0)).r > 0.0f;
-        if (Detector8) detectorMatches8 = tex2Dlod(UIDetectGUISampler, float4((PixelOffset + float2(7, 0)) / 8.0f, 0, 0)).r > 0.0f;
+        if (Detector1) detectorMatches1 = tex2Dfetch(UIDetectGUISampler, int2(0, 0), 0).r > 0.0f;
+        if (Detector2) detectorMatches2 = tex2Dfetch(UIDetectGUISampler, int2(1, 0), 0).r > 0.0f;
+        if (Detector3) detectorMatches3 = tex2Dfetch(UIDetectGUISampler, int2(2, 0), 0).r > 0.0f;
+        if (Detector4) detectorMatches4 = tex2Dfetch(UIDetectGUISampler, int2(3, 0), 0).r > 0.0f;
+        if (Detector5) detectorMatches5 = tex2Dfetch(UIDetectGUISampler, int2(4, 0), 0).r > 0.0f;
+        if (Detector6) detectorMatches6 = tex2Dfetch(UIDetectGUISampler, int2(5, 0), 0).r > 0.0f;
+        if (Detector7) detectorMatches7 = tex2Dfetch(UIDetectGUISampler, int2(6, 0), 0).r > 0.0f;
+        if (Detector8) detectorMatches8 = tex2Dfetch(UIDetectGUISampler, int2(7, 0), 0).r > 0.0f;
 
         if (pixelNumber == 1 && Detector1 && detectorMatches1) return float4(1,0,0,1);
         if (pixelNumber == 3 && Detector3 && detectorMatches3) return float4(1,0,0,1);
