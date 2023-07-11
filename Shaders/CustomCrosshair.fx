@@ -122,7 +122,7 @@
 
     uniform bool Detector2 <
         ui_label = "UI Detector 2";
-        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 2";
         ui_category_closed = true;
         ui_spacing = 2;
@@ -189,7 +189,7 @@
 
     uniform bool Detector3 <
         ui_label = "UI Detector 3";
-        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 3";
         ui_category_closed = true;
         ui_spacing = 2;
@@ -256,7 +256,7 @@
 
     uniform bool Detector4 <
         ui_label = "UI Detector 4";
-        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 4";
         ui_category_closed = true;
         ui_spacing = 2;
@@ -323,7 +323,7 @@
 
     uniform bool Detector5 <
         ui_label = "UI Detector 5";
-        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 5";
         ui_category_closed = true;
         ui_spacing = 2;
@@ -390,7 +390,7 @@
 
     uniform bool Detector6 <
         ui_label = "UI Detector 6";
-        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 6";
         ui_category_closed = true;
         ui_spacing = 2;
@@ -457,7 +457,7 @@
 
     uniform bool Detector7 <
         ui_label = "UI Detector 7";
-        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 7";
         ui_category_closed = true;
         ui_spacing = 2;
@@ -524,7 +524,7 @@
 
     uniform bool Detector8 <
         ui_label = "UI Detector 8";
-        ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
+        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 8";
         ui_category_closed = true;
         ui_spacing = 2;
@@ -588,6 +588,144 @@
 // ------------------------------------------------------------------------------------------------------------------------
 // Hotkeys
 // ------------------------------------------------------------------------------------------------------------------------
+    
+    uniform bool MouseRight_Down < source = "mousebutton"; keycode = 1; mode = ""; >;
+    uniform bool MouseRight_Press < source = "mousebutton"; keycode = 1; mode = "press"; >;
+
+    uniform bool Spacebar_Down <source = "key"; keycode = 0x20; mode = ""; >;
+    uniform bool Spacebar_Press <source = "key"; keycode = 0x20; mode = "press"; >;
+    uniform bool Shift_Down <source = "key"; keycode = 0x10; mode = ""; >;
+    uniform bool Shift_Press <source = "key"; keycode = 0x10; mode = "press"; >;
+    uniform bool Ctrl_Down <source = "key"; keycode = 0x11; mode = ""; >;
+    uniform bool Ctrl_Press <source = "key"; keycode = 0x11; mode = "press"; >;
+    uniform bool Alt_Down <source = "key"; keycode = 0x12; mode = ""; >;
+    uniform bool Alt_Press <source = "key"; keycode = 0x12; mode = "press"; >;
+    
+    uniform bool One_Down <source = "key"; keycode = 0x31; mode = ""; >;
+    uniform bool One_Press <source = "key"; keycode = 0x31; mode = "press"; >;
+    uniform bool Two_Down <source = "key"; keycode = 0x32; mode = ""; >;
+    uniform bool Two_Press <source = "key"; keycode = 0x32; mode = "press"; >;
+    uniform bool Three_Down <source = "key"; keycode = 0x33; mode = ""; >;
+    uniform bool Three_Press <source = "key"; keycode = 0x33; mode = "press"; >;
+    uniform bool Four_Down <source = "key"; keycode = 0x34; mode = ""; >;
+    uniform bool Four_Press <source = "key"; keycode = 0x34; mode = "press"; >;
+    uniform bool Five_Down <source = "key"; keycode = 0x35; mode = ""; >;
+    uniform bool Five_Press <source = "key"; keycode = 0x35; mode = "press"; >;
+    
+    uniform bool WWW_Down <source = "key"; keycode = 0x57; mode = ""; >;
+    uniform bool WWW_Press <source = "key"; keycode = 0x57; mode = "press"; >;
+    uniform bool AAA_Down <source = "key"; keycode = 0x41; mode = ""; >;
+    uniform bool AAA_Press <source = "key"; keycode = 0x41; mode = "press"; >;
+    uniform bool SSS_Down <source = "key"; keycode = 0x53; mode = ""; >;
+    uniform bool SSS_Press <source = "key"; keycode = 0x53; mode = "press"; >;
+    uniform bool DDD_Down <source = "key"; keycode = 0x44; mode = ""; >;
+    uniform bool DDD_Press <source = "key"; keycode = 0x44; mode = "press"; >;
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Hotkey 1
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Hotkey1 <
+        ui_label = "Hotkey 1";
+        ui_category = "Hotkey 1";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform int HotkeyBehavior1 <
+        ui_type = "combo";
+        ui_label = "Behavior";
+        ui_items = "Hold\0Toggle\0Hide/Show\0";
+        ui_category = "Hotkey 1";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform int HotkeyButton1 <
+        ui_type = "combo";
+        ui_label = "Button";
+        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_category = "Hotkey 1";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform bool HotkeyInverted1 <
+        ui_label = "Invert Hide/Show";
+        ui_tooltip = "Inverse the hotkey initial state to hide until the hotkey is held, toggled, or pressed.";
+        ui_category = "Hotkey 1";
+        ui_category_closed = true;
+    > = false;
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Hotkey 2
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Hotkey2 <
+        ui_label = "Hotkey 2";
+        ui_category = "Hotkey 2";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform int HotkeyBehavior2 <
+        ui_type = "combo";
+        ui_label = "Behavior";
+        ui_items = "Hold\0Toggle\0Hide/Show\0";
+        ui_category = "Hotkey 2";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform int HotkeyButton2 <
+        ui_type = "combo";
+        ui_label = "Button";
+        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_category = "Hotkey 2";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform bool HotkeyInverted2 <
+        ui_label = "Invert Hide/Show";
+        ui_tooltip = "Inverse the hotkey initial state to hide unless the hotkey is held/toggled.";
+        ui_category = "Hotkey 2";
+        ui_category_closed = true;
+    > = false;
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Hotkey 3
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Hotkey3 <
+        ui_label = "Hotkey 3";
+        ui_category = "Hotkey 3";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform int HotkeyBehavior3 <
+        ui_type = "combo";
+        ui_label = "Behavior";
+        ui_items = "Hold\0Toggle\0Hide/Show\0";
+        ui_category = "Hotkey 3";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform int HotkeyButton3 <
+        ui_type = "combo";
+        ui_label = "Button";
+        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_category = "Hotkey 3";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform bool HotkeyInverted3 <
+        ui_label = "Invert Hide/Show";
+        ui_tooltip = "Inverse the hotkey initial state to hide unless the hotkey is held/toggled.";
+        ui_category = "Hotkey 3";
+        ui_category_closed = true;
+    > = false;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Hidden or Static Variables
@@ -599,8 +737,6 @@
     
     uniform float2 MousePoint < source = "mousepoint"; >;
 
-    // uniform bool SpaceBar <source = "key"; keycode = 0x20; mode = ""; >;
-    // uniform bool left_mouse_button_down < source = "mousebutton"; keycode = 0; mode = ""; >;
 
     /*
     To Do:
@@ -614,8 +750,11 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture CustomCrosshairDetectorTexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
-    sampler CustomCrosshairDetectorSampler { Texture = CustomCrosshairDetectorTexture; };
+    texture CustomCrosshairStateTex <pooled = false; > { Width = 9; Height = 1; Format = R8; };
+    sampler CustomCrosshairStateSamp { Texture = CustomCrosshairStateTex; };
+
+    texture CustomCrosshairPrevStateTex <pooled = false; > { Width = 9; Height = 1; Format = R8; };
+    sampler CustomCrosshairPrevStateSamp { Texture = CustomCrosshairPrevStateTex; };
 
     texture CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
     sampler CustomCrosshairOverlaySampler { Texture = CustomCrosshairOverlayTexture;};
@@ -719,8 +858,14 @@
 // Pixel Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-    float PS_UIDetect(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        const int pixelNumber = round(texCoord.x * 8 + PixelOffset.x);
+    float PS_PrevStateHandler(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        return tex2Dfetch(CustomCrosshairStateSamp, floor(pos.xy), 0).r;
+    }
+
+    float PS_StateHandler(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        const int pixelNumber = round(texCoord.x * 9 + PixelOffset.x);
+        
+        // detector state
         if (pixelNumber == 1 && Detector1) return DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1);
         if (pixelNumber == 2 && Detector2) return DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2);
         if (pixelNumber == 3 && Detector3) return DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3);
@@ -729,6 +874,42 @@
         if (pixelNumber == 6 && Detector6) return DetectorMatchAll((DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6 - PixelOffset, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorInverted6);
         if (pixelNumber == 7 && Detector7) return DetectorMatchAll((DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7 - PixelOffset, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorInverted7);
         if (pixelNumber == 8 && Detector8) return DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8);
+        
+        // hotkey state
+        // "Right-Click, 1, 2, 3, 4, 5, WASD, Shift, Ctrl, Alt, Spacebar";
+        // const bool hotkeyToggle[] = { MouseRight_Toggle, One_Toggle, Two_Toggle, Three_Toggle, Four_Toggle, Five_Toggle, WWW_Toggle || AAA_Toggle || SSS_Toggle || DDD_Toggle, Shift_Toggle, Ctrl_Toggle, Alt_Toggle, Spacebar_Toggle };
+
+        if (pixelNumber == 9) {
+            const bool hotkeyDown[] = { MouseRight_Down, One_Down, Two_Down, Three_Down, Four_Down, Five_Down, WWW_Down || AAA_Down || SSS_Down || DDD_Down, Shift_Down, Ctrl_Down, Alt_Down, Spacebar_Down };
+            const bool hotkeyPress[] = { MouseRight_Press, One_Press, Two_Press, Three_Press, Four_Press, Five_Press, WWW_Press || AAA_Press || SSS_Press || DDD_Press, Shift_Press, Ctrl_Press, Alt_Press, Spacebar_Press };
+            const float prevState = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(8, 0), 0).r;
+
+            if (Hotkey1) {
+                if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] != HotkeyInverted1) return 1.0f;
+                if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] == HotkeyInverted1) return 0.0f;
+                if (HotkeyBehavior1 == 1 && hotkeyPress[HotkeyButton1] != HotkeyInverted1) return 1.0f - prevState;
+                if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && !HotkeyInverted1) return 1.0f;
+                if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && HotkeyInverted1) return 0.0f;
+            }
+
+
+            if (Hotkey2 && HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] != HotkeyInverted2) return 1.0f;
+            if (Hotkey2 && HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] == HotkeyInverted2) return 0.0f;
+            if (Hotkey2 && HotkeyBehavior2 == 1 && hotkeyPress[HotkeyButton2] != HotkeyInverted2) return 1.0f - prevState;
+            if (Hotkey2 && HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && !HotkeyInverted2) return 1.0f;
+            if (Hotkey2 && HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && HotkeyInverted2) return 0.0f;
+
+            if (Hotkey3 && HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] != HotkeyInverted3) return 1.0f;
+            if (Hotkey3 && HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] == HotkeyInverted3) return 1.0f;
+            if (Hotkey3 && HotkeyBehavior3 == 1 && hotkeyPress[HotkeyButton3] != HotkeyInverted3) return 1.0f - prevState;
+            if (Hotkey3 && HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && !HotkeyInverted3) return 1.0f;
+            if (Hotkey3 && HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && HotkeyInverted3) return 0.0f;
+            
+            return prevState;
+        }
+
+
+        
         return 0.0f;
     }
 
@@ -736,6 +917,8 @@
         float4 color = tex2Dlod(ReShade::BackBuffer, float4(texCoord, 0, 0));
         const float2 overlayOffset = Offset + (FollowCursor ? MousePoint - CenterPoint : 0);
         const float4 overlay = tex2Dlod(CustomCrosshairOverlaySampler, float4(texCoord + -overlayOffset * BUFFER_PIXEL_SIZE, 0, 0));
+
+        if (tex2Dfetch(CustomCrosshairStateSamp, int2(8, 0), 0).r > 0.0f) discard;
 
         if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
             bool detectorMatches1;
@@ -748,14 +931,14 @@
             bool detectorMatches8;
             bool showOverlay;
 
-            if (Detector1) detectorMatches1 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(0, 0), 0).r > 0.0f;
-            if (Detector2) detectorMatches2 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(1, 0), 0).r > 0.0f;
-            if (Detector3) detectorMatches3 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(2, 0), 0).r > 0.0f;
-            if (Detector4) detectorMatches4 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(3, 0), 0).r > 0.0f;
-            if (Detector5) detectorMatches5 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(4, 0), 0).r > 0.0f;
-            if (Detector6) detectorMatches6 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(5, 0), 0).r > 0.0f;
-            if (Detector7) detectorMatches7 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(6, 0), 0).r > 0.0f;
-            if (Detector8) detectorMatches8 = tex2Dfetch(CustomCrosshairDetectorSampler, int2(7, 0), 0).r > 0.0f;
+            if (Detector1) detectorMatches1 = tex2Dfetch(CustomCrosshairStateSamp, int2(0, 0), 0).r > 0.0f;
+            if (Detector2) detectorMatches2 = tex2Dfetch(CustomCrosshairStateSamp, int2(1, 0), 0).r > 0.0f;
+            if (Detector3) detectorMatches3 = tex2Dfetch(CustomCrosshairStateSamp, int2(2, 0), 0).r > 0.0f;
+            if (Detector4) detectorMatches4 = tex2Dfetch(CustomCrosshairStateSamp, int2(3, 0), 0).r > 0.0f;
+            if (Detector5) detectorMatches5 = tex2Dfetch(CustomCrosshairStateSamp, int2(4, 0), 0).r > 0.0f;
+            if (Detector6) detectorMatches6 = tex2Dfetch(CustomCrosshairStateSamp, int2(5, 0), 0).r > 0.0f;
+            if (Detector7) detectorMatches7 = tex2Dfetch(CustomCrosshairStateSamp, int2(6, 0), 0).r > 0.0f;
+            if (Detector8) detectorMatches8 = tex2Dfetch(CustomCrosshairStateSamp, int2(7, 0), 0).r > 0.0f;
 
             if (DetectorBehavior == 1) { // OR
                 showOverlay = false;
@@ -779,6 +962,8 @@
                 if (Detector7) showOverlay = showOverlay && detectorMatches7;
                 if (Detector8) showOverlay = showOverlay && detectorMatches8;
             }
+
+            if (!showOverlay && !ShowDetectors) discard;
 
             if (showOverlay) {
                 color = lerp(color, overlay, overlay.a);
@@ -848,10 +1033,15 @@
         ui_label = "Custom Crosshair";
         ui_tooltip = "Enable \"Custom Crosshair Setup\" to apply config changes.";
     > {
+        pass prevState {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_PrevStateHandler;
+            RenderTarget = CustomCrosshairPrevStateTex;
+        }
         pass detector {
             VertexShader = PostProcessVS;
-            PixelShader = PS_UIDetect;
-            RenderTarget = CustomCrosshairDetectorTexture;
+            PixelShader = PS_StateHandler;
+            RenderTarget = CustomCrosshairStateTex;
         }
         pass final {
             VertexShader = PostProcessVS;
@@ -859,12 +1049,12 @@
         }
     }
 
-    technique CustomCrosshairDetectorDebug <
-        ui_label = "Custom Crosshair Detector Debug";
+    technique CustomCrosshairStateDebug <
+        ui_label = "Custom Crosshair State Debug";
         hidden = true;
     > {
         pass detector {
             VertexShader = PostProcessVS;
-            PixelShader = PS_UIDetect;
+            PixelShader = PS_StateHandler;
         }
     }
