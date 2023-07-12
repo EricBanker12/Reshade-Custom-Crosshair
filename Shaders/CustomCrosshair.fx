@@ -750,10 +750,10 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture CustomCrosshairStateTex <pooled = false; > { Width = 9; Height = 1; Format = R8; };
+    texture CustomCrosshairStateTex <pooled = false; > { Width = 11; Height = 1; Format = R8; };
     sampler CustomCrosshairStateSamp { Texture = CustomCrosshairStateTex; };
 
-    texture CustomCrosshairPrevStateTex <pooled = false; > { Width = 9; Height = 1; Format = R8; };
+    texture CustomCrosshairPrevStateTex <pooled = false; > { Width = 11; Height = 1; Format = R8; };
     sampler CustomCrosshairPrevStateSamp { Texture = CustomCrosshairPrevStateTex; };
 
     texture CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
@@ -863,52 +863,63 @@
     }
 
     float PS_StateHandler(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        const int pixelNumber = round(texCoord.x * 9 + PixelOffset.x);
+        // "Right-Click, 1, 2, 3, 4, 5, WASD, Shift, Ctrl, Alt, Spacebar";
+        const bool hotkeyDown[] = { MouseRight_Down, One_Down, Two_Down, Three_Down, Four_Down, Five_Down, WWW_Down || AAA_Down || SSS_Down || DDD_Down, Shift_Down, Ctrl_Down, Alt_Down, Spacebar_Down };
+        const bool hotkeyPress[] = { MouseRight_Press, One_Press, Two_Press, Three_Press, Four_Press, Five_Press, WWW_Press || AAA_Press || SSS_Press || DDD_Press, Shift_Press, Ctrl_Press, Alt_Press, Spacebar_Press };
+        const int pixelNumber = floor(texCoord.x * 11);
+        float prevState;
         
         // detector state
-        if (pixelNumber == 1 && Detector1) return DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1);
-        if (pixelNumber == 2 && Detector2) return DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2);
-        if (pixelNumber == 3 && Detector3) return DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3);
-        if (pixelNumber == 4 && Detector4) return DetectorMatchAll((DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4 - PixelOffset, DetectorSize4, DetectorColor4, DetectorThreshold4, DetectorInverted4);
-        if (pixelNumber == 5 && Detector5) return DetectorMatchAll((DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5 - PixelOffset, DetectorSize5, DetectorColor5, DetectorThreshold5, DetectorInverted5);
-        if (pixelNumber == 6 && Detector6) return DetectorMatchAll((DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6 - PixelOffset, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorInverted6);
-        if (pixelNumber == 7 && Detector7) return DetectorMatchAll((DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7 - PixelOffset, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorInverted7);
-        if (pixelNumber == 8 && Detector8) return DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8);
+        if (pixelNumber == 0 && Detector1) return DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1);
+        if (pixelNumber == 1 && Detector2) return DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2);
+        if (pixelNumber == 2 && Detector3) return DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3);
+        if (pixelNumber == 3 && Detector4) return DetectorMatchAll((DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4 - PixelOffset, DetectorSize4, DetectorColor4, DetectorThreshold4, DetectorInverted4);
+        if (pixelNumber == 4 && Detector5) return DetectorMatchAll((DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5 - PixelOffset, DetectorSize5, DetectorColor5, DetectorThreshold5, DetectorInverted5);
+        if (pixelNumber == 5 && Detector6) return DetectorMatchAll((DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6 - PixelOffset, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorInverted6);
+        if (pixelNumber == 6 && Detector7) return DetectorMatchAll((DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7 - PixelOffset, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorInverted7);
+        if (pixelNumber == 7 && Detector8) return DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8);
         
         // hotkey state
-        // "Right-Click, 1, 2, 3, 4, 5, WASD, Shift, Ctrl, Alt, Spacebar";
-        // const bool hotkeyToggle[] = { MouseRight_Toggle, One_Toggle, Two_Toggle, Three_Toggle, Four_Toggle, Five_Toggle, WWW_Toggle || AAA_Toggle || SSS_Toggle || DDD_Toggle, Shift_Toggle, Ctrl_Toggle, Alt_Toggle, Spacebar_Toggle };
+        bool hotkeyTriggered1;
+        bool hotkeyTriggered2;
+        bool hotkeyTriggered3;
+        
+        if (Hotkey1) hotkeyTriggered1 = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(8, 0), 0).r > 0.0f;
+        if (Hotkey2) hotkeyTriggered2 = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(9, 0), 0).r > 0.0f;
+        if (Hotkey3) hotkeyTriggered3 = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(10, 0), 0).r > 0.0f;
 
-        if (pixelNumber == 9) {
-            const bool hotkeyDown[] = { MouseRight_Down, One_Down, Two_Down, Three_Down, Four_Down, Five_Down, WWW_Down || AAA_Down || SSS_Down || DDD_Down, Shift_Down, Ctrl_Down, Alt_Down, Spacebar_Down };
-            const bool hotkeyPress[] = { MouseRight_Press, One_Press, Two_Press, Three_Press, Four_Press, Five_Press, WWW_Press || AAA_Press || SSS_Press || DDD_Press, Shift_Press, Ctrl_Press, Alt_Press, Spacebar_Press };
-            const float prevState = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(8, 0), 0).r;
+        if (pixelNumber == 8 && Hotkey1) {
+            if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] != HotkeyInverted1) return 1.0f;
+            if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] == HotkeyInverted1) return 0.0f;
+            if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && !HotkeyInverted1) return 1.0f;
+            if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && HotkeyInverted1) return 0.0f;
 
-            if (Hotkey1) {
-                if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] != HotkeyInverted1) return 1.0f;
-                if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] == HotkeyInverted1) return 0.0f;
-                if (HotkeyBehavior1 == 1 && hotkeyPress[HotkeyButton1] != HotkeyInverted1) return 1.0f - prevState;
-                if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && !HotkeyInverted1) return 1.0f;
-                if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && HotkeyInverted1) return 0.0f;
-            }
+            if (HotkeyBehavior1 == 1 && hotkeyPress[HotkeyButton1] != HotkeyInverted1) return 1.0f - prevState;
 
+            return prevState;
+        }
+        if (pixelNumber == 9 && Hotkey2) {
+            prevState = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(9, 0), 0).r;
 
-            if (Hotkey2 && HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] != HotkeyInverted2) return 1.0f;
-            if (Hotkey2 && HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] == HotkeyInverted2) return 0.0f;
-            if (Hotkey2 && HotkeyBehavior2 == 1 && hotkeyPress[HotkeyButton2] != HotkeyInverted2) return 1.0f - prevState;
-            if (Hotkey2 && HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && !HotkeyInverted2) return 1.0f;
-            if (Hotkey2 && HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && HotkeyInverted2) return 0.0f;
+            if (HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] != HotkeyInverted2) return 1.0f;
+            if (HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] == HotkeyInverted2) return 0.0f;
+            if (HotkeyBehavior2 == 1 && hotkeyPress[HotkeyButton2] != HotkeyInverted2) return 1.0f - prevState;
+            if (HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && !HotkeyInverted2) return 1.0f;
+            if (HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && HotkeyInverted2) return 0.0f;
 
-            if (Hotkey3 && HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] != HotkeyInverted3) return 1.0f;
-            if (Hotkey3 && HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] == HotkeyInverted3) return 1.0f;
-            if (Hotkey3 && HotkeyBehavior3 == 1 && hotkeyPress[HotkeyButton3] != HotkeyInverted3) return 1.0f - prevState;
-            if (Hotkey3 && HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && !HotkeyInverted3) return 1.0f;
-            if (Hotkey3 && HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && HotkeyInverted3) return 0.0f;
+            return prevState;
+        }
+        if (pixelNumber == 10 && Hotkey3) {
+            prevState = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(10, 0), 0).r;
+
+            if (HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] != HotkeyInverted3) return 1.0f;
+            if (HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] == HotkeyInverted3) return 0.0f;
+            if (HotkeyBehavior3 == 1 && hotkeyPress[HotkeyButton3] != HotkeyInverted3) return 1.0f - prevState;
+            if (HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && !HotkeyInverted3) return 1.0f;
+            if (HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && HotkeyInverted3) return 0.0f;
             
             return prevState;
         }
-
-
         
         return 0.0f;
     }
@@ -918,7 +929,18 @@
         const float2 overlayOffset = Offset + (FollowCursor ? MousePoint - CenterPoint : 0);
         const float4 overlay = tex2Dlod(CustomCrosshairOverlaySampler, float4(texCoord + -overlayOffset * BUFFER_PIXEL_SIZE, 0, 0));
 
-        if (tex2Dfetch(CustomCrosshairStateSamp, int2(8, 0), 0).r > 0.0f) discard;
+        if (Hotkey1 || Hotkey2 || Hotkey3) {
+            bool hotkeyTriggered1;
+            bool hotkeyTriggered2;
+            bool hotkeyTriggered3;
+
+            if (Hotkey1) hotkeyTriggered1 = tex2Dfetch(CustomCrosshairStateSamp, int2(8, 0), 0).r > 0.0f;
+            if (Hotkey2) hotkeyTriggered2 = tex2Dfetch(CustomCrosshairStateSamp, int2(9, 0), 0).r > 0.0f;
+            if (Hotkey3) hotkeyTriggered3 = tex2Dfetch(CustomCrosshairStateSamp, int2(10, 0), 0).r > 0.0f;
+
+            // Hide inverted > Hide > toggle > hold inverted > hold
+            if (hotkeyTriggered1 || hotkeyTriggered2 || hotkeyTriggered3) discard;
+        }
 
         if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
             bool detectorMatches1;
@@ -1051,7 +1073,7 @@
 
     technique CustomCrosshairStateDebug <
         ui_label = "Custom Crosshair State Debug";
-        hidden = true;
+        hidden = false;
     > {
         pass detector {
             VertexShader = PostProcessVS;
