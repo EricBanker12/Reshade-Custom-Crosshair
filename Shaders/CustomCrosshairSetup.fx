@@ -8,7 +8,7 @@
         ui_label = "Fill Color";
         ui_category = "Crosshair Setup";
         ui_category_closed = true;
-    > = float4(1, 1, 1, 0.8f);
+    > = float4(1, 1, 1, 0.75f);
 
     uniform float4 OutlineColor <
         ui_type = "color";
@@ -16,7 +16,7 @@
         ui_category = "Crosshair Setup";
         ui_category_closed = true;
 
-    > = float4(0, 0, 0, 0.8f);
+    > = float4(0, 0, 0, 0.5f);
 
     uniform float OutlineSize <
         ui_type = "drag";
@@ -574,7 +574,7 @@
         ui_category = "Crosshair Shape 06";
         ui_category_closed = true;
         ui_spacing = 2;
-    > = false;
+    > = true;
 
     uniform int Shape6 <
         ui_type = "combo";
@@ -582,7 +582,7 @@
         ui_items = "Rectangle\0Triangle\0Ellipse\0";
         ui_category = "Crosshair Shape 06";
         ui_category_closed = true;
-    > = 0;
+    > = 2;
 
     uniform int Anchor6 <
         ui_type = "combo";
@@ -600,7 +600,7 @@
         ui_step = 1.0f;
         ui_category = "Crosshair Shape 06";
         ui_category_closed = true;
-    > = float2(10,10);
+    > = float2(22,22);
 
     uniform float2 GapSize6 <
         ui_type = "drag";
@@ -610,7 +610,7 @@
         ui_step = 1.0f;
         ui_category = "Crosshair Shape 06";
         ui_category_closed = true;
-    > = float2(0,0);
+    > = float2(18,18);
 
     uniform float2 Offset6 <
         ui_type = "drag";
@@ -1789,63 +1789,43 @@
         return -sqrt(d.x)*sign(d.y);
     }
     
-    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor) {
+    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, int anchor, float outlineSize) {
         const float2 center = fillPos + fillSize * anchorOffsets[anchor];
         const float sdFill = sdBox(basePos - center, fillSize / 2.0f);
+        float sdGap = 1.0f;
 
-        if (gapSize.x > 0 && gapSize.y > 0) {
-            gapSize /= 2.0f;
-            const float sdGap = sdBox(basePos - center - gapOffset, gapSize);
-            if (sdFill <= 0 && sdGap > 0) return lerp(fillColor, baseColor, baseColor.a);
-            if (sdFill <= outlineSize && sdGap > -outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
-        }
-        else {
-            if (sdFill <= 0) return lerp(fillColor, baseColor, baseColor.a);
-            if (sdFill <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
-        }
+        if (gapSize.x > 0 && gapSize.y > 0)
+            sdGap = sdBox(basePos - center - gapOffset, gapSize / 2.0f);
+        
+        if (sdFill <= outlineSize && sdGap > -outlineSize)
+            return lerp(fillColor, baseColor, baseColor.a);
 
         return baseColor;
     }
 
-    float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor, float slice) {
+    float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, int anchor, float slice, float outlineSize) {
         const float2 center = fillPos + fillSize * anchorOffsets[anchor];
         fillSize /= 2.0f;
+        
         const float sdFill = sdEllipse(basePos - center, fillSize);
+        float sdGap = 1.0f;
+        float sdSlice = -1.0f;
 
-        if (gapSize.x > 0 && gapSize.y > 0) {
-            gapSize /= 2.0f;
-            const float sdGap = sdEllipse(basePos - center - gapOffset, gapSize);
+        if (gapSize.x > 0 && gapSize.y > 0)
+            sdGap = sdEllipse(basePos - center - gapOffset, gapSize / 2.0f);
             
-            if (slice > 0) {
-                slice = radians(180.0f - slice / 2.0f);
-                const float sdSlice = sdPie(basePos - center, float2(sin(slice), cos(slice)), max(fillSize.x, fillSize.y));
-
-                if (sdFill <= 0 && sdGap > 0 && sdSlice <= 0) return lerp(fillColor, baseColor, baseColor.a);
-                if (sdFill <= outlineSize && sdGap > -outlineSize && sdSlice <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
-            }
-            else {
-                if (sdFill <= 0 && sdGap > 0) return lerp(fillColor, baseColor, baseColor.a);
-                if (sdFill <= outlineSize && sdGap > -outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
-            }
+        if (slice > 0) {
+            slice = radians(180.0f - slice / 2.0f);
+            sdSlice = sdPie(basePos - center, float2(sin(slice), cos(slice)), max(fillSize.x, fillSize.y));
         }
-        else {
-            if (slice > 0) {
-                slice = radians(180.0f - slice / 2.0f);
-                const float sdSlice = sdPie(basePos - center, float2(sin(slice), cos(slice)), max(fillSize.x, fillSize.y));
 
-                if (sdFill <= 0 && sdSlice <= 0) return lerp(fillColor, baseColor, baseColor.a);
-                if (sdFill <= outlineSize && sdSlice <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
-            }
-            else {
-                if (sdFill <= 0) return lerp(fillColor, baseColor, baseColor.a);
-                if (sdFill <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
-            }
-        }
+        if (sdFill <= outlineSize && sdGap > -outlineSize && sdSlice <= outlineSize)
+            return lerp(fillColor, baseColor, baseColor.a);
 
         return baseColor;
     }
 
-    float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, int anchor, float skew) {
+    float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, int anchor, float skew, float outlineSize) {
         // float2 anchorOffsets[9] = {float2(0.5f, 0.67f), float2(0, 0.67f), float2(-0.5f, 0.67f), float2(0.5f, 0), float2(0, 0), float2(-0.5f, 0f), float2(0.5f, -0.33f), float2(0, -0.33f), float2(-0.5f, -0.33f)};
         float2 anchorOffset = anchorOffsets[anchor];
         if (anchorOffset.y != 0.0f) anchorOffset.y += 1.0f / 6.0f;
@@ -1855,31 +1835,28 @@
         float2 B = float2 (fillSize.x * skew / 90.0f, -fillSize.y * 2.0f / 3.0f);
         float2 C = float2 (fillSize.x / 2.0f * (1 - skew / 90.0f), fillSize.y / 3.0f);
         const float sdFill = sdTriangle(basePos - center, A, B, C);
+        float sdGap = 1.0f;
 
         if (gapSize.x > 0 && gapSize.y > 0) {
             A = float2 (-gapSize.x / 2.0f * (1 + skew / 90.0f), gapSize.y / 3.0f);
             B = float2 (gapSize.x * skew / 90.0f, -gapSize.y * 2.0f / 3.0f);
             C = float2 (gapSize.x / 2.0f * (1 - skew / 90.0f), gapSize.y / 3.0f);
-            const float sdGap = sdTriangle(basePos - center - gapOffset, A, B, C);
-
-            if (sdFill <= 0 && sdGap > 0) return lerp(fillColor, baseColor, baseColor.a);
-            if (sdFill <= outlineSize && sdGap > -outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
-        }
-        else {
-            if (sdFill <= 0) return lerp(fillColor, baseColor, baseColor.a);
-            if (sdFill <= outlineSize) return lerp(outlineColor, baseColor, baseColor.a);
+            sdGap = sdTriangle(basePos - center - gapOffset, A, B, C);
         }
 
+        if (sdFill <= outlineSize && sdGap > -outlineSize)
+            return lerp(fillColor, baseColor, baseColor.a);
+        
         return baseColor;
     }
 
-    float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float outlineSize, float4 outlineColor, float rotation, int anchor, float slice, float skew) {
+    float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float rotation, int anchor, float slice, float skew, float outlineSize) {
         if (Antialiasing) {
-                fillPos *= 2.0f;
-                fillSize *= 2.0f;
-                gapSize *= 2.0f;
-                gapOffset *= 2.0f;
-                outlineSize *= 2.0f;
+                fillPos += fillPos;
+                fillSize += fillSize;
+                gapSize += gapSize;
+                gapOffset += gapOffset;
+                outlineSize += outlineSize;
         }
 
         if (rotation > 0) {
@@ -1887,9 +1864,9 @@
             basePos = float4((basePos.x - fillPos.x) * cos(rotation) - (basePos.y - fillPos.y) * sin(rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(rotation) + (basePos.y - fillPos.y) * cos(rotation) + fillPos.y, 0, 0);
         }
         
-        if (shape == 1) return DrawTriangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor, skew);
-        if (shape == 2) return DrawEllipse(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor, slice);
-        return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, outlineSize, outlineColor, anchor);
+        if (shape == 1) return DrawTriangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, skew, outlineSize);
+        if (shape == 2) return DrawEllipse(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, slice, outlineSize);
+        return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, outlineSize);
     }
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -1899,26 +1876,47 @@
     float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (!Antialiasing) discard;
 
-        float4 color = float4(OutlineColor.rgb, 0);
-        if (OutlineSize < 1) color = float4(FillColor.rgb, 0);
+        float4 color = float4(FillColor.rgb, 0);
+        if (OutlineSize > 0) color = float4(OutlineColor.rgb, 0);
 
-        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Slice1, Skew1);
-        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Slice2, Skew2);
-        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Slice3, Skew3);
-        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Slice4, Skew4);
-        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Slice5, Skew5);
-        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Slice6, Skew6);
-        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Slice7, Skew7);
-        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Slice8, Skew8);
-        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Slice9, Skew9);
-        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Slice10, Skew10);
-        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Slice11, Skew11);
-        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Slice12, Skew12);
-        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Slice13, Skew13);
-        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Slice14, Skew14);
-        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Slice15, Skew15);
-        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Slice16, Skew16);
-
+        // fill
+        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, 0);
+        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, 0);
+        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, 0);
+        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, 0);
+        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, 0);
+        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, 0);
+        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, 0);
+        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, 0);
+        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, 0);
+        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, 0);
+        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, 0);
+        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, 0);
+        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, 0);
+        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, 0);
+        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0);
+        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0);
+        
+        // outline
+        if (OutlineSize > 0) {
+            if (ShapeEnabled1 && (color.a == 0.0f)) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, OutlineColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, OutlineSize);
+            if (ShapeEnabled2 && (color.a == 0.0f)) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, OutlineColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, OutlineSize);
+            if (ShapeEnabled3 && (color.a == 0.0f)) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, OutlineColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, OutlineSize);
+            if (ShapeEnabled4 && (color.a == 0.0f)) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, OutlineColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, OutlineSize);
+            if (ShapeEnabled5 && (color.a == 0.0f)) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, OutlineColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, OutlineSize);
+            if (ShapeEnabled6 && (color.a == 0.0f)) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, OutlineColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, OutlineSize);
+            if (ShapeEnabled7 && (color.a == 0.0f)) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, OutlineColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, OutlineSize);
+            if (ShapeEnabled8 && (color.a == 0.0f)) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, OutlineColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, OutlineSize);
+            if (ShapeEnabled9 && (color.a == 0.0f)) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, OutlineColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, OutlineSize);
+            if (ShapeEnabled10 && (color.a == 0.0f)) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, OutlineColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, OutlineSize);
+            if (ShapeEnabled11 && (color.a == 0.0f)) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, OutlineColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, OutlineSize);
+            if (ShapeEnabled12 && (color.a == 0.0f)) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, OutlineColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, OutlineSize);
+            if (ShapeEnabled13 && (color.a == 0.0f)) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, OutlineColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, OutlineSize);
+            if (ShapeEnabled14 && (color.a == 0.0f)) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, OutlineColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, OutlineSize);
+            if (ShapeEnabled15 && (color.a == 0.0f)) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
+            if (ShapeEnabled16 && (color.a == 0.0f)) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
+        }
+        
         return color;
     }
 
@@ -1933,25 +1931,46 @@
                 ) / 4.0f;
         }
         else {
-            float4 color = float4(OutlineColor.rgb, 0);
-            if (OutlineSize < 1) color = float4(FillColor.rgb, 0);
+            float4 color = float4(FillColor.rgb, 0);
+            if (OutlineSize > 0) color = float4(OutlineColor.rgb, 0);
 
-            if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, OutlineSize, OutlineColor, Rotation1, Anchor1, Slice1, Skew1);
-            if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, OutlineSize, OutlineColor, Rotation2, Anchor2, Slice2, Skew2);
-            if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, OutlineSize, OutlineColor, Rotation3, Anchor3, Slice3, Skew3);
-            if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, OutlineSize, OutlineColor, Rotation4, Anchor4, Slice4, Skew4);
-            if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, OutlineSize, OutlineColor, Rotation5, Anchor5, Slice5, Skew5);
-            if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, OutlineSize, OutlineColor, Rotation6, Anchor6, Slice6, Skew6);
-            if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, OutlineSize, OutlineColor, Rotation7, Anchor7, Slice7, Skew7);
-            if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, OutlineSize, OutlineColor, Rotation8, Anchor8, Slice8, Skew8);
-            if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, OutlineSize, OutlineColor, Rotation9, Anchor9, Slice9, Skew9);
-            if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, OutlineSize, OutlineColor, Rotation10, Anchor10, Slice10, Skew10);
-            if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, OutlineSize, OutlineColor, Rotation11, Anchor11, Slice11, Skew11);
-            if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, OutlineSize, OutlineColor, Rotation12, Anchor12, Slice12, Skew12);
-            if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, OutlineSize, OutlineColor, Rotation13, Anchor13, Slice13, Skew13);
-            if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, OutlineSize, OutlineColor, Rotation14, Anchor14, Slice14, Skew14);
-            if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, OutlineSize, OutlineColor, Rotation15, Anchor15, Slice15, Skew15);
-            if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, OutlineSize, OutlineColor, Rotation16, Anchor16, Slice16, Skew16);
+            // fill
+            if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, 0);
+            if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, 0);
+            if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, 0);
+            if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, 0);
+            if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, 0);
+            if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, 0);
+            if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, 0);
+            if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, 0);
+            if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, 0);
+            if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, 0);
+            if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, 0);
+            if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, 0);
+            if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, 0);
+            if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, 0);
+            if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0);
+            if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0);
+            
+            // outline
+            if (OutlineSize > 0) {
+                if (ShapeEnabled1 && (color.a == 0.0f)) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, OutlineColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, OutlineSize);
+                if (ShapeEnabled2 && (color.a == 0.0f)) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, OutlineColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, OutlineSize);
+                if (ShapeEnabled3 && (color.a == 0.0f)) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, OutlineColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, OutlineSize);
+                if (ShapeEnabled4 && (color.a == 0.0f)) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, OutlineColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, OutlineSize);
+                if (ShapeEnabled5 && (color.a == 0.0f)) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, OutlineColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, OutlineSize);
+                if (ShapeEnabled6 && (color.a == 0.0f)) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, OutlineColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, OutlineSize);
+                if (ShapeEnabled7 && (color.a == 0.0f)) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, OutlineColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, OutlineSize);
+                if (ShapeEnabled8 && (color.a == 0.0f)) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, OutlineColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, OutlineSize);
+                if (ShapeEnabled9 && (color.a == 0.0f)) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, OutlineColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, OutlineSize);
+                if (ShapeEnabled10 && (color.a == 0.0f)) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, OutlineColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, OutlineSize);
+                if (ShapeEnabled11 && (color.a == 0.0f)) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, OutlineColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, OutlineSize);
+                if (ShapeEnabled12 && (color.a == 0.0f)) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, OutlineColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, OutlineSize);
+                if (ShapeEnabled13 && (color.a == 0.0f)) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, OutlineColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, OutlineSize);
+                if (ShapeEnabled14 && (color.a == 0.0f)) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, OutlineColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, OutlineSize);
+                if (ShapeEnabled15 && (color.a == 0.0f)) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
+                if (ShapeEnabled16 && (color.a == 0.0f)) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
+            }
 
             return color;
         }
