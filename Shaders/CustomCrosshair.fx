@@ -7,7 +7,7 @@
         ui_type = "radio";
         ui_label = " ";
         ui_text = "To make changes to the crosshair shape,\n"
-                    "enable the technique \"Custom Crosshair Setup\"";
+                    "enable the effect \"CustomCrosshairSetup\"";
         ui_category = "Crosshair Offset";
         ui_category_closed = true;
     >;
@@ -29,6 +29,106 @@
         ui_category = "Crosshair Offset";
         ui_category_closed = true;
     > = false;
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Hotkeys
+// ------------------------------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Hotkey 1
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Hotkey1 <
+        ui_label = "Hotkey 1";
+        ui_category = "Hotkey 1";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform int HotkeyBehavior1 <
+        ui_type = "combo";
+        ui_label = "Behavior";
+        ui_items = "Hold Hide\0Hold Show\0Toggle\0Hide\0Show\0";
+        ui_tooltip = "Hold Hide: Hide the crosshair when held.\n"
+                        "Hold Show: Show the crosshair when held and not toggled.\n"
+                        "Toggle: Show the crosshair if toggled. Hide if not toggled.\n"
+                        "Hide: Toggle to hide the crosshair if not toggled.\n"
+                        "Show: Toggle to show the crosshair if toggled.";
+        ui_category = "Hotkey 1";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform int HotkeyButton1 <
+        ui_type = "combo";
+        ui_label = "Button";
+        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_category = "Hotkey 1";
+        ui_category_closed = true;
+    > = 0;
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Hotkey 2
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Hotkey2 <
+        ui_label = "Hotkey 2";
+        ui_category = "Hotkey 2";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform int HotkeyBehavior2 <
+        ui_type = "combo";
+        ui_label = "Behavior";
+        ui_items = "Hold Hide\0Hold Show\0Toggle\0Hide\0Show\0";
+        ui_tooltip = "Hold Hide: Hide the crosshair when held.\n"
+                        "Hold Show: Show the crosshair when held and not toggled.\n"
+                        "Toggle: Show the crosshair if toggled. Hide if not toggled.\n"
+                        "Hide: Toggle to hide the crosshair if not toggled.\n"
+                        "Show: Toggle to show the crosshair if toggled.";
+        ui_category = "Hotkey 2";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform int HotkeyButton2 <
+        ui_type = "combo";
+        ui_label = "Button";
+        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_category = "Hotkey 2";
+        ui_category_closed = true;
+    > = 0;
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Hotkey 3
+// ------------------------------------------------------------------------------------------------------------------------
+
+    uniform bool Hotkey3 <
+        ui_label = "Hotkey 3";
+        ui_category = "Hotkey 3";
+        ui_category_closed = true;
+        ui_spacing = 2;
+    > = false;
+
+    uniform int HotkeyBehavior3 <
+        ui_type = "combo";
+        ui_label = "Behavior";
+        ui_items = "Hold Hide\0Hold Show\0Toggle\0Hide\0Show\0";
+        ui_tooltip = "Hold Hide: Hide the crosshair when held.\n"
+                        "Hold Show: Show the crosshair when held and not toggled.\n"
+                        "Toggle: Show the crosshair if toggled. Hide if not toggled.\n"
+                        "Hide: Toggle to hide the crosshair if not toggled.\n"
+                        "Show: Toggle to show the crosshair if toggled.";
+        ui_category = "Hotkey 3";
+        ui_category_closed = true;
+    > = 0;
+
+    uniform int HotkeyButton3 <
+        ui_type = "combo";
+        ui_label = "Button";
+        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_category = "Hotkey 3";
+        ui_category_closed = true;
+    > = 0;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // UI Detection
@@ -586,8 +686,14 @@
     > = false;
 
 // ------------------------------------------------------------------------------------------------------------------------
-// Hotkeys
+// Hidden or Static Variables
 // ------------------------------------------------------------------------------------------------------------------------
+
+    static const float2 CenterPoint = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
+    static const float2 PixelOffset = float2(0.5f, 0.5f);
+    static const float2 anchorOffsets[9] = {float2(0.5f, 0.5f), float2(0, 0.5f), float2(-0.5f, 0.5f), float2(0.5f, 0), float2(0, 0), float2(-0.5f, 0), float2(0.5f, -0.5f), float2(0, -0.5f), float2(-0.5f, -0.5f)};
+    
+    uniform float2 MousePoint < source = "mousepoint"; >;
     
     uniform bool MouseRight_Down < source = "mousebutton"; keycode = 1; mode = ""; >;
     uniform bool MouseRight_Press < source = "mousebutton"; keycode = 1; mode = "press"; >;
@@ -621,129 +727,10 @@
     uniform bool DDD_Down <source = "key"; keycode = 0x44; mode = ""; >;
     uniform bool DDD_Press <source = "key"; keycode = 0x44; mode = "press"; >;
 
-// ------------------------------------------------------------------------------------------------------------------------
-// Hotkey 1
-// ------------------------------------------------------------------------------------------------------------------------
-
-    uniform bool Hotkey1 <
-        ui_label = "Hotkey 1";
-        ui_category = "Hotkey 1";
-        ui_category_closed = true;
-        ui_spacing = 2;
-    > = false;
-
-    uniform int HotkeyBehavior1 <
-        ui_type = "combo";
-        ui_label = "Behavior";
-        ui_items = "Hold\0Toggle\0Hide/Show\0";
-        ui_category = "Hotkey 1";
-        ui_category_closed = true;
-    > = 0;
-
-    uniform int HotkeyButton1 <
-        ui_type = "combo";
-        ui_label = "Button";
-        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
-        ui_category = "Hotkey 1";
-        ui_category_closed = true;
-    > = 0;
-
-    uniform bool HotkeyInverted1 <
-        ui_label = "Invert Hide/Show";
-        ui_tooltip = "Inverse the hotkey initial state to hide until the hotkey is held, toggled, or pressed.";
-        ui_category = "Hotkey 1";
-        ui_category_closed = true;
-    > = false;
-
-
-
-// ------------------------------------------------------------------------------------------------------------------------
-// Hotkey 2
-// ------------------------------------------------------------------------------------------------------------------------
-
-    uniform bool Hotkey2 <
-        ui_label = "Hotkey 2";
-        ui_category = "Hotkey 2";
-        ui_category_closed = true;
-        ui_spacing = 2;
-    > = false;
-
-    uniform int HotkeyBehavior2 <
-        ui_type = "combo";
-        ui_label = "Behavior";
-        ui_items = "Hold\0Toggle\0Hide/Show\0";
-        ui_category = "Hotkey 2";
-        ui_category_closed = true;
-    > = 0;
-
-    uniform int HotkeyButton2 <
-        ui_type = "combo";
-        ui_label = "Button";
-        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
-        ui_category = "Hotkey 2";
-        ui_category_closed = true;
-    > = 0;
-
-    uniform bool HotkeyInverted2 <
-        ui_label = "Invert Hide/Show";
-        ui_tooltip = "Inverse the hotkey initial state to hide unless the hotkey is held/toggled.";
-        ui_category = "Hotkey 2";
-        ui_category_closed = true;
-    > = false;
-
-
-
-// ------------------------------------------------------------------------------------------------------------------------
-// Hotkey 3
-// ------------------------------------------------------------------------------------------------------------------------
-
-    uniform bool Hotkey3 <
-        ui_label = "Hotkey 3";
-        ui_category = "Hotkey 3";
-        ui_category_closed = true;
-        ui_spacing = 2;
-    > = false;
-
-    uniform int HotkeyBehavior3 <
-        ui_type = "combo";
-        ui_label = "Behavior";
-        ui_items = "Hold\0Toggle\0Hide/Show\0";
-        ui_category = "Hotkey 3";
-        ui_category_closed = true;
-    > = 0;
-
-    uniform int HotkeyButton3 <
-        ui_type = "combo";
-        ui_label = "Button";
-        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
-        ui_category = "Hotkey 3";
-        ui_category_closed = true;
-    > = 0;
-
-    uniform bool HotkeyInverted3 <
-        ui_label = "Invert Hide/Show";
-        ui_tooltip = "Inverse the hotkey initial state to hide unless the hotkey is held/toggled.";
-        ui_category = "Hotkey 3";
-        ui_category_closed = true;
-    > = false;
-
-// ------------------------------------------------------------------------------------------------------------------------
-// Hidden or Static Variables
-// ------------------------------------------------------------------------------------------------------------------------
-
-    static const float2 CenterPoint = float2(BUFFER_WIDTH / 2.0f, BUFFER_HEIGHT / 2.0f);
-    static const float2 PixelOffset = float2(0.5f, 0.5f);
-    static const float2 anchorOffsets[9] = {float2(0.5f, 0.5f), float2(0, 0.5f), float2(-0.5f, 0.5f), float2(0.5f, 0), float2(0, 0), float2(-0.5f, 0), float2(0.5f, -0.5f), float2(0, -0.5f), float2(-0.5f, -0.5f)};
-    
-    uniform float2 MousePoint < source = "mousepoint"; >;
-
-
     /*
     To Do:
     - option to use png image layer instead of shape - see https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/Layer.fx
-    - hotkey enable/disable shapes - might be easier to duplicate fx file for switching between different crosshairs
     - hotkey animated transformations - likely too expensive unless pre-rendered - could use overlay LoD for frames?
-
     */
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -863,11 +850,7 @@
     }
 
     float PS_StateHandler(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        // "Right-Click, 1, 2, 3, 4, 5, WASD, Shift, Ctrl, Alt, Spacebar";
-        const bool hotkeyDown[] = { MouseRight_Down, One_Down, Two_Down, Three_Down, Four_Down, Five_Down, WWW_Down || AAA_Down || SSS_Down || DDD_Down, Shift_Down, Ctrl_Down, Alt_Down, Spacebar_Down };
-        const bool hotkeyPress[] = { MouseRight_Press, One_Press, Two_Press, Three_Press, Four_Press, Five_Press, WWW_Press || AAA_Press || SSS_Press || DDD_Press, Shift_Press, Ctrl_Press, Alt_Press, Spacebar_Press };
         const int pixelNumber = floor(texCoord.x * 11);
-        float prevState;
         
         // detector state
         if (pixelNumber == 0 && Detector1) return DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1);
@@ -880,45 +863,67 @@
         if (pixelNumber == 7 && Detector8) return DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8);
         
         // hotkey state
-        bool hotkeyTriggered1;
-        bool hotkeyTriggered2;
-        bool hotkeyTriggered3;
-        
-        if (Hotkey1) hotkeyTriggered1 = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(8, 0), 0).r > 0.0f;
-        if (Hotkey2) hotkeyTriggered2 = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(9, 0), 0).r > 0.0f;
-        if (Hotkey3) hotkeyTriggered3 = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(10, 0), 0).r > 0.0f;
+        // "Right-Click, 1, 2, 3, 4, 5, WASD, Shift, Ctrl, Alt, Spacebar";
+        if (Hotkey1 || Hotkey2 || Hotkey3) {
+            const bool hotkeyDown[] = { MouseRight_Down, One_Down, Two_Down, Three_Down, Four_Down, Five_Down, WWW_Down || AAA_Down || SSS_Down || DDD_Down, Shift_Down, Ctrl_Down, Alt_Down, Spacebar_Down };
+            const bool hotkeyPress[] = { MouseRight_Press, One_Press, Two_Press, Three_Press, Four_Press, Five_Press, WWW_Press || AAA_Press || SSS_Press || DDD_Press, Shift_Press, Ctrl_Press, Alt_Press, Spacebar_Press };
+            const bool hotkeyTriggered1 = Hotkey1 && (tex2Dfetch(CustomCrosshairPrevStateSamp, int2(8, 0), 0).r > 0.0f);
+            const bool hotkeyTriggered2 = Hotkey2 && (tex2Dfetch(CustomCrosshairPrevStateSamp, int2(9, 0), 0).r > 0.0f);
+            const bool hotkeyTriggered3 = Hotkey3 && (tex2Dfetch(CustomCrosshairPrevStateSamp, int2(10, 0), 0).r > 0.0f);
 
-        if (pixelNumber == 8 && Hotkey1) {
-            if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] != HotkeyInverted1) return 1.0f;
-            if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1] == HotkeyInverted1) return 0.0f;
-            if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && !HotkeyInverted1) return 1.0f;
-            if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && HotkeyInverted1) return 0.0f;
+            bool toggled = (HotkeyBehavior1 > 1) && hotkeyTriggered1 || (HotkeyBehavior2 > 1) && hotkeyTriggered2 || (HotkeyBehavior3 > 1) && hotkeyTriggered3;
 
-            if (HotkeyBehavior1 == 1 && hotkeyPress[HotkeyButton1] != HotkeyInverted1) return 1.0f - prevState;
+            if (pixelNumber == 8 && Hotkey1) {
+                if (Hotkey2 && HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && toggled) toggled = false;
+                if (Hotkey2 && HotkeyBehavior2 == 4 && hotkeyPress[HotkeyButton2]) toggled = false;
+                if (Hotkey3 && HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && toggled) toggled = false;
+                if (Hotkey3 && HotkeyBehavior3 == 4 && hotkeyPress[HotkeyButton3]) toggled = false;
 
-            return prevState;
-        }
-        if (pixelNumber == 9 && Hotkey2) {
-            prevState = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(9, 0), 0).r;
+                if (HotkeyBehavior1 == 0 && hotkeyDown[HotkeyButton1]) return 1.0f;
+                if (HotkeyBehavior1 == 0 && !hotkeyDown[HotkeyButton1] && !toggled) return 0.0f;
+                if (HotkeyBehavior1 == 1 && !hotkeyDown[HotkeyButton1]) return 1.0f;
+                if (HotkeyBehavior1 == 1 && hotkeyDown[HotkeyButton1] && !toggled) return 0.0f;
+                if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && !toggled) return 1.0f;
+                if (HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && toggled) return 0.0f;
+                if (HotkeyBehavior1 == 3 && hotkeyPress[HotkeyButton1]) return 1.0f;
+                if (HotkeyBehavior1 == 4 && hotkeyPress[HotkeyButton1]) return 0.0f;
+                if (HotkeyBehavior1 > 1) return (toggled ? 1.0f : 0.0f);
+                return (hotkeyTriggered1 ? 1.0f : 0.0f);
+            }
+            if (pixelNumber == 9 && Hotkey2) {
+                if (Hotkey1 && HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && toggled) toggled = false;
+                if (Hotkey1 && HotkeyBehavior1 == 4 && hotkeyPress[HotkeyButton1]) toggled = false;
+                if (Hotkey3 && HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && toggled) toggled = false;
+                if (Hotkey3 && HotkeyBehavior3 == 4 && hotkeyPress[HotkeyButton3]) toggled = false;
 
-            if (HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] != HotkeyInverted2) return 1.0f;
-            if (HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2] == HotkeyInverted2) return 0.0f;
-            if (HotkeyBehavior2 == 1 && hotkeyPress[HotkeyButton2] != HotkeyInverted2) return 1.0f - prevState;
-            if (HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && !HotkeyInverted2) return 1.0f;
-            if (HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && HotkeyInverted2) return 0.0f;
+                if (HotkeyBehavior2 == 0 && hotkeyDown[HotkeyButton2]) return 1.0f;
+                if (HotkeyBehavior2 == 0 && !hotkeyDown[HotkeyButton2] && !toggled) return 0.0f;
+                if (HotkeyBehavior2 == 1 && !hotkeyDown[HotkeyButton2]) return 1.0f;
+                if (HotkeyBehavior2 == 1 && hotkeyDown[HotkeyButton2] && !toggled) return 0.0f;
+                if (HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && !toggled) return 1.0f;
+                if (HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && toggled) return 0.0f;
+                if (HotkeyBehavior2 == 3 && hotkeyPress[HotkeyButton2]) return 1.0f;
+                if (HotkeyBehavior2 == 4 && hotkeyPress[HotkeyButton2]) return 0.0f;
+                if (HotkeyBehavior2 > 1) return (toggled ? 1.0f : 0.0f);
+                return (hotkeyTriggered2 ? 1.0f : 0.0f);
+            }
+            if (pixelNumber == 10 && Hotkey3) {
+                if (Hotkey2 && HotkeyBehavior2 == 2 && hotkeyPress[HotkeyButton2] && toggled) toggled = false;
+                if (Hotkey2 && HotkeyBehavior2 == 4 && hotkeyPress[HotkeyButton2]) toggled = false;
+                if (Hotkey1 && HotkeyBehavior1 == 2 && hotkeyPress[HotkeyButton1] && toggled) toggled = false;
+                if (Hotkey1 && HotkeyBehavior1 == 4 && hotkeyPress[HotkeyButton1]) toggled = false;
 
-            return prevState;
-        }
-        if (pixelNumber == 10 && Hotkey3) {
-            prevState = tex2Dfetch(CustomCrosshairPrevStateSamp, int2(10, 0), 0).r;
-
-            if (HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] != HotkeyInverted3) return 1.0f;
-            if (HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3] == HotkeyInverted3) return 0.0f;
-            if (HotkeyBehavior3 == 1 && hotkeyPress[HotkeyButton3] != HotkeyInverted3) return 1.0f - prevState;
-            if (HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && !HotkeyInverted3) return 1.0f;
-            if (HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && HotkeyInverted3) return 0.0f;
-            
-            return prevState;
+                if (HotkeyBehavior3 == 0 && hotkeyDown[HotkeyButton3]) return 1.0f;
+                if (HotkeyBehavior3 == 0 && !hotkeyDown[HotkeyButton3] && !toggled) return 0.0f;
+                if (HotkeyBehavior3 == 1 && !hotkeyDown[HotkeyButton3]) return 1.0f;
+                if (HotkeyBehavior3 == 1 && hotkeyDown[HotkeyButton3] && !toggled) return 0.0f;
+                if (HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && !toggled) return 1.0f;
+                if (HotkeyBehavior3 == 2 && hotkeyPress[HotkeyButton3] && toggled) return 0.0f;
+                if (HotkeyBehavior3 == 3 && hotkeyPress[HotkeyButton3]) return 1.0f;
+                if (HotkeyBehavior3 == 4 && hotkeyPress[HotkeyButton3]) return 0.0f;
+                if (HotkeyBehavior3 > 1) return (toggled ? 1.0f : 0.0f);
+                return (hotkeyTriggered3 ? 1.0f : 0.0f);
+            }
         }
         
         return 0.0f;
@@ -938,7 +943,6 @@
             if (Hotkey2) hotkeyTriggered2 = tex2Dfetch(CustomCrosshairStateSamp, int2(9, 0), 0).r > 0.0f;
             if (Hotkey3) hotkeyTriggered3 = tex2Dfetch(CustomCrosshairStateSamp, int2(10, 0), 0).r > 0.0f;
 
-            // Hide inverted > Hide > toggle > hold inverted > hold
             if (hotkeyTriggered1 || hotkeyTriggered2 || hotkeyTriggered3) discard;
         }
 
@@ -1052,7 +1056,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
     technique CustomCrosshair <
-        ui_label = "Custom Crosshair";
+        ui_label = "CustomCrosshair";
         ui_tooltip = "Enable \"Custom Crosshair Setup\" to apply config changes.";
     > {
         pass prevState {
@@ -1072,8 +1076,8 @@
     }
 
     technique CustomCrosshairStateDebug <
-        ui_label = "Custom Crosshair State Debug";
-        hidden = false;
+        ui_label = "CustomCrosshairStateDebug";
+        hidden = true;
     > {
         pass detector {
             VertexShader = PostProcessVS;

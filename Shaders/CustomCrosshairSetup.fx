@@ -1962,7 +1962,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
     technique CustomCrosshairStartup <
-        ui_label = "Custom Crosshair Startup";
+        ui_label = "CustomCrosshairStartup";
         ui_tooltip = "Apply settings and cache overlay texture.";
         hidden = true;
         enabled = true;
@@ -1981,7 +1981,7 @@
     }
 
     technique CustomCrosshairSetup <
-        ui_label = "Custom Crosshair Setup";
+        ui_label = "CustomCrosshairSetup";
         ui_tooltip = "Enable to apply config changes to \"Custom Crosshair.\"\n"
                         "Disable for performance";
     > {
