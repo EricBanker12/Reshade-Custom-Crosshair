@@ -1,28 +1,77 @@
-#if (USE_FSR == 1)
+#define FSR_RCAS_LIMIT (0.25 - (1.0 / 16.0))
 
-//---------------------------------------------------------------------- FSR BEGIN
-// Based on: https://www.shadertoy.com/view/stXSWB
+#ifndef _PIXEL_CENTER_OFFSET
+    #define _PIXEL_CENTER_OFFSET float2(0.5f, 0.5f)
+#endif
 
-#define PI 3.1415923693
-#define SINE(x) sin(.5 * PI * (x - .5)) + 1.
-#define COSINE(x) 1. - cos(.5 * PI * x)
+#include "ReShadeUI.fxh"
 
-texture BufferATex < pooled = true; >
+uniform float renderscale <
+    ui_type = "drag";
+    ui_label = "Render Scale";
+    ui_tooltip = "Downscaling factor.";
+    ui_min = 0.5f;
+    ui_max = 1.0f;
+> = 0.8f;
+
+#include "ReShade.fxh"
+
+// https://gist.github.com/TheRealMJP/c83b8c0f46b63f3a88a5986f4fa982b1
+float4 CatmullRom(in float2 uv, in float2 texSize)
 {
-	Width = BUFFER_WIDTH;
-	Height = BUFFER_HEIGHT;
-	Format = RGBA8;
-};
+    // We're going to sample a a 4x4 grid of texels surrounding the target UV coordinate. We'll do this by rounding
+    // down the sample location to get the exact center of our "starting" texel. The starting texel will be at
+    // location [1, 1] in the grid, where [0, 0] is the top left corner.
+    float2 samplePos = uv * texSize;
+    float2 texPos1 = floor(samplePos - 0.5f) + 0.5f;
 
-sampler BufferASampler
+    // Compute the fractional offset from our starting texel to our original sample location, which we'll
+    // feed into the Catmull-Rom spline function to get our filter weights.
+    float2 f = samplePos - texPos1;
+
+    // Compute the Catmull-Rom weights using the fractional offset that we calculated earlier.
+    // These equations are pre-expanded based on our knowledge of where the texels will be located,
+    // which lets us avoid having to evaluate a piece-wise function.
+    float2 w0 = f * (-0.5f + f * (1.0f - 0.5f * f));
+    float2 w1 = 1.0f + f * f * (-2.5f + 1.5f * f);
+    float2 w2 = f * (0.5f + f * (2.0f - 1.5f * f));
+    float2 w3 = f * f * (-0.5f + 0.5f * f);
+
+    // Work out weighting factors and sampling offsets that will let us use bilinear filtering to
+    // simultaneously evaluate the middle 2 samples from the 4x4 grid.
+    float2 w12 = w1 + w2;
+    float2 offset12 = w2 / (w1 + w2);
+
+    // Compute the final UV coordinates we'll use for sampling the texture
+    float2 texPos0 = texPos1 - 1;
+    float2 texPos3 = texPos1 + 2;
+    float2 texPos12 = texPos1 + offset12;
+
+    texPos0 /= texSize;
+    texPos3 /= texSize;
+    texPos12 /= texSize;
+
+    float4 result = 0.0f;
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos0.x, texPos0.y, 0.0f, 0.0f)) * w0.x * w0.y;
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos12.x, texPos0.y, 0.0f, 0.0f)) * w12.x * w0.y;
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos3.x, texPos0.y, 0.0f, 0.0f)) * w3.x * w0.y;
+
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos0.x, texPos12.y, 0.0f, 0.0f)) * w0.x * w12.y;
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos12.x, texPos12.y, 0.0f, 0.0f)) * w12.x * w12.y;
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos3.x, texPos12.y, 0.0f, 0.0f)) * w3.x * w12.y;
+
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos0.x, texPos3.y, 0.0f, 0.0f)) * w0.x * w3.y;
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos12.x, texPos3.y, 0.0f, 0.0f)) * w12.x * w3.y;
+    result += tex2Dlod(ReShade::BackBuffer, float4(texPos3.x, texPos3.y, 0.0f, 0.0f)) * w3.x * w3.y;
+
+    return result;
+}
+
+float sdBox( in float2 p, in float2 b )
 {
-	Texture = BufferATex;
-	AddressU = Repeat; AddressV = Repeat;
-	MipFilter = Linear; MinFilter = Linear; MagFilter = Linear;
-	SRGBTexture = false;
-};
-
-//---------------------------------------------------------------------- FSR Buffer A (Output to be used in Main, should use s0 as input)
+    float2 d = abs(p)-b;
+    return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
+}
 
 /**** EASU ****/
 void FsrEasuCon(
@@ -172,18 +221,18 @@ void FsrEasuF(
     float4 off = float4(-.5, .5, -.5, .5) * con1.xxyy;
     // textureGather to texture offsets
     // x=west y=east z=north w=south
-    float3 bC = tex2D(s0, p0 + off.xw).rgb; float bL = mad(0.5, bC.r + bC.b, bC.g);
-    float3 cC = tex2D(s0, p0 + off.yw).rgb; float cL = mad(0.5, cC.r + cC.b, cC.g);
-    float3 iC = tex2D(s0, p1 + off.xw).rgb; float iL = mad(0.5, iC.r + iC.b, iC.g);
-    float3 jC = tex2D(s0, p1 + off.yw).rgb; float jL = mad(0.5, jC.r + jC.b, jC.g);
-    float3 fC = tex2D(s0, p1 + off.yz).rgb; float fL = mad(0.5, fC.r + fC.b, fC.g);
-    float3 eC = tex2D(s0, p1 + off.xz).rgb; float eL = mad(0.5, eC.r + eC.b, eC.g);
-    float3 kC = tex2D(s0, p2 + off.xw).rgb; float kL = mad(0.5, kC.r + kC.b, kC.g);
-    float3 lC = tex2D(s0, p2 + off.yw).rgb; float lL = mad(0.5, lC.r + lC.b, lC.g);
-    float3 hC = tex2D(s0, p2 + off.yz).rgb; float hL = mad(0.5, hC.r + hC.b, hC.g);
-    float3 gC = tex2D(s0, p2 + off.xz).rgb; float gL = mad(0.5, gC.r + gC.b, gC.g);
-    float3 oC = tex2D(s0, p3 + off.yz).rgb; float oL = mad(0.5, oC.r + oC.b, oC.g);
-    float3 nC = tex2D(s0, p3 + off.xz).rgb; float nL = mad(0.5, nC.r + nC.b, nC.g);
+    float3 bC = tex2D(ReShade::BackBuffer, p0 + off.xw).rgb; float bL = mad(0.5, bC.r + bC.b, bC.g);
+    float3 cC = tex2D(ReShade::BackBuffer, p0 + off.yw).rgb; float cL = mad(0.5, cC.r + cC.b, cC.g);
+    float3 iC = tex2D(ReShade::BackBuffer, p1 + off.xw).rgb; float iL = mad(0.5, iC.r + iC.b, iC.g);
+    float3 jC = tex2D(ReShade::BackBuffer, p1 + off.yw).rgb; float jL = mad(0.5, jC.r + jC.b, jC.g);
+    float3 fC = tex2D(ReShade::BackBuffer, p1 + off.yz).rgb; float fL = mad(0.5, fC.r + fC.b, fC.g);
+    float3 eC = tex2D(ReShade::BackBuffer, p1 + off.xz).rgb; float eL = mad(0.5, eC.r + eC.b, eC.g);
+    float3 kC = tex2D(ReShade::BackBuffer, p2 + off.xw).rgb; float kL = mad(0.5, kC.r + kC.b, kC.g);
+    float3 lC = tex2D(ReShade::BackBuffer, p2 + off.yw).rgb; float lL = mad(0.5, lC.r + lC.b, lC.g);
+    float3 hC = tex2D(ReShade::BackBuffer, p2 + off.yz).rgb; float hL = mad(0.5, hC.r + hC.b, hC.g);
+    float3 gC = tex2D(ReShade::BackBuffer, p2 + off.xz).rgb; float gL = mad(0.5, gC.r + gC.b, gC.g);
+    float3 oC = tex2D(ReShade::BackBuffer, p3 + off.yz).rgb; float oL = mad(0.5, oC.r + oC.b, oC.g);
+    float3 nC = tex2D(ReShade::BackBuffer, p3 + off.xz).rgb; float nL = mad(0.5, nC.r + nC.b, nC.g);
 
     //------------------------------------------------------------------------------------------------------------------------------
     // Simplest multi-channel approximate luma possible (luma times 2, in 2 FMA/MAD).
@@ -248,27 +297,11 @@ void FsrEasuF(
     pix = min(max4, max(min4, aC / aW));
 }
 
-float4 BufferA(float4 position : SV_Position, float2 texcoord : TEXCOORD0) : SV_Target
-{
-    float3 c;
-    float4 con0, con1, con2, con3;
-
-    float2 fragcoord = texcoord * float2(BUFFER_WIDTH, BUFFER_HEIGHT);
-
-    // "rendersize" refers to size of source image before upscaling.
-    float2 rendersize = float2(1920, 1080);
-    FsrEasuCon(con0, con1, con2, con3, rendersize, rendersize, float2(BUFFER_WIDTH, BUFFER_HEIGHT));
-    FsrEasuF(c, fragcoord, con0, con1, con2, con3);
-    return float4(c.xyz, 1);
-}
-
 //---------------------------------------------------------------------- BufferA END / FSR MAIN
 
-#define FSR_RCAS_LIMIT (0.25 - (1.0 / 16.0))
-
-float4 FsrRcasLoadF(float2 p)
+float4 FsrRcasLoadF(float2 pp, int2 off)
 {
-    return tex2D(BufferASampler, p / float2(BUFFER_WIDTH, BUFFER_HEIGHT));
+    return tex2Dlod(ReShade::BackBuffer, float4(pp, 0, 0), off);
 }
 
 // The scale is {0.0 := maximum, to N>0, where N is the number of stops (halving) of the reduction of sharpness}.
@@ -280,7 +313,7 @@ float FsrRcasCon(float sharpness)
 }
 
 float3 FsrRcasF(
-    float2 ip, // Integer pixel position in output.
+    float2 pp, // pixel center position in output.
     float con
 )
 {
@@ -289,12 +322,11 @@ float3 FsrRcasF(
     //    b 
     //  d e f
     //    h
-    float2 sp = float2(ip);
-    float3 b = FsrRcasLoadF(sp + float2(0, -1)).rgb;
-    float3 d = FsrRcasLoadF(sp + float2(-1, 0)).rgb;
-    float3 e = FsrRcasLoadF(sp).rgb;
-    float3 f = FsrRcasLoadF(sp + float2(1, 0)).rgb;
-    float3 h = FsrRcasLoadF(sp + float2(0, 1)).rgb;
+    float3 b = FsrRcasLoadF(pp, int2(0, -1)).rgb;
+    float3 d = FsrRcasLoadF(pp, int2(-1, 0)).rgb;
+    float3 e = FsrRcasLoadF(pp, int2(0, 0)).rgb;
+    float3 f = FsrRcasLoadF(pp, int2(1, 0)).rgb;
+    float3 h = FsrRcasLoadF(pp, int2(0, 1)).rgb;
 
     // Luma times 2.
     float bL = mad(.5, b.b + b.r, b.g);
@@ -323,33 +355,77 @@ float3 FsrRcasF(
     return mad(lobe, b + d + h + f, e) / mad(4., lobe, 1.);
 }
 
+float4 BufferA(float4 position : SV_Position, float2 texcoord : TEXCOORD0) : SV_Target
+{
+    float3 c;
+    float4 con0, con1, con2, con3;
+
+    float2 fragcoord = round(position.xy - _PIXEL_CENTER_OFFSET);
+
+    // "rendersize" refers to size of source image before upscaling.
+    FsrEasuCon(con0, con1, con2, con3, BUFFER_SCREEN_SIZE * renderscale, BUFFER_SCREEN_SIZE, BUFFER_SCREEN_SIZE);
+    FsrEasuF(c, fragcoord, con0, con1, con2, con3);
+    return float4(c.xyz, 1);
+}
+
 float4 FSR(float4 position : SV_Position, float2 texcoord : TEXCOORD0) : SV_Target
 {
     // Set up constants
     float sharpness = 0.2;
     float con = FsrRcasCon(sharpness);
 
-    float2 fragcoord = texcoord * float2(BUFFER_WIDTH, BUFFER_HEIGHT);
+    // float2 fragcoord = round(position.xy - _PIXEL_CENTER_OFFSET);
 
     // Perform RCAS pass
-    float3 col = FsrRcasF(fragcoord, con);
+    float3 col = FsrRcasF(texcoord, con);
     return float4(col, 1.0);
 }
 
-technique FSRTechnique < enabled = true; >
+float4 DownscaleBicubicPS(float4 position : SV_Position, float2 texcoord : TEXCOORD0) : SV_Target {
+    // // downscale to center of window
+    // if (sdBox(position.xy - BUFFER_SCREEN_SIZE / 2, renderscale * BUFFER_SCREEN_SIZE / 2) > 0) return float4(0,0,0,0);
+    // return CatmullRom((texcoord - (1 - renderscale) / 2) / renderscale, BUFFER_SCREEN_SIZE);
+
+    // downscale to top left corner (expected by FSR).
+    if (sdBox(position.xy - renderscale * BUFFER_SCREEN_SIZE / 2, renderscale * BUFFER_SCREEN_SIZE / 2) > 0) return float4(0,0,0,0);
+    return CatmullRom(texcoord / renderscale, BUFFER_SCREEN_SIZE);
+}
+
+float4 ReupscaleBicubicPS(float4 position : SV_Position, float2 texcoord : TEXCOORD0) : SV_Target {
+    // // upscale from center of window
+    // return CatmullRom(texcoord * renderscale + (1 - renderscale) / 2, BUFFER_SCREEN_SIZE);
+    
+    // upscale from top left corner
+    return CatmullRom(texcoord * renderscale, BUFFER_SCREEN_SIZE);
+}
+
+technique Downscale
 {
-	pass BufferAPass
+    pass Downscale {
+        VertexShader = PostProcessVS;
+        PixelShader = DownscaleBicubicPS;
+    }
+}
+
+technique Reupscale
+{
+    pass Downscale {
+        VertexShader = PostProcessVS;
+        PixelShader = ReupscaleBicubicPS;
+    }
+}
+
+technique FSR
+{
+    pass BufferAPass
 	{
-		VertexShader = FullscreenTriangle;
+		VertexShader = PostProcessVS;
 		PixelShader  = BufferA;
-		RenderTarget = BufferATex;
 	}
 
 	pass SuperResPass
 	{
-		VertexShader = FullscreenTriangle;
+		VertexShader = PostProcessVS;
 		PixelShader  = FSR;
 	}
 }
-
-#endif
