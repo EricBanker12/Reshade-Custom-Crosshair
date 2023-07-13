@@ -38,6 +38,14 @@ uniform float renderscale <
     ui_max = 1.0f;
 > = 0.8f;
 
+uniform float sharpness <
+    ui_type = "drag";
+    ui_label = "Sharpness";
+    ui_tooltip = "Post upscale sharpening. Lower value is higher sharpening.";
+    ui_min = 0.0f;
+    ui_max = 4.0f;
+> = 0.2f;
+
 #include "ReShade.fxh"
 
 // https://gist.github.com/TheRealMJP/c83b8c0f46b63f3a88a5986f4fa982b1
@@ -330,10 +338,10 @@ float4 FsrRcasLoadF(float2 pp, int2 off)
 
 // The scale is {0.0 := maximum, to N>0, where N is the number of stops (halving) of the reduction of sharpness}.
 //----------------------------------------------------------------------------------------------------------------
-float FsrRcasCon(float sharpness)
+float FsrRcasCon(float stops)
 {
     // Transform from stops to linear value.
-    return exp2(-sharpness);
+    return exp2(-stops);
 }
 
 float3 FsrRcasF(
@@ -395,7 +403,7 @@ float4 BufferA(float4 position : SV_Position, float2 texcoord : TEXCOORD0) : SV_
 float4 FSR(float4 position : SV_Position, float2 texcoord : TEXCOORD0) : SV_Target
 {
     // Set up constants
-    float sharpness = 0.2;
+    // float sharpness = 0.2;
     float con = FsrRcasCon(sharpness);
 
     // float2 fragcoord = round(position.xy - _PIXEL_CENTER_OFFSET);
@@ -423,24 +431,35 @@ float4 ReupscaleBicubicPS(float4 position : SV_Position, float2 texcoord : TEXCO
     return CatmullRom(texcoord * renderscale, BUFFER_SCREEN_SIZE);
 }
 
-technique Downscale
-{
+technique Downscale <
+    hidden = true;
+> {
     pass Downscale {
         VertexShader = PostProcessVS;
         PixelShader = DownscaleBicubicPS;
     }
 }
 
-technique Reupscale
-{
+technique Reupscale <
+    hidden = true;
+> {
     pass Downscale {
         VertexShader = PostProcessVS;
         PixelShader = ReupscaleBicubicPS;
     }
 }
 
-technique FSR
-{
+technique FSR <
+    ui_tooltip = "Downscales then re-upscales using FSR 1.0.\n"
+                    "Useful for improving upscaling quality for\n"
+                    "older games with built-in bilinear/bicubic\n"
+                    "resolution scaling. Use with a UI Mask effect\n"
+                    "to prevent downgrading unscaled UI elements.";
+> {
+    pass Downscale {
+        VertexShader = PostProcessVS;
+        PixelShader = DownscaleBicubicPS;
+    }
     pass BufferAPass
 	{
 		VertexShader = PostProcessVS;
