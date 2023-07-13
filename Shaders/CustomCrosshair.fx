@@ -42,7 +42,6 @@
         ui_label = "Hotkey 1";
         ui_category = "Hotkey 1";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int HotkeyBehavior1 <
@@ -74,7 +73,6 @@
         ui_label = "Hotkey 2";
         ui_category = "Hotkey 2";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int HotkeyBehavior2 <
@@ -106,7 +104,6 @@
         ui_label = "Hotkey 3";
         ui_category = "Hotkey 3";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int HotkeyBehavior3 <
@@ -158,7 +155,6 @@
         ui_label = "UI Detector 1";
         ui_category = "UI Detector 1";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor1 <
@@ -222,10 +218,8 @@
 
     uniform bool Detector2 <
         ui_label = "UI Detector 2";
-        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 2";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor2 <
@@ -289,10 +283,8 @@
 
     uniform bool Detector3 <
         ui_label = "UI Detector 3";
-        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 3";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor3 <
@@ -356,10 +348,8 @@
 
     uniform bool Detector4 <
         ui_label = "UI Detector 4";
-        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 4";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor4 <
@@ -423,10 +413,8 @@
 
     uniform bool Detector5 <
         ui_label = "UI Detector 5";
-        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 5";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor5 <
@@ -490,10 +478,8 @@
 
     uniform bool Detector6 <
         ui_label = "UI Detector 6";
-        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 6";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor6 <
@@ -557,10 +543,8 @@
 
     uniform bool Detector7 <
         ui_label = "UI Detector 7";
-        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 7";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor7 <
@@ -624,10 +608,8 @@
 
     uniform bool Detector8 <
         ui_label = "UI Detector 8";
-        // ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
         ui_category = "UI Detector 8";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform float3 DetectorColor8 <
@@ -1057,7 +1039,7 @@
 
     technique CustomCrosshair <
         ui_label = "CustomCrosshair";
-        ui_tooltip = "Enable \"Custom Crosshair Setup\" to apply config changes.";
+        ui_tooltip = "Enable \"CustomCrosshairSetup\" to apply config changes.";
     > {
         pass prevState {
             VertexShader = PostProcessVS;

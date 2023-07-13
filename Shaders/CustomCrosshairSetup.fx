@@ -3,6 +3,16 @@
 // Crosshair Setup
 // ------------------------------------------------------------------------------------------------------------------------
 
+    uniform int ConfigNotice <
+        ui_type = "radio";
+        ui_label = " ";
+        ui_text = "\"CustomCrosshair\" must be enabled to see results.\n"
+                    "Once crosshair color and shape are configured,\n"
+                    "disable this effect for performance.";
+        ui_category = "Crosshair Setup";
+        ui_category_closed = true;
+    >;
+
     uniform float4 FillColor <
         ui_type = "color";
         ui_label = "Fill Color";
@@ -43,7 +53,6 @@
         ui_label = "Shape 1";
         ui_category = "Crosshair Shape 01";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = true;
 
     uniform int Shape1 <
@@ -168,7 +177,6 @@
         ui_label = "Shape 2";
         ui_category = "Crosshair Shape 02";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = true;
 
     uniform int Shape2 <
@@ -269,7 +277,6 @@
         ui_label = "Shape 3";
         ui_category = "Crosshair Shape 03";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = true;
 
     uniform int Shape3 <
@@ -370,7 +377,6 @@
         ui_label = "Shape 4";
         ui_category = "Crosshair Shape 04";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = true;
 
     uniform int Shape4 <
@@ -471,7 +477,6 @@
         ui_label = "Shape 5";
         ui_category = "Crosshair Shape 05";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = true;
 
     uniform int Shape5 <
@@ -572,7 +577,6 @@
         ui_label = "Shape 6";
         ui_category = "Crosshair Shape 06";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = true;
 
     uniform int Shape6 <
@@ -673,7 +677,6 @@
         ui_label = "Shape 7";
         ui_category = "Crosshair Shape 07";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape7 <
@@ -774,7 +777,6 @@
         ui_label = "Shape 8";
         ui_category = "Crosshair Shape 08";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape8 <
@@ -875,7 +877,6 @@
         ui_label = "Shape 9";
         ui_category = "Crosshair Shape 09";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape9 <
@@ -976,7 +977,6 @@
         ui_label = "Shape 10";
         ui_category = "Crosshair Shape 10";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape10 <
@@ -1077,7 +1077,6 @@
         ui_label = "Shape 11";
         ui_category = "Crosshair Shape 11";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape11 <
@@ -1178,7 +1177,6 @@
         ui_label = "Shape 12";
         ui_category = "Crosshair Shape 12";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape12 <
@@ -1279,7 +1277,6 @@
         ui_label = "Shape 13";
         ui_category = "Crosshair Shape 13";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape13 <
@@ -1380,7 +1377,6 @@
         ui_label = "Shape 14";
         ui_category = "Crosshair Shape 14";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape14 <
@@ -1481,7 +1477,6 @@
         ui_label = "Shape 15";
         ui_category = "Crosshair Shape 15";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape15 <
@@ -1582,7 +1577,6 @@
         ui_label = "Shape 16";
         ui_category = "Crosshair Shape 16";
         ui_category_closed = true;
-        ui_spacing = 2;
     > = false;
 
     uniform int Shape16 <
@@ -2173,7 +2167,7 @@
 
     technique CustomCrosshairSetup <
         ui_label = "CustomCrosshairSetup";
-        ui_tooltip = "Enable to apply config changes to \"Custom Crosshair.\"\n"
+        ui_tooltip = "Enable to apply config changes to \"CustomCrosshair.\"\n"
                         "Disable for performance";
     > {
         // Build Overlay w/ Antialiasing
