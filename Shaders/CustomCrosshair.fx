@@ -742,8 +742,7 @@
 // Functions
 // ------------------------------------------------------------------------------------------------------------------------
     // https://iquilezles.org/articles/distfunctions2d/
-    float sdBox( in float2 p, in float2 b )
-    {
+    float sdBox( in float2 p, in float2 b ) {
         float2 d = abs(p)-b;
         return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
     }
