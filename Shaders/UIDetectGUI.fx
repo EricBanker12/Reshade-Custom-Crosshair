@@ -589,57 +589,49 @@
     float DetectorMatchAll(float2 pos, float2 size, float3 detectorColor, float3 detectorThreshold, bool inverted) {
         detectorThreshold = detectorThreshold / 255.0f;
         
-        float3 color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, 0)), 0, 1)).rgb - detectorColor.rgb);
+        float3 color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, 0)), 0, 0)).rgb - detectorColor.rgb);
         bool matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-        if (inverted && matched) return 0.0f;
         if (!matched && !inverted) return 0.0f;
 
         if (size.x > 2) {
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, 0) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, 0) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, 0) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, 0) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
         }
 
         if (size.y > 2) {
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, -1) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, -1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, 1) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0, 1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
         }
 
         if (size.x > 3 && size.y > 3) {
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, -1) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, -1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, -1) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, -1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, 1) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1, 1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, 1) * size / 2.0f), 0, 1)).rgb - detectorColor.rgb);
-            matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
-            if (inverted && matched) return 0.0f;
+            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1, 1) * size / 2.0f), 0, 0)).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0f;
         }
 
+        if (inverted && matched) return 0.0f;
         return 1.0f;
     }
 
