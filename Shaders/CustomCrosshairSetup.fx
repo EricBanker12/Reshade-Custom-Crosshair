@@ -38,12 +38,12 @@
         ui_category_closed = true;
     > = 1.0;
 
-    // uniform bool Antialiasing <
-    //     ui_label = "Antialiasing";
-    //     ui_tooltip = "Applies SSAA x4.";
-    //     ui_category = "Crosshair Setup";
-    //     ui_category_closed = true;
-    // > = true;
+    uniform bool Antialiasing <
+        ui_label = "Antialiasing";
+        ui_tooltip = "Applies SSAA x4.";
+        ui_category = "Crosshair Setup";
+        ui_category_closed = true;
+    > = true;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Crosshair > Shape 1
@@ -1694,14 +1694,8 @@
     texture CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
     sampler CustomCrosshairOverlaySampler { Texture = CustomCrosshairOverlayTexture;};
 
-    // texture CustomCrosshairOverlayShapeTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    // sampler CustomCrosshairOverlayShapeSampler { Texture = CustomCrosshairOverlayShapeTexture;};
-
-    texture CustomCrosshairOverlayShapeSSAATexture <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
-    sampler CustomCrosshairOverlayShapeSSAASampler { Texture = CustomCrosshairOverlayShapeSSAATexture;};
-
-    texture CustomCrosshairOverlaySSAATexture <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
-    sampler CustomCrosshairOverlaySSAASampler { Texture = CustomCrosshairOverlaySSAATexture;};
+    texture CustomCrosshairOverlayShapeTexture <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
+    sampler CustomCrosshairOverlayShapeSampler { Texture = CustomCrosshairOverlayShapeTexture;};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Imports
@@ -1847,11 +1841,13 @@
     }
 
     float4 DrawShapeRectangle(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float rotation, int anchor, float slice, float skew, float outlineSize) {
-        fillPos += fillPos;
-        fillSize += fillSize;
-        gapSize += gapSize;
-        gapOffset += gapOffset;
-        outlineSize += outlineSize;
+        if (Antialiasing) {
+            fillPos += fillPos;
+            fillSize += fillSize;
+            gapSize += gapSize;
+            gapOffset += gapOffset;
+            outlineSize += outlineSize;
+        }
 
         if (rotation > 0.0) {
             rotation = -radians(rotation);
@@ -1864,11 +1860,13 @@
     }
 
     float4 DrawShapeTriangle(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float rotation, int anchor, float slice, float skew, float outlineSize) {
-        fillPos += fillPos;
-        fillSize += fillSize;
-        gapSize += gapSize;
-        gapOffset += gapOffset;
-        outlineSize += outlineSize;
+        if (Antialiasing) {
+            fillPos += fillPos;
+            fillSize += fillSize;
+            gapSize += gapSize;
+            gapOffset += gapOffset;
+            outlineSize += outlineSize;
+        }
 
         if (rotation > 0.0) {
             rotation = -radians(rotation);
@@ -1879,11 +1877,13 @@
     }
 
     float4 DrawShapeEllipse(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, float rotation, int anchor, float slice, float skew, float outlineSize) {
-        fillPos += fillPos;
-        fillSize += fillSize;
-        gapSize += gapSize;
-        gapOffset += gapOffset;
-        outlineSize += outlineSize;
+        if (Antialiasing) {
+            fillPos += fillPos;
+            fillSize += fillSize;
+            gapSize += gapSize;
+            gapOffset += gapOffset;
+            outlineSize += outlineSize;
+        }
 
         if (rotation > 0.0) {
             rotation = -radians(rotation);
@@ -1897,16 +1897,7 @@
 // Pixel Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-    float4 PS_CustomCrosshairShapeSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        int2 intPos = floor(pos.xy);
-        
-        float4 color = tex2Dfetch(CustomCrosshairOverlayShapeSSAASampler, intPos, 0);
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_CustomCrosshairSSAARectangleFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshairRectangleFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (FillColor.a == 0.0) discard;
 
         float4 color;
@@ -1929,10 +1920,12 @@
         if (ShapeEnabled15 && Shape15 == 0) color = DrawShapeRectangle(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0.0);
         if (ShapeEnabled16 && Shape16 == 0) color = DrawShapeRectangle(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0.0);
 
-        return color;
+        if (color.a > 0.0) return color;
+
+        discard;
     }
 
-    float4 PS_CustomCrosshairSSAARectangleOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshairRectangleOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (OutlineSize < 1.0 || OutlineColor.a == 0.0) discard;
 
         float4 color;
@@ -1955,10 +1948,12 @@
         if (ShapeEnabled15 && Shape15 == 0) color = DrawShapeRectangle(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
         if (ShapeEnabled16 && Shape16 == 0) color = DrawShapeRectangle(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
         
-        return color;
+        if (color.a > 0.0) return color;
+
+        discard;
     }
 
-    float4 PS_CustomCrosshairSSAATriangleFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshairTriangleFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (FillColor.a == 0.0) discard;
 
         float4 color;
@@ -1981,10 +1976,12 @@
         if (ShapeEnabled15 && Shape15 == 1) color = DrawShapeTriangle(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0.0);
         if (ShapeEnabled16 && Shape16 == 1) color = DrawShapeTriangle(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0.0);
 
-        return color;
+        if (color.a > 0.0) return color;
+
+        discard;
     }
 
-    float4 PS_CustomCrosshairSSAATriangleOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshairTriangleOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (OutlineSize < 1.0 || OutlineColor.a == 0.0) discard;
 
         float4 color;
@@ -2007,10 +2004,12 @@
         if (ShapeEnabled15 && Shape15 == 1) color = DrawShapeTriangle(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
         if (ShapeEnabled16 && Shape16 == 1) color = DrawShapeTriangle(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
         
-        return color;
+        if (color.a > 0.0) return color;
+
+        discard;
     }
 
-    float4 PS_CustomCrosshairSSAAEllipseFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshairEllipseFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (FillColor.a == 0.0) discard;
 
         float4 color;
@@ -2033,10 +2032,12 @@
         if (ShapeEnabled15 && Shape15 == 2) color = DrawShapeEllipse(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0.0);
         if (ShapeEnabled16 && Shape16 == 2) color = DrawShapeEllipse(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0.0);
 
-        return color;
+        if (color.a > 0.0) return color;
+
+        discard;
     }
 
-    float4 PS_CustomCrosshairSSAAEllipseOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshairEllipseOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         if (OutlineSize < 1.0 || OutlineColor.a == 0.0) discard;
 
         float4 color;
@@ -2059,17 +2060,23 @@
         if (ShapeEnabled15 && Shape15 == 2) color = DrawShapeEllipse(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
         if (ShapeEnabled16 && Shape16 == 2) color = DrawShapeEllipse(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
         
-        return color;
+        if (color.a > 0.0) return color;
+
+        discard;
     }
 
-    float4 PS_CustomCrosshairSSAA(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        if (!Antialiasing)
+            return tex2Dfetch(CustomCrosshairOverlayShapeSampler, floor(pos.xy), 0);
+        
+        // alpha-weighted bilinear downscale
         const int2 intPos = floor(pos.xy) * 2;
-        float4 p0 = tex2Dfetch(CustomCrosshairOverlaySSAASampler, intPos, 0);
-        float4 p1 = tex2Dfetch(CustomCrosshairOverlaySSAASampler, intPos + int2(1, 0), 0);
-        float4 p2 = tex2Dfetch(CustomCrosshairOverlaySSAASampler, intPos + int2(0, 1), 0);
-        float4 p3 = tex2Dfetch(CustomCrosshairOverlaySSAASampler, intPos + int2(1, 1), 0);
+        float4 p0 = tex2Dfetch(CustomCrosshairOverlayShapeSampler, intPos, 0);
+        float4 p1 = tex2Dfetch(CustomCrosshairOverlayShapeSampler, intPos + int2(1, 0), 0);
+        float4 p2 = tex2Dfetch(CustomCrosshairOverlayShapeSampler, intPos + int2(0, 1), 0);
+        float4 p3 = tex2Dfetch(CustomCrosshairOverlayShapeSampler, intPos + int2(1, 1), 0);
         float w4 = p0.a + p1.a + p2.a + p3.a;
-        return float4(p0.rgb * p0.a / w4 + p1.rgb * p1.a / w4 + p2.rgb * p2.a / w4 + p3.rgb * p3.a / w4, (p0.a + p1.a + p2.a + p3.a) / 4.0);
+        return float4(p0.rgb * p0.a / w4 + p1.rgb * p1.a / w4 + p2.rgb * p2.a / w4 + p3.rgb * p3.a / w4, w4 / 4.0);
     }
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -2084,82 +2091,41 @@
         timeout = 1;
     > {
         // Build Overlay w/ Antialiasing
-        pass CustomCrosshairOverlaySSAARectangleOutline {
+        pass CustomCrosshairOverlayRectangleOutline {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAARectangleOutline;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
+            PixelShader = PS_CustomCrosshairRectangleOutline;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
             ClearRenderTargets = true;
         }
-        pass {
+        pass CustomCrosshairOverlayTriangleOutline {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = true;
+            PixelShader = PS_CustomCrosshairTriangleOutline;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass CustomCrosshairOverlaySSAATriangleOutline {
+        pass CustomCrosshairOverlayEllipseOutline {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAATriangleOutline;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
+            PixelShader = PS_CustomCrosshairEllipseOutline;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass {
+        pass CustomCrosshairOverlayRectangleFill {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
+            PixelShader = PS_CustomCrosshairRectangleFill;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass CustomCrosshairOverlaySSAAEllipseOutline {
+        pass CustomCrosshairOverlayTriangleFill {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAAEllipseOutline;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
+            PixelShader = PS_CustomCrosshairTriangleFill;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass {
+        pass CustomCrosshairOverlayEllipseFill {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
+            PixelShader = PS_CustomCrosshairEllipseFill;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass CustomCrosshairOverlaySSAARectangleFill {
+        // Transfer overlayShape to overlay texture
+        pass overlay {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAARectangleFill;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
-        }
-        pass {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
-        }
-        pass CustomCrosshairOverlaySSAATriangleFill {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAATriangleFill;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
-        }
-        pass {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
-        }
-        pass CustomCrosshairOverlaySSAAEllipseFill {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAAEllipseFill;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
-        }
-        pass {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
-        }
-        // Transfer overlaySSAA to overlay texture
-        pass overlaySSAA {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAA;
+            PixelShader = PS_CustomCrosshair;
             RenderTarget = CustomCrosshairOverlayTexture;
             ClearRenderTargets = true;
         }
@@ -2171,82 +2137,41 @@
                         "Disable for performance";
     > {
         // Build Overlay w/ Antialiasing
-        pass CustomCrosshairOverlaySSAARectangleOutline {
+        pass CustomCrosshairOverlayRectangleOutline {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAARectangleOutline;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
+            PixelShader = PS_CustomCrosshairRectangleOutline;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
             ClearRenderTargets = true;
         }
-        pass {
+        pass CustomCrosshairOverlayTriangleOutline {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = true;
+            PixelShader = PS_CustomCrosshairTriangleOutline;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass CustomCrosshairOverlaySSAATriangleOutline {
+        pass CustomCrosshairOverlayEllipseOutline {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAATriangleOutline;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
+            PixelShader = PS_CustomCrosshairEllipseOutline;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass {
+        pass CustomCrosshairOverlayRectangleFill {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
+            PixelShader = PS_CustomCrosshairRectangleFill;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass CustomCrosshairOverlaySSAAEllipseOutline {
+        pass CustomCrosshairOverlayTriangleFill {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAAEllipseOutline;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
+            PixelShader = PS_CustomCrosshairTriangleFill;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass {
+        pass CustomCrosshairOverlayEllipseFill {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
+            PixelShader = PS_CustomCrosshairEllipseFill;
+            RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
-        pass CustomCrosshairOverlaySSAARectangleFill {
+        // Transfer overlayShape to overlay texture
+        pass overlay {
             VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAARectangleFill;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
-        }
-        pass {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
-        }
-        pass CustomCrosshairOverlaySSAATriangleFill {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAATriangleFill;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
-        }
-        pass {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
-        }
-        pass CustomCrosshairOverlaySSAAEllipseFill {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAAEllipseFill;
-            RenderTarget = CustomCrosshairOverlayShapeSSAATexture;
-            ClearRenderTargets = true;
-        }
-        pass {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairShapeSSAA;
-            RenderTarget = CustomCrosshairOverlaySSAATexture;
-            ClearRenderTargets = false;
-        }
-        // Transfer overlaySSAA to overlay texture
-        pass overlaySSAA {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_CustomCrosshairSSAA;
+            PixelShader = PS_CustomCrosshair;
             RenderTarget = CustomCrosshairOverlayTexture;
             ClearRenderTargets = true;
         }
