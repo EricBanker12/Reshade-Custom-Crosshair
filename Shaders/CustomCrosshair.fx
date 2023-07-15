@@ -294,15 +294,20 @@
         return 0.0;
     }
 
-    float4 PS_Final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    void VS_Final(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD)
+    {
         const bool uiDetected = tex2Dfetch(UIDetectCustomCrosshairSampler, int2(0, 0), 0).r > 0.0;
-        if (uiDetected) discard;
-
         const bool hotkeyTriggered1 = Hotkey1 && (tex2Dfetch(CustomCrosshairStateSamp, int2(0, 0), 0).r > 0.0);
         const bool hotkeyTriggered2 = Hotkey2 && (tex2Dfetch(CustomCrosshairStateSamp, int2(1, 0), 0).r > 0.0);
         const bool hotkeyTriggered3 = Hotkey3 && (tex2Dfetch(CustomCrosshairStateSamp, int2(2, 0), 0).r > 0.0);
-        if (hotkeyTriggered1 || hotkeyTriggered2 || hotkeyTriggered3) discard;
         
+        if (uiDetected || hotkeyTriggered1 || hotkeyTriggered2 || hotkeyTriggered3)
+            PostProcessVS(0, position, texcoord);
+        else
+            PostProcessVS(id, position, texcoord);
+    }
+
+    float4 PS_Final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         const float2 overlayOffset = Offset + (FollowCursor ? MousePoint - CenterPoint : 0);
         const float4 overlay = tex2Dlod(CustomCrosshairOverlaySampler, float4(texCoord - overlayOffset * BUFFER_PIXEL_SIZE, 0, 0));
         if (overlay.a > 0.0)
@@ -330,7 +335,7 @@
             RenderTarget = CustomCrosshairStateTex;
         }
         pass final {
-            VertexShader = PostProcessVS;
+            VertexShader = VS_Final;
             PixelShader = PS_Final;
         }
     }
