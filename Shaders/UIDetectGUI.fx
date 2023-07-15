@@ -1,4 +1,6 @@
 #include "ReShadeUI.fxh"
+#include "ReShade.fxh"
+
 // ------------------------------------------------------------------------------------------------------------------------
 // UI Detection
 // ------------------------------------------------------------------------------------------------------------------------
@@ -70,6 +72,17 @@
         ui_category_closed = true;
     > = float2(0.0, 0.0);
 
+    uniform float DetectorRotation1 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 1";
+        ui_category_closed = true;
+    > = 0.0;
+
     uniform bool DetectorFollowCursor1 <
         ui_label = "Follow Cursor";
         ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
@@ -134,6 +147,17 @@
         ui_category = "UI Detector 2";
         ui_category_closed = true;
     > = float2(0.0, 0.0);
+
+    uniform float DetectorRotation2 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 2";
+        ui_category_closed = true;
+    > = 0.0;
 
     uniform bool DetectorFollowCursor2 <
         ui_label = "Follow Cursor";
@@ -200,6 +224,17 @@
         ui_category_closed = true;
     > = float2(0.0, 0.0);
 
+    uniform float DetectorRotation3 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 3";
+        ui_category_closed = true;
+    > = 0.0;
+
     uniform bool DetectorFollowCursor3 <
         ui_label = "Follow Cursor";
         ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
@@ -264,6 +299,17 @@
         ui_category = "UI Detector 4";
         ui_category_closed = true;
     > = float2(0.0, 0.0);
+
+    uniform float DetectorRotation4 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 4";
+        ui_category_closed = true;
+    > = 0.0;
 
     uniform bool DetectorFollowCursor4 <
         ui_label = "Follow Cursor";
@@ -330,6 +376,17 @@
         ui_category_closed = true;
     > = float2(0.0, 0.0);
 
+    uniform float DetectorRotation5 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 5";
+        ui_category_closed = true;
+    > = 0.0;
+
     uniform bool DetectorFollowCursor5 <
         ui_label = "Follow Cursor";
         ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
@@ -394,6 +451,17 @@
         ui_category = "UI Detector 6";
         ui_category_closed = true;
     > = float2(0.0, 0.0);
+
+    uniform float DetectorRotation6 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 6";
+        ui_category_closed = true;
+    > = 0.0;
 
     uniform bool DetectorFollowCursor6 <
         ui_label = "Follow Cursor";
@@ -460,6 +528,17 @@
         ui_category_closed = true;
     > = float2(0.0, 0.0);
 
+    uniform float DetectorRotation7 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 7";
+        ui_category_closed = true;
+    > = 0.0;
+
     uniform bool DetectorFollowCursor7 <
         ui_label = "Follow Cursor";
         ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
@@ -525,6 +604,17 @@
         ui_category_closed = true;
     > = float2(0.0, 0.0);
 
+    uniform float DetectorRotation8 <
+        ui_type = "drag";
+        ui_label = "Rotation";
+        ui_tooltip = "Rotation in degrees, relative to the center of the rectanglular detector.";
+        ui_min = 0.0;
+        ui_max = 360.0;
+        ui_step = 1.0;
+        ui_category = "UI Detector 8";
+        ui_category_closed = true;
+    > = 0.0;
+
     uniform bool DetectorFollowCursor8 <
         ui_label = "Follow Cursor";
         ui_tooltip = "Apply detector relative to mouse cursor instead of the window center.";
@@ -555,19 +645,21 @@
     texture UIDetectGUITexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
     sampler UIDetectGUISampler { Texture = UIDetectGUITexture; };
 
+    texture UIDetectCustomCrosshairTexture <pooled = false; > { Width = 1; Height = 1; Format = R8; };
+    sampler UIDetectCustomCrosshairSampler { Texture = UIDetectCustomCrosshairTexture; };
+
     texture UIDetectGUIBeforeTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
     sampler UIDetectGUIBeforeSampler { Texture = UIDetectGUIBeforeTexture;};
 
 // ------------------------------------------------------------------------------------------------------------------------
-// Imports
-// ------------------------------------------------------------------------------------------------------------------------
-
-    #include "ReShade.fxh"
-
-// ------------------------------------------------------------------------------------------------------------------------
 // Functions
 // ------------------------------------------------------------------------------------------------------------------------
-    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 center, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor) {
+    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 center, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor, float rotation) {
+        if (rotation > 0.0) {
+            rotation = -radians(rotation);
+            basePos = float2((basePos.x - center.x) * cos(rotation) - (basePos.y - center.y) * sin(rotation) + center.x, (basePos.x - center.x) * sin(rotation) + (basePos.y - center.y) * cos(rotation) + center.y);
+        }
+
         // https://iquilezles.org/articles/distfunctions2d/
         float2 d = abs(basePos - center) - fillSize / 2.0;
         const float sdFill = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
@@ -578,47 +670,88 @@
         return baseColor;
     }
 
-    float DetectorMatchAll(float2 pos, float2 size, float3 detectorColor, float3 detectorThreshold, bool inverted) {
+    float DetectorMatchAll(float2 offset, float2 size, float3 detectorColor, float3 detectorThreshold, float rotation, bool inverted, bool followCursor) {
         detectorThreshold = detectorThreshold / 255.0;
+        rotation = -radians(rotation);
+        float2 pos = (followCursor ? MousePoint : CenterPoint) + offset;
         
-        float3 color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0.0, 0.0)), 0.0, 0.0)).rgb - detectorColor.rgb);
+        // center
+        float4 target = float4(BUFFER_PIXEL_SIZE * pos, 0.0, 0.0);
+        float3 color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
         bool matched = color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
         if (!matched && !inverted) return 0.0;
 
+        //  center left and right
         if (size.x > 2.0) {
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1.0, 0.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((-size.x / 2.0) * cos(rotation) - (0.0) * sin(rotation) + pos.x, (-size.x / 2.0) * sin(rotation) + (0.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1.0, 0.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((size.x / 2.0) * cos(rotation) - (0.0) * sin(rotation) + pos.x, (size.x / 2.0) * sin(rotation) + (0.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
         }
 
+        // center top and bottom
         if (size.y > 2.0) {
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0.0, -1.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((0.0) * cos(rotation) - (-size.y / 2.0) * sin(rotation) + pos.x, (0.0) * sin(rotation) + (-size.y / 2.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(0.0, 1.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((0.0) * cos(rotation) - (size.y / 2.0) * sin(rotation) + pos.x, (0.0) * sin(rotation) + (size.y / 2.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
         }
 
+        // 4 corners
         if (size.x > 3.0 && size.y > 3.0) {
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1.0, -1.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((-size.x / 2.0) * cos(rotation) - (-size.y / 2.0) * sin(rotation) + pos.x, (-size.x / 2.0) * sin(rotation) + (-size.y / 2.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1.0, -1.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((size.x / 2.0) * cos(rotation) - (-size.y / 2.0) * sin(rotation) + pos.x, (size.x / 2.0) * sin(rotation) + (-size.y / 2.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(-1.0, 1.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((-size.x / 2.0) * cos(rotation) - (size.y / 2.0) * sin(rotation) + pos.x, (-size.x / 2.0) * sin(rotation) + (size.y / 2.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
 
-            color = abs(tex2Dlod(ReShade::BackBuffer, float4(BUFFER_PIXEL_SIZE * (pos + float2(1.0, 1.0) * size / 2.0), 0.0, 0.0)).rgb - detectorColor.rgb);
+            target.xy = BUFFER_PIXEL_SIZE * float2((size.x / 2.0) * cos(rotation) - (size.y / 2.0) * sin(rotation) + pos.x, (size.x / 2.0) * sin(rotation) + (size.y / 2.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (!matched && !inverted) return 0.0;
+        }
+
+        // center left and right midpoint
+        if (size.x > 5.0) {
+            target.xy = BUFFER_PIXEL_SIZE * float2((-size.x / 4.0) * cos(rotation) - (0.0) * sin(rotation) + pos.x, (-size.x / 4.0) * sin(rotation) + (0.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (!matched && !inverted) return 0.0;
+            
+            target.xy = BUFFER_PIXEL_SIZE * float2((size.x / 4.0) * cos(rotation) - (0.0) * sin(rotation) + pos.x, (size.x / 4.0) * sin(rotation) + (0.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (!matched && !inverted) return 0.0;
+        }
+
+        // center top and bottom midpoint
+        if (size.y > 5.0) {
+            target.xy = BUFFER_PIXEL_SIZE * float2((0.0) * cos(rotation) - (-size.y / 4.0) * sin(rotation) + pos.x, (0.0) * sin(rotation) + (-size.y / 4.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
+            matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
+            if (!matched && !inverted) return 0.0;
+
+            target.xy = BUFFER_PIXEL_SIZE * float2((0.0) * cos(rotation) - (size.y / 4.0) * sin(rotation) + pos.x, (0.0) * sin(rotation) + (size.y / 4.0) * cos(rotation) + pos.y);
+            color = abs(tex2Dlod(ReShade::BackBuffer, target).rgb - detectorColor.rgb);
             matched = matched && color.r <= detectorThreshold.r && color.g <= detectorThreshold.g && color.b <= detectorThreshold.b;
             if (!matched && !inverted) return 0.0;
         }
@@ -632,15 +765,15 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
     float PS_UIDetect(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        float pixelNumber = round(texCoord.x * 8.0 + PixelOffset.x);
-        if (pixelNumber == 1 && Detector1) return DetectorMatchAll((DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1 - PixelOffset, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorInverted1);
-        if (pixelNumber == 2 && Detector2) return DetectorMatchAll((DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2 - PixelOffset, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorInverted2);
-        if (pixelNumber == 3 && Detector3) return DetectorMatchAll((DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3 - PixelOffset, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorInverted3);
-        if (pixelNumber == 4 && Detector4) return DetectorMatchAll((DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4 - PixelOffset, DetectorSize4, DetectorColor4, DetectorThreshold4, DetectorInverted4);
-        if (pixelNumber == 5 && Detector5) return DetectorMatchAll((DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5 - PixelOffset, DetectorSize5, DetectorColor5, DetectorThreshold5, DetectorInverted5);
-        if (pixelNumber == 6 && Detector6) return DetectorMatchAll((DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6 - PixelOffset, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorInverted6);
-        if (pixelNumber == 7 && Detector7) return DetectorMatchAll((DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7 - PixelOffset, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorInverted7);
-        if (pixelNumber == 8 && Detector8) return DetectorMatchAll((DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8 - PixelOffset, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorInverted8);
+        int pixelNumber = floor(pos.x);
+        if (pixelNumber == 0 && Detector1) return DetectorMatchAll(DetectorOffset1, DetectorSize1, DetectorColor1, DetectorThreshold1, DetectorRotation1, DetectorInverted1, DetectorFollowCursor1);
+        if (pixelNumber == 1 && Detector2) return DetectorMatchAll(DetectorOffset2, DetectorSize2, DetectorColor2, DetectorThreshold2, DetectorRotation2, DetectorInverted2, DetectorFollowCursor2);
+        if (pixelNumber == 2 && Detector3) return DetectorMatchAll(DetectorOffset3, DetectorSize3, DetectorColor3, DetectorThreshold3, DetectorRotation3, DetectorInverted3, DetectorFollowCursor3);
+        if (pixelNumber == 3 && Detector4) return DetectorMatchAll(DetectorOffset4, DetectorSize4, DetectorColor4, DetectorThreshold4, DetectorRotation4, DetectorInverted4, DetectorFollowCursor4);
+        if (pixelNumber == 4 && Detector5) return DetectorMatchAll(DetectorOffset5, DetectorSize5, DetectorColor5, DetectorThreshold5, DetectorRotation5, DetectorInverted5, DetectorFollowCursor5);
+        if (pixelNumber == 5 && Detector6) return DetectorMatchAll(DetectorOffset6, DetectorSize6, DetectorColor6, DetectorThreshold6, DetectorRotation6, DetectorInverted6, DetectorFollowCursor6);
+        if (pixelNumber == 6 && Detector7) return DetectorMatchAll(DetectorOffset7, DetectorSize7, DetectorColor7, DetectorThreshold7, DetectorRotation7, DetectorInverted7, DetectorFollowCursor7);
+        if (pixelNumber == 7 && Detector8) return DetectorMatchAll(DetectorOffset8, DetectorSize8, DetectorColor8, DetectorThreshold8, DetectorRotation8, DetectorInverted8, DetectorFollowCursor8);
         return 0.0;
     }
 
@@ -649,9 +782,8 @@
     }
 
     float4 PS_After(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        const int2 intPos = floor(pos.xy);
-        float4 color = tex2Dfetch(ReShade::BackBuffer, intPos, 0);
-        const float4 before = tex2Dfetch(UIDetectGUIBeforeSampler, intPos, 0);
+        const float4 before = tex2Dfetch(UIDetectGUIBeforeSampler, floor(pos.xy), 0);
+        float4 color;
 
         if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
             bool detectorMatches1;
@@ -672,8 +804,6 @@
             if (Detector6) detectorMatches6 = tex2Dfetch(UIDetectGUISampler, int2(5, 0), 0).r > 0.0;
             if (Detector7) detectorMatches7 = tex2Dfetch(UIDetectGUISampler, int2(6, 0), 0).r > 0.0;
             if (Detector8) detectorMatches8 = tex2Dfetch(UIDetectGUISampler, int2(7, 0), 0).r > 0.0;
-
-            // if (detectorMatches1) return float4(1.0, 0.0, 0.0, 1.0);
 
             if (DetectorBehavior == 1) { // OR
                 showBefore = detectorMatches1 || detectorMatches2 || detectorMatches3 || detectorMatches4 || detectorMatches5 || detectorMatches6 || detectorMatches7 || detectorMatches8;
@@ -700,80 +830,89 @@
                 if (Detector1) {
                     detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
                     outlineColor = detectorMatches1 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize1, float4(DetectorColor1, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize1, float4(DetectorColor1, 1.0), 1.0, outlineColor, DetectorRotation1);
                 }
                 if (Detector2) {
                     detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
                     outlineColor = detectorMatches2 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize2, float4(DetectorColor2, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize2, float4(DetectorColor2, 1.0), 1.0, outlineColor, DetectorRotation2);
                 }
                 if (Detector3) {
                     detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
                     outlineColor = detectorMatches3 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize3, float4(DetectorColor3, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize3, float4(DetectorColor3, 1.0), 1.0, outlineColor, DetectorRotation3);
                 }
                 if (Detector4) {
                     detectorPos = (DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4;
                     outlineColor = detectorMatches4 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize4, float4(DetectorColor4, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize4, float4(DetectorColor4, 1.0), 1.0, outlineColor, DetectorRotation4);
                 }
                 if (Detector5) {
                     detectorPos = (DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5;
                     outlineColor = detectorMatches5 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize5, float4(DetectorColor5, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize5, float4(DetectorColor5, 1.0), 1.0, outlineColor, DetectorRotation5);
                 }
                 if (Detector6) {
                     detectorPos = (DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6;
                     outlineColor = detectorMatches6 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize6, float4(DetectorColor6, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize6, float4(DetectorColor6, 1.0), 1.0, outlineColor, DetectorRotation6);
                 }
                 if (Detector7) {
                     detectorPos = (DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7;
                     outlineColor = detectorMatches7 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize7, float4(DetectorColor7, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize7, float4(DetectorColor7, 1.0), 1.0, outlineColor, DetectorRotation7);
                 }
                 if (Detector8) {
                     detectorPos = (DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8;
                     outlineColor = detectorMatches8 ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize8, float4(DetectorColor8, 1.0), 1.0, outlineColor);
+                    color = DrawRectangle(color, pos.xy, detectorPos, DetectorSize8, float4(DetectorColor8, 1.0), 1.0, outlineColor, DetectorRotation8);
                 }
             }
         }
         
-        return color;
+        if (color.a > 0.0) return color;
+
+        discard;
     }
 
-    float4 PS_UIDetectAfter(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        const int pixelNumber = round(texCoord.x * 8.0 + PixelOffset.x);
+    float4 PS_CustomCrosshair(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        if (Detector1 || Detector2 || Detector3 || Detector4 || Detector5 || Detector6 || Detector7 || Detector8) {
+            bool detectorMatches1;
+            bool detectorMatches2;
+            bool detectorMatches3;
+            bool detectorMatches4;
+            bool detectorMatches5;
+            bool detectorMatches6;
+            bool detectorMatches7;
+            bool detectorMatches8;
 
-        bool detectorMatches1;
-        bool detectorMatches2;
-        bool detectorMatches3;
-        bool detectorMatches4;
-        bool detectorMatches5;
-        bool detectorMatches6;
-        bool detectorMatches7;
-        bool detectorMatches8;
-        bool showBefore;
+            if (Detector1) detectorMatches1 = tex2Dfetch(UIDetectGUISampler, int2(0, 0), 0).r > 0.0;
+            if (Detector2) detectorMatches2 = tex2Dfetch(UIDetectGUISampler, int2(1, 0), 0).r > 0.0;
+            if (Detector3) detectorMatches3 = tex2Dfetch(UIDetectGUISampler, int2(2, 0), 0).r > 0.0;
+            if (Detector4) detectorMatches4 = tex2Dfetch(UIDetectGUISampler, int2(3, 0), 0).r > 0.0;
+            if (Detector5) detectorMatches5 = tex2Dfetch(UIDetectGUISampler, int2(4, 0), 0).r > 0.0;
+            if (Detector6) detectorMatches6 = tex2Dfetch(UIDetectGUISampler, int2(5, 0), 0).r > 0.0;
+            if (Detector7) detectorMatches7 = tex2Dfetch(UIDetectGUISampler, int2(6, 0), 0).r > 0.0;
+            if (Detector8) detectorMatches8 = tex2Dfetch(UIDetectGUISampler, int2(7, 0), 0).r > 0.0;
 
-        if (Detector1) detectorMatches1 = tex2Dfetch(UIDetectGUISampler, int2(0, 0), 0).r > 0.0;
-        if (Detector2) detectorMatches2 = tex2Dfetch(UIDetectGUISampler, int2(1, 0), 0).r > 0.0;
-        if (Detector3) detectorMatches3 = tex2Dfetch(UIDetectGUISampler, int2(2, 0), 0).r > 0.0;
-        if (Detector4) detectorMatches4 = tex2Dfetch(UIDetectGUISampler, int2(3, 0), 0).r > 0.0;
-        if (Detector5) detectorMatches5 = tex2Dfetch(UIDetectGUISampler, int2(4, 0), 0).r > 0.0;
-        if (Detector6) detectorMatches6 = tex2Dfetch(UIDetectGUISampler, int2(5, 0), 0).r > 0.0;
-        if (Detector7) detectorMatches7 = tex2Dfetch(UIDetectGUISampler, int2(6, 0), 0).r > 0.0;
-        if (Detector8) detectorMatches8 = tex2Dfetch(UIDetectGUISampler, int2(7, 0), 0).r > 0.0;
+            bool hideCrosshair;
+            if (DetectorBehavior == 1) { // OR
+                hideCrosshair = detectorMatches1 || detectorMatches2 || detectorMatches3 || detectorMatches4 || detectorMatches5 || detectorMatches6 || detectorMatches7 || detectorMatches8;
+            }
+            else { // AND
+                hideCrosshair = Detector1 && detectorMatches1 || !Detector1;
+                hideCrosshair = hideCrosshair && (Detector2 && detectorMatches2 || !Detector2);
+                hideCrosshair = hideCrosshair && (Detector3 && detectorMatches3 || !Detector3);
+                hideCrosshair = hideCrosshair && (Detector4 && detectorMatches4 || !Detector4);
+                hideCrosshair = hideCrosshair && (Detector5 && detectorMatches5 || !Detector5);
+                hideCrosshair = hideCrosshair && (Detector6 && detectorMatches6 || !Detector6);
+                hideCrosshair = hideCrosshair && (Detector7 && detectorMatches7 || !Detector7);
+                hideCrosshair = hideCrosshair && (Detector8 && detectorMatches8 || !Detector8);
+            }
 
-        if (pixelNumber == 1 && Detector1 && detectorMatches1) return float4(1.0, 0.0, 0.0, 1.0);
-        if (pixelNumber == 3 && Detector3 && detectorMatches3) return float4(1.0, 0.0, 0.0, 1.0);
-        if (pixelNumber == 4 && Detector4 && detectorMatches4) return float4(1.0, 0.0, 0.0, 1.0);
-        if (pixelNumber == 5 && Detector5 && detectorMatches5) return float4(1.0, 0.0, 0.0, 1.0);
-        if (pixelNumber == 6 && Detector6 && detectorMatches6) return float4(1.0, 0.0, 0.0, 1.0);
-        if (pixelNumber == 7 && Detector7 && detectorMatches7) return float4(1.0, 0.0, 0.0, 1.0);
-        if (pixelNumber == 8 && Detector8 && detectorMatches8) return float4(1.0, 0.0, 0.0, 1.0);
-
-        return float4(0.0, 0.0, 0.0, 1.0);
+            if (hideCrosshair) return 1.0;
+        }
+        return 0.0;
     }
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -788,13 +927,30 @@
             VertexShader = PostProcessVS;
             PixelShader = PS_UIDetect;
             RenderTarget = UIDetectGUITexture;
-            ClearRenderTargets = true;
         }
         pass before {
             VertexShader = PostProcessVS;
             PixelShader = PS_Before;
             RenderTarget = UIDetectGUIBeforeTexture;
-            ClearRenderTargets = true;
+        }
+    }
+
+    technique UIDetectCustomCrosshair <
+        ui_label = "UI Detect CustomCrosshair";
+        ui_tooltip = "A lightweight version of \"UI Detect Before\" only for \"CustomCrosshair\".\n"
+                        "Order this before \"CustomCrosshair\".\n\n"
+                        "\"UI Detect After\" is required for the \"Show Detectors\" option,\n"
+                        "but after configuration, it should be disabled for performance.";
+    > {
+        pass detector {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_UIDetect;
+            RenderTarget = UIDetectGUITexture;
+        }
+        pass detector {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_CustomCrosshair;
+            RenderTarget = UIDetectCustomCrosshairTexture;
         }
     }
 
@@ -805,27 +961,5 @@
         pass after {
             VertexShader = PostProcessVS;
             PixelShader = PS_After;
-        }
-    }
-
-    technique UIDetectDebug <
-        ui_label = "UI Detect Debug Before";
-        hidden = true;
-    > {
-        pass detector {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_UIDetect;
-            ClearRenderTargets = true;
-        }
-    }
-
-    technique UIDetectDebugAfter <
-        ui_label = "UI Detect Debug After";
-        hidden = true;
-    > {
-        pass detector {
-            VertexShader = PostProcessVS;
-            PixelShader = PS_UIDetectAfter;
-            ClearRenderTargets = true;
         }
     }
