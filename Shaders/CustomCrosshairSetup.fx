@@ -1676,15 +1676,10 @@
     static const float2 CenterPoint = float2(BUFFER_WIDTH / 2.0, BUFFER_HEIGHT / 2.0);
     static const float2 PixelOffset = float2(0.5, 0.5);
     static const float2 anchorOffsets[9] = {float2(0.5, 0.5), float2(0.0, 0.5), float2(-0.5, 0.5), float2(0.5, 0.0), float2(0.0, 0.0), float2(-0.5, 0.0), float2(0.5, -0.5), float2(0.0, -0.5), float2(-0.5, -0.5)};
-    
-    uniform float2 MousePoint < source = "mousepoint"; >;
 
     /*
     To Do:
     - option to use png image layer instead of shape - see https://github.com/CeeJayDK/SweetFX/blob/master/Shaders/Layer.fx
-    - hotkey enable/disable shapes - might be easier to duplicate fx file for switching between different crosshairs
-    - hotkey animated transformations - likely too expensive unless pre-rendered - could use overlay LoD for frames?
-
     */
 
 // ------------------------------------------------------------------------------------------------------------------------

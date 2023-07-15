@@ -62,10 +62,10 @@
     uniform int HotkeyButton1 <
         ui_type = "combo";
         ui_label = "Button";
-        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_items = "Left-Click\0Right-Click\0Middle-Click\0Back-Click\0Forward-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0Custom Hotkey 1\0Custom Hotkey 2\0Custom Hotkey 3\0";
         ui_category = "Hotkey 1";
         ui_category_closed = true;
-    > = 0;
+    > = 1;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Hotkey 2
@@ -93,10 +93,10 @@
     uniform int HotkeyButton2 <
         ui_type = "combo";
         ui_label = "Button";
-        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_items = "Left-Click\0Right-Click\0Middle-Click\0Back-Click\0Forward-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0Custom Hotkey 1\0Custom Hotkey 2\0Custom Hotkey 3\0";
         ui_category = "Hotkey 2";
         ui_category_closed = true;
-    > = 0;
+    > = 1;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Hotkey 3
@@ -124,10 +124,10 @@
     uniform int HotkeyButton3 <
         ui_type = "combo";
         ui_label = "Button";
-        ui_items = "Right-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0";
+        ui_items = "Left-Click\0Right-Click\0Middle-Click\0Back-Click\0Forward-Click\0 1\0 2\0 3\0 4\0 5\0WASD\0Shift\0Ctrl\0Alt\0Spacebar\0Custom Hotkey 1\0Custom Hotkey 2\0Custom Hotkey 3\0";
         ui_category = "Hotkey 3";
         ui_category_closed = true;
-    > = 0;
+    > = 1;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Variables
@@ -139,8 +139,16 @@
     
     uniform float2 MousePoint < source = "mousepoint"; >;
     
+    uniform bool MouseLeft_Down < source = "mousebutton"; keycode = 0; mode = ""; >;
+    uniform bool MouseLeft_Press < source = "mousebutton"; keycode = 0; mode = "press"; >;
     uniform bool MouseRight_Down < source = "mousebutton"; keycode = 1; mode = ""; >;
     uniform bool MouseRight_Press < source = "mousebutton"; keycode = 1; mode = "press"; >;
+    uniform bool MouseMiddle_Down < source = "mousebutton"; keycode = 2; mode = ""; >;
+    uniform bool MouseMiddle_Press < source = "mousebutton"; keycode = 2; mode = "press"; >;
+    uniform bool MouseBack_Down < source = "mousebutton"; keycode = 3; mode = ""; >;
+    uniform bool MouseBack_Press < source = "mousebutton"; keycode = 3; mode = "press"; >;
+    uniform bool MouseForward_Down < source = "mousebutton"; keycode = 4; mode = ""; >;
+    uniform bool MouseForward_Press < source = "mousebutton"; keycode = 4; mode = "press"; >;
 
     uniform bool Spacebar_Down <source = "key"; keycode = 0x20; mode = ""; >;
     uniform bool Spacebar_Press <source = "key"; keycode = 0x20; mode = "press"; >;
@@ -171,24 +179,24 @@
     uniform bool DDD_Down <source = "key"; keycode = 0x44; mode = ""; >;
     uniform bool DDD_Press <source = "key"; keycode = 0x44; mode = "press"; >;
 
-    #ifndef CUSTOM_KEY_CODE_1
-        #define CUSTOM_KEY_CODE_1 0x51
+    #ifndef CUSTOM_HOTKEY_KEYCODE_1
+        #define CUSTOM_HOTKEY_KEYCODE_1 0x51
     #endif
 
-    #ifndef CUSTOM_KEY_CODE_2
-        #define CUSTOM_KEY_CODE_2 0x45
+    #ifndef CUSTOM_HOTKEY_KEYCODE_2
+        #define CUSTOM_HOTKEY_KEYCODE_2 0x45
     #endif
 
-    #ifndef CUSTOM_KEY_CODE_3
-        #define CUSTOM_KEY_CODE_3 0x52
+    #ifndef CUSTOM_HOTKEY_KEYCODE_3
+        #define CUSTOM_HOTKEY_KEYCODE_3 0x52
     #endif
 
-    uniform bool CustomKey1_Down <source = "key"; keycode = CUSTOM_KEY_CODE_1; mode = ""; >;
-    uniform bool CustomKey1_Press <source = "key"; keycode = CUSTOM_KEY_CODE_1; mode = "press"; >;
-    uniform bool CustomKey2_Down <source = "key"; keycode = CUSTOM_KEY_CODE_2; mode = ""; >;
-    uniform bool CustomKey2_Press <source = "key"; keycode = CUSTOM_KEY_CODE_2; mode = "press"; >;
-    uniform bool CustomKey3_Down <source = "key"; keycode = CUSTOM_KEY_CODE_3; mode = ""; >;
-    uniform bool CustomKey3_Press <source = "key"; keycode = CUSTOM_KEY_CODE_3; mode = "press"; >;
+    uniform bool CustomKey1_Down <source = "key"; keycode = CUSTOM_HOTKEY_KEYCODE_1; mode = ""; >;
+    uniform bool CustomKey1_Press <source = "key"; keycode = CUSTOM_HOTKEY_KEYCODE_1; mode = "press"; >;
+    uniform bool CustomKey2_Down <source = "key"; keycode = CUSTOM_HOTKEY_KEYCODE_2; mode = ""; >;
+    uniform bool CustomKey2_Press <source = "key"; keycode = CUSTOM_HOTKEY_KEYCODE_2; mode = "press"; >;
+    uniform bool CustomKey3_Down <source = "key"; keycode = CUSTOM_HOTKEY_KEYCODE_3; mode = ""; >;
+    uniform bool CustomKey3_Press <source = "key"; keycode = CUSTOM_HOTKEY_KEYCODE_3; mode = "press"; >;
 
     /*
     To Do:
@@ -231,8 +239,8 @@
     float PS_StateHandler(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         const int pixelNumber = floor(pos.x);
         if (Hotkey1 || Hotkey2 || Hotkey3) {
-            const bool hotkeyDown[] = { MouseRight_Down, One_Down, Two_Down, Three_Down, Four_Down, Five_Down, WWW_Down || AAA_Down || SSS_Down || DDD_Down, Shift_Down, Ctrl_Down, Alt_Down, Spacebar_Down };
-            const bool hotkeyPress[] = { MouseRight_Press, One_Press, Two_Press, Three_Press, Four_Press, Five_Press, WWW_Press || AAA_Press || SSS_Press || DDD_Press, Shift_Press, Ctrl_Press, Alt_Press, Spacebar_Press };
+            const bool hotkeyDown[18] = { MouseLeft_Down, MouseRight_Down, MouseMiddle_Down, MouseBack_Down, MouseForward_Down, One_Down, Two_Down, Three_Down, Four_Down, Five_Down, WWW_Down || AAA_Down || SSS_Down || DDD_Down, Shift_Down, Ctrl_Down, Alt_Down, Spacebar_Down, CustomKey1_Down, CustomKey2_Down, CustomKey3_Down };
+            const bool hotkeyPress[18] = { MouseLeft_Press, MouseRight_Press, MouseMiddle_Press, MouseBack_Press, MouseForward_Press, One_Press, Two_Press, Three_Press, Four_Press, Five_Press, WWW_Press || AAA_Press || SSS_Press || DDD_Press, Shift_Press, Ctrl_Press, Alt_Press, Spacebar_Press, CustomKey1_Press, CustomKey2_Press, CustomKey3_Press };
             const bool hotkeyTriggered1 = Hotkey1 && (tex2Dfetch(CustomCrosshairPrevStateSamp, int2(0, 0), 0).r > 0.0);
             const bool hotkeyTriggered2 = Hotkey2 && (tex2Dfetch(CustomCrosshairPrevStateSamp, int2(1, 0), 0).r > 0.0);
             const bool hotkeyTriggered3 = Hotkey3 && (tex2Dfetch(CustomCrosshairPrevStateSamp, int2(2, 0), 0).r > 0.0);
