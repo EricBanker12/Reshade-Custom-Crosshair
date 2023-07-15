@@ -1899,226 +1899,162 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
     void VS_DrawShapeOutline1(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled1)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled1 ? GetBoundingBoxVertex(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill1(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled1)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, 0.0);
-        
+        texcoord.xy = ShapeEnabled1 ? GetBoundingBoxVertex(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline2(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled2)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled2 ? GetBoundingBoxVertex(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill2(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled2)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, 0.0);
-        
+        texcoord.xy = ShapeEnabled2 ? GetBoundingBoxVertex(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline3(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled3)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled3 ? GetBoundingBoxVertex(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill3(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled3)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, 0.0);
-        
+        texcoord.xy = ShapeEnabled3 ? GetBoundingBoxVertex(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline4(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled4)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled4 ? GetBoundingBoxVertex(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill4(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled4)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, 0.0);
-        
+        texcoord.xy = ShapeEnabled4 ? GetBoundingBoxVertex(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline5(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled5)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled5 ? GetBoundingBoxVertex(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill5(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled5)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, 0.0);
-        
+        texcoord.xy = ShapeEnabled5 ? GetBoundingBoxVertex(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline6(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled6)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled6 ? GetBoundingBoxVertex(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill6(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled6)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, 0.0);
-        
+        texcoord.xy = ShapeEnabled6 ? GetBoundingBoxVertex(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline7(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled7)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled7 ? GetBoundingBoxVertex(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill7(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled7)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, 0.0);
-        
+        texcoord.xy = ShapeEnabled7 ? GetBoundingBoxVertex(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline8(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled8)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled8 ? GetBoundingBoxVertex(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill8(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled8)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, 0.0);
-        
+        texcoord.xy = ShapeEnabled8 ? GetBoundingBoxVertex(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline9(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled9)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled9 ? GetBoundingBoxVertex(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill9(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled9)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, 0.0);
-        
+        texcoord.xy = ShapeEnabled9 ? GetBoundingBoxVertex(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline10(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled10)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled10 ? GetBoundingBoxVertex(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill10(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled10)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, 0.0);
-        
+        texcoord.xy = ShapeEnabled10 ? GetBoundingBoxVertex(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline11(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled11)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled11 ? GetBoundingBoxVertex(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill11(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled11)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, 0.0);
-        
+        texcoord.xy = ShapeEnabled11 ? GetBoundingBoxVertex(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline12(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled12)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled12 ? GetBoundingBoxVertex(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill12(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled12)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, 0.0);
-        
+        texcoord.xy = ShapeEnabled12 ? GetBoundingBoxVertex(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline13(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled13)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled13 ? GetBoundingBoxVertex(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill13(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled13)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, 0.0);
-        
+        texcoord.xy = ShapeEnabled13 ? GetBoundingBoxVertex(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline14(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled14)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled14 ? GetBoundingBoxVertex(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill14(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled14)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, 0.0);
-        
+        texcoord.xy = ShapeEnabled14 ? GetBoundingBoxVertex(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline15(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled15)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled15 ? GetBoundingBoxVertex(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill15(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled15)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, 0.0);
-        
+        texcoord.xy = ShapeEnabled15 ? GetBoundingBoxVertex(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeOutline16(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled16)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, OutlineSize);
-        
+        texcoord.xy = ShapeEnabled16 ? GetBoundingBoxVertex(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, OutlineSize) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
     void VS_DrawShapeFill16(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        if (ShapeEnabled16)
-            texcoord.xy = GetBoundingBoxVertex(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, 0.0);
-        
+        texcoord.xy = ShapeEnabled16 ? GetBoundingBoxVertex(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, 0.0) : float2(0.0, 0.0);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
