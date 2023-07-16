@@ -1846,12 +1846,13 @@
         }
         
         if (shape == 1) return DrawTriangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, skew, outlineSize);
-        if (shape == 2) return DrawEllipse(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, slice, outlineSize);
-        return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, outlineSize);
+        else if (shape == 2) return DrawEllipse(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, slice, outlineSize);
+        else return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, outlineSize);
     }
 
     float2 GetBoundingBoxVertex(int id, int shape, float2 fillPos, float2 fillSize, float rotation, int anchor, float skew, float outlineSize) {
         float2 retVal;
+        outlineSize += 1.0;
 
         if (shape == 1) { //triangle
             float2 anchorOffset = anchorOffsets[anchor];
@@ -1889,167 +1890,37 @@
         return retVal;
     }
 
+    float2 GetBoundingBoxVertexTL(int id, int shape, float2 fillPos, float2 fillSize, float rotation, int anchor, float skew, float outlineSize) {
+        id = id % 6;
+        if (id > 2) id -= 2;
+        return GetBoundingBoxVertex(id, shape, fillPos, fillSize, rotation, anchor, skew, outlineSize);
+    }
+
 // ------------------------------------------------------------------------------------------------------------------------
 // Vertex Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-    void VS_DrawShapeOutline1(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled1 ? GetBoundingBoxVertex(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
+    void VS_DrawShapes(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
+        texcoord.xy = float2(0.0, 0.0);
 
-    void VS_DrawShapeFill1(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled1 ? GetBoundingBoxVertex(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline2(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled2 ? GetBoundingBoxVertex(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill2(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled2 ? GetBoundingBoxVertex(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline3(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled3 ? GetBoundingBoxVertex(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill3(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled3 ? GetBoundingBoxVertex(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline4(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled4 ? GetBoundingBoxVertex(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill4(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled4 ? GetBoundingBoxVertex(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline5(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled5 ? GetBoundingBoxVertex(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill5(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled5 ? GetBoundingBoxVertex(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline6(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled6 ? GetBoundingBoxVertex(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill6(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled6 ? GetBoundingBoxVertex(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline7(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled7 ? GetBoundingBoxVertex(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill7(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled7 ? GetBoundingBoxVertex(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline8(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled8 ? GetBoundingBoxVertex(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill8(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled8 ? GetBoundingBoxVertex(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline9(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled9 ? GetBoundingBoxVertex(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill9(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled9 ? GetBoundingBoxVertex(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline10(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled10 ? GetBoundingBoxVertex(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill10(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled10 ? GetBoundingBoxVertex(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline11(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled11 ? GetBoundingBoxVertex(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill11(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled11 ? GetBoundingBoxVertex(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline12(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled12 ? GetBoundingBoxVertex(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill12(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled12 ? GetBoundingBoxVertex(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline13(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled13 ? GetBoundingBoxVertex(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill13(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled13 ? GetBoundingBoxVertex(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline14(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled14 ? GetBoundingBoxVertex(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill14(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled14 ? GetBoundingBoxVertex(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline15(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled15 ? GetBoundingBoxVertex(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill15(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled15 ? GetBoundingBoxVertex(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, 0.0) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeOutline16(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled16 ? GetBoundingBoxVertex(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, OutlineSize) : float2(0.0, 0.0);
-        position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
-    }
-
-    void VS_DrawShapeFill16(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = ShapeEnabled16 ? GetBoundingBoxVertex(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, 0.0) : float2(0.0, 0.0);
+        int idShape = floor(id / 6);
+        if (idShape == 0 && ShapeEnabled1) texcoord.xy = GetBoundingBoxVertexTL(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize);
+        if (idShape == 1 && ShapeEnabled2) texcoord.xy = GetBoundingBoxVertexTL(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize);
+        if (idShape == 2 && ShapeEnabled3) texcoord.xy = GetBoundingBoxVertexTL(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize);
+        if (idShape == 3 && ShapeEnabled4) texcoord.xy = GetBoundingBoxVertexTL(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, OutlineSize);
+        if (idShape == 4 && ShapeEnabled5) texcoord.xy = GetBoundingBoxVertexTL(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, OutlineSize);
+        if (idShape == 5 && ShapeEnabled6) texcoord.xy = GetBoundingBoxVertexTL(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, OutlineSize);
+        if (idShape == 6 && ShapeEnabled7) texcoord.xy = GetBoundingBoxVertexTL(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, OutlineSize);
+        if (idShape == 7 && ShapeEnabled8) texcoord.xy = GetBoundingBoxVertexTL(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, OutlineSize);
+        if (idShape == 8 && ShapeEnabled9) texcoord.xy = GetBoundingBoxVertexTL(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize);
+        if (idShape == 9 && ShapeEnabled10) texcoord.xy = GetBoundingBoxVertexTL(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize);
+        if (idShape == 10 && ShapeEnabled11) texcoord.xy = GetBoundingBoxVertexTL(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize);
+        if (idShape == 112 && ShapeEnabled12) texcoord.xy = GetBoundingBoxVertexTL(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize);
+        if (idShape == 12 && ShapeEnabled13) texcoord.xy = GetBoundingBoxVertexTL(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize);
+        if (idShape == 13 && ShapeEnabled14) texcoord.xy = GetBoundingBoxVertexTL(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize);
+        if (idShape == 14 && ShapeEnabled15) texcoord.xy = GetBoundingBoxVertexTL(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize);
+        if (idShape == 15 && ShapeEnabled16) texcoord.xy = GetBoundingBoxVertexTL(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, OutlineSize);
+        
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
@@ -2057,352 +1928,52 @@
 // Pixel Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-    float4 PS_DrawShapeOutline1(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled1) discard;
+    float4 PS_DrawShapeOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        if (OutlineSize < 1.0 || OutlineColor.a == 0.0) discard;
         
         float4 color;
-        color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, OutlineColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, OutlineSize);
+        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, OutlineColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, OutlineSize);
+        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, OutlineColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, OutlineSize);
+        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, OutlineColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, OutlineSize);
+        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, OutlineColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, OutlineSize);
+        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, OutlineColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, OutlineSize);
+        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, OutlineColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, OutlineSize);
+        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, OutlineColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, OutlineSize);
+        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, OutlineColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, OutlineSize);
+        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, OutlineColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, OutlineSize);
+        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, OutlineColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, OutlineSize);
+        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, OutlineColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, OutlineSize);
+        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, OutlineColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, OutlineSize);
+        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, OutlineColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, OutlineSize);
+        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, OutlineColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, OutlineSize);
+        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
+        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
         
         if (color.a > 0.0) return color;
         
         discard;
     }
 
-    float4 PS_DrawShapeFill1(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled1) discard;
+    float4 PS_DrawShapeFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        if (FillColor.a == 0.0) discard;
         
         float4 color;
-        color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline2(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled2) discard;
-        
-        float4 color;
-        color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, OutlineColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill2(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled2) discard;
-        
-        float4 color;
-        color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline3(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled3) discard;
-        
-        float4 color;
-        color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, OutlineColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill3(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled3) discard;
-        
-        float4 color;
-        color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline4(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled4) discard;
-        
-        float4 color;
-        color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, OutlineColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill4(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled4) discard;
-        
-        float4 color;
-        color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline5(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled5) discard;
-        
-        float4 color;
-        color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, OutlineColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill5(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled5) discard;
-        
-        float4 color;
-        color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline6(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled6) discard;
-        
-        float4 color;
-        color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, OutlineColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill6(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled6) discard;
-        
-        float4 color;
-        color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline7(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled7) discard;
-        
-        float4 color;
-        color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, OutlineColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill7(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled7) discard;
-        
-        float4 color;
-        color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline8(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled8) discard;
-        
-        float4 color;
-        color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, OutlineColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill8(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled8) discard;
-        
-        float4 color;
-        color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline9(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled9) discard;
-        
-        float4 color;
-        color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, OutlineColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill9(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled9) discard;
-        
-        float4 color;
-        color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline10(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled10) discard;
-        
-        float4 color;
-        color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, OutlineColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill10(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled10) discard;
-        
-        float4 color;
-        color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline11(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled11) discard;
-        
-        float4 color;
-        color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, OutlineColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill11(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled11) discard;
-        
-        float4 color;
-        color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline12(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled12) discard;
-        
-        float4 color;
-        color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, OutlineColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill12(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled12) discard;
-        
-        float4 color;
-        color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline13(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled13) discard;
-        
-        float4 color;
-        color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, OutlineColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill13(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled13) discard;
-        
-        float4 color;
-        color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline14(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled14) discard;
-        
-        float4 color;
-        color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, OutlineColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill14(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled14) discard;
-        
-        float4 color;
-        color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline15(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled15) discard;
-        
-        float4 color;
-        color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill15(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled15) discard;
-        
-        float4 color;
-        color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeOutline16(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0 || !ShapeEnabled16) discard;
-        
-        float4 color;
-        color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
-        discard;
-    }
-
-    float4 PS_DrawShapeFill16(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0 || !ShapeEnabled16) discard;
-        
-        float4 color;
-        color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0.0);
+        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, 0.0);
+        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, 0.0);
+        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, 0.0);
+        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, 0.0);
+        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, 0.0);
+        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, 0.0);
+        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, 0.0);
+        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, 0.0);
+        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, 0.0);
+        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, 0.0);
+        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, 0.0);
+        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, 0.0);
+        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, 0.0);
+        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, 0.0);
+        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0.0);
+        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0.0);
         
         if (color.a > 0.0) return color;
         
@@ -2435,237 +2006,24 @@
         timeout = 1;
     > {
         // Build Overlay
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline1;
-            PixelShader = PS_DrawShapeOutline1;
+        pass Outline {
+            VertexCount = 96;
+            VertexShader = VS_DrawShapes;
+            PixelShader = PS_DrawShapeOutline;
             RenderTarget = CustomCrosshairOverlayShapeTexture;
             ClearRenderTargets = true;
         }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline2;
-            PixelShader = PS_DrawShapeOutline2;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline3;
-            PixelShader = PS_DrawShapeOutline3;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline4;
-            PixelShader = PS_DrawShapeOutline4;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline5;
-            PixelShader = PS_DrawShapeOutline5;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline6;
-            PixelShader = PS_DrawShapeOutline6;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline7;
-            PixelShader = PS_DrawShapeOutline7;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline8;
-            PixelShader = PS_DrawShapeOutline8;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline9;
-            PixelShader = PS_DrawShapeOutline9;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline10;
-            PixelShader = PS_DrawShapeOutline10;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline11;
-            PixelShader = PS_DrawShapeOutline11;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline12;
-            PixelShader = PS_DrawShapeOutline12;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline13;
-            PixelShader = PS_DrawShapeOutline13;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline14;
-            PixelShader = PS_DrawShapeOutline14;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline15;
-            PixelShader = PS_DrawShapeOutline15;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline16;
-            PixelShader = PS_DrawShapeOutline16;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill1;
-            PixelShader = PS_DrawShapeFill1;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill2;
-            PixelShader = PS_DrawShapeFill2;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill3;
-            PixelShader = PS_DrawShapeFill3;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill4;
-            PixelShader = PS_DrawShapeFill4;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill5;
-            PixelShader = PS_DrawShapeFill5;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill6;
-            PixelShader = PS_DrawShapeFill6;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill7;
-            PixelShader = PS_DrawShapeFill7;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill8;
-            PixelShader = PS_DrawShapeFill8;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill9;
-            PixelShader = PS_DrawShapeFill9;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill10;
-            PixelShader = PS_DrawShapeFill10;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill11;
-            PixelShader = PS_DrawShapeFill11;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill12;
-            PixelShader = PS_DrawShapeFill12;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill13;
-            PixelShader = PS_DrawShapeFill13;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill14;
-            PixelShader = PS_DrawShapeFill14;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill15;
-            PixelShader = PS_DrawShapeFill15;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill16;
-            PixelShader = PS_DrawShapeFill16;
+        pass Fill {
+            VertexCount = 96;
+            VertexShader = VS_DrawShapes;
+            PixelShader = PS_DrawShapeFill;
             RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
         // Transfer overlayShape to overlay texture
-        pass overlay {
+        pass Downscale {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshair;
             RenderTarget = CustomCrosshairOverlayTexture;
-            ClearRenderTargets = true;
         }
     }
 
@@ -2675,237 +2033,25 @@
                         "Disable for performance\n\n"
                         "\"CustomCrosshair\" must be enabled to see results.";
     > {
+        
         // Build Overlay
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline1;
-            PixelShader = PS_DrawShapeOutline1;
+        pass Outline {
+            VertexCount = 96;
+            VertexShader = VS_DrawShapes;
+            PixelShader = PS_DrawShapeOutline;
             RenderTarget = CustomCrosshairOverlayShapeTexture;
             ClearRenderTargets = true;
         }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline2;
-            PixelShader = PS_DrawShapeOutline2;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline3;
-            PixelShader = PS_DrawShapeOutline3;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline4;
-            PixelShader = PS_DrawShapeOutline4;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline5;
-            PixelShader = PS_DrawShapeOutline5;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline6;
-            PixelShader = PS_DrawShapeOutline6;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline7;
-            PixelShader = PS_DrawShapeOutline7;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline8;
-            PixelShader = PS_DrawShapeOutline8;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline9;
-            PixelShader = PS_DrawShapeOutline9;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline10;
-            PixelShader = PS_DrawShapeOutline10;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline11;
-            PixelShader = PS_DrawShapeOutline11;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline12;
-            PixelShader = PS_DrawShapeOutline12;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline13;
-            PixelShader = PS_DrawShapeOutline13;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline14;
-            PixelShader = PS_DrawShapeOutline14;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline15;
-            PixelShader = PS_DrawShapeOutline15;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeOutline16;
-            PixelShader = PS_DrawShapeOutline16;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill1;
-            PixelShader = PS_DrawShapeFill1;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill2;
-            PixelShader = PS_DrawShapeFill2;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill3;
-            PixelShader = PS_DrawShapeFill3;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill4;
-            PixelShader = PS_DrawShapeFill4;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill5;
-            PixelShader = PS_DrawShapeFill5;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill6;
-            PixelShader = PS_DrawShapeFill6;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill7;
-            PixelShader = PS_DrawShapeFill7;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill8;
-            PixelShader = PS_DrawShapeFill8;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill9;
-            PixelShader = PS_DrawShapeFill9;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill10;
-            PixelShader = PS_DrawShapeFill10;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill11;
-            PixelShader = PS_DrawShapeFill11;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill12;
-            PixelShader = PS_DrawShapeFill12;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill13;
-            PixelShader = PS_DrawShapeFill13;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill14;
-            PixelShader = PS_DrawShapeFill14;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill15;
-            PixelShader = PS_DrawShapeFill15;
-            RenderTarget = CustomCrosshairOverlayShapeTexture;
-        }
-        pass {
-            PrimitiveTopology = TRIANGLESTRIP;
-            VertexCount = 4;
-            VertexShader = VS_DrawShapeFill16;
-            PixelShader = PS_DrawShapeFill16;
+        pass Fill {
+            VertexCount = 96;
+            VertexShader = VS_DrawShapes;
+            PixelShader = PS_DrawShapeFill;
             RenderTarget = CustomCrosshairOverlayShapeTexture;
         }
         // Transfer overlayShape to overlay texture
-        pass overlay {
+        pass Downscale {
             VertexShader = PostProcessVS;
             PixelShader = PS_CustomCrosshair;
             RenderTarget = CustomCrosshairOverlayTexture;
-            ClearRenderTargets = true;
         }
     }

@@ -318,8 +318,7 @@
     float4 PS_Final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
         const float2 overlayOffset = Offset + (FollowCursor ? MousePoint - CenterPoint : 0);
         const float4 overlay = tex2Dlod(CustomCrosshairOverlaySampler, float4(texCoord - overlayOffset * BUFFER_PIXEL_SIZE, 0, 0));
-        if (overlay.a > 0.0)
-            return lerp(tex2Dfetch(ReShade::BackBuffer, floor(pos.xy), 0), overlay, overlay.a);
+        if (overlay.a > 0.0) return overlay;
 
         discard;
     }
@@ -345,5 +344,8 @@
         pass final {
             VertexShader = VS_Final;
             PixelShader = PS_Final;
+            BlendEnable = true;
+            SrcBlend = SRCALPHA;
+            DestBlend = INVSRCALPHA;
         }
     }

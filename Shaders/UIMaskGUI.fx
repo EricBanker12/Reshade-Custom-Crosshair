@@ -20,7 +20,7 @@
         ui_label = "UI Mask 1";
         ui_category = "UI Mask 1";
         ui_category_closed = true;
-    > = false;
+    > = true;
 
     uniform int Shape1 <
         ui_type = "combo";
@@ -1833,8 +1833,8 @@
 // Techniques
 // ------------------------------------------------------------------------------------------------------------------------
 
-    technique UIMaskBefore <
-        ui_label = "UI Mask Before";
+    technique UIMaskGUIBefore <
+        ui_label = "UI Mask GUI Before";
         ui_tooltip = "Order this before the effects you want to mask.";
     > {
         pass UIDetect {
@@ -1854,8 +1854,8 @@
         }
     }
 
-    technique UIMaskAfter <
-        ui_label = "UI Mask After";
+    technique UIMaskGUIAfter <
+        ui_label = "UI Mask GUI After";
         ui_tooltip = "Order this after the effects you want to mask.";
     > {
         pass AfterMasks {
