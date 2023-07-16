@@ -2672,7 +2672,8 @@
     technique CustomCrosshairSetup <
         ui_label = "CustomCrosshairSetup";
         ui_tooltip = "Enable to apply config changes to \"CustomCrosshair.\"\n"
-                        "Disable for performance";
+                        "Disable for performance\n\n"
+                        "\"CustomCrosshair\" must be enabled to see results.";
     > {
         // Build Overlay
         pass {

@@ -935,8 +935,8 @@
         }
     }
 
-    technique UIDetectCustomCrosshair <
-        ui_label = "UI Detect CustomCrosshair";
+    technique CustomCrosshairUIDetectBefore <
+        ui_label = "CustomCrosshair UI Detect Before";
         ui_tooltip = "A lightweight version of \"UI Detect Before\" only for \"CustomCrosshair\".\n"
                         "Order this before \"CustomCrosshair\".\n\n"
                         "\"UI Detect After\" is required for the \"Show Detectors\" option,\n"
