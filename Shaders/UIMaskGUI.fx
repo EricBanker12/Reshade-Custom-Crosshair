@@ -31,6 +31,14 @@
         ui_category_closed = true;
     > = 0;
 
+    uniform int Anchor1 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 1";
+        ui_category_closed = true;
+    > = 7;
+
     uniform float2 MaskSize1 <
         ui_type = "drag";
         ui_label = "Size";
@@ -40,7 +48,7 @@
         ui_step = 1.0;
         ui_category = "UI Mask 1";
         ui_category_closed = true;
-    > = float2(200.0, 200.0);
+    > = float2(600.0, 200.0);
 
     uniform float2 Offset1 <
         ui_type = "drag";
@@ -51,7 +59,7 @@
         ui_step = 1.0;
         ui_category = "UI Mask 1";
         ui_category_closed = true;
-    > = float2(0.0, 0.0);
+    > = float2(0.0, BUFFER_HEIGHT / 2.0);
 
     uniform float Feather1 <
         ui_type = "drag";
@@ -99,6 +107,14 @@
         ui_category = "UI Mask 2";
         ui_category_closed = true;
     > = 0;
+
+    uniform int Anchor2 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 2";
+        ui_category_closed = true;
+    > = 4;
 
     uniform float2 MaskSize2 <
         ui_type = "drag";
@@ -169,6 +185,14 @@
         ui_category_closed = true;
     > = 0;
 
+    uniform int Anchor3 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 3";
+        ui_category_closed = true;
+    > = 4;
+
     uniform float2 MaskSize3 <
         ui_type = "drag";
         ui_label = "Size";
@@ -237,6 +261,14 @@
         ui_category = "UI Mask 4";
         ui_category_closed = true;
     > = 0;
+
+    uniform int Anchor4 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 4";
+        ui_category_closed = true;
+    > = 4;
 
     uniform float2 MaskSize4 <
         ui_type = "drag";
@@ -307,6 +339,14 @@
         ui_category_closed = true;
     > = 0;
 
+    uniform int Anchor5 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 5";
+        ui_category_closed = true;
+    > = 4;
+
     uniform float2 MaskSize5 <
         ui_type = "drag";
         ui_label = "Size";
@@ -375,6 +415,14 @@
         ui_category = "UI Mask 6";
         ui_category_closed = true;
     > = 0;
+
+    uniform int Anchor6 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 6";
+        ui_category_closed = true;
+    > = 4;
 
     uniform float2 MaskSize6 <
         ui_type = "drag";
@@ -445,6 +493,14 @@
         ui_category_closed = true;
     > = 0;
 
+    uniform int Anchor7 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 7";
+        ui_category_closed = true;
+    > = 4;
+
     uniform float2 MaskSize7 <
         ui_type = "drag";
         ui_label = "Size";
@@ -513,6 +569,14 @@
         ui_category = "UI Mask 8";
         ui_category_closed = true;
     > = 0;
+
+    uniform int Anchor8 <
+        ui_type = "combo";
+        ui_label = "Anchor";
+        ui_items = "Top Left\0Top Center\0Top Right\0Center Left\0Center\0Center Right\0Bottom Left\0Bottom Center\0Bottom Right\0";
+        ui_category = "UI Mask 8";
+        ui_category_closed = true;
+    > = 4;
 
     uniform float2 MaskSize8 <
         ui_type = "drag";
@@ -1271,6 +1335,7 @@
 
     static const float2 CenterPoint = float2(BUFFER_WIDTH / 2.0, BUFFER_HEIGHT / 2.0);
     static const float2 PixelOffset = float2(0.5, 0.5);
+    static const float2 AnchorOffsets[9] = {float2(0.5, 0.5), float2(0.0, 0.5), float2(-0.5, 0.5), float2(0.5, 0.0), float2(0.0, 0.0), float2(-0.5, 0.0), float2(0.5, -0.5), float2(0.0, -0.5), float2(-0.5, -0.5)};
     static const float4 MaskColors[8] = { float4(0xff, 0xad, 0xad, 0xff), float4(0xff, 0xd6, 0xa5, 0xff), float4(0xfd, 0xff, 0xb6, 0xff), float4(0xca, 0xff, 0xbf, 0xff), float4(0x9b, 0xf6, 0xff, 0xff), float4(0xa0, 0xc4, 0xff, 0xff), float4(0xbd, 0xb2, 0xff, 0xff), float4(0xff, 0xc6, 0xff, 0xff) };
     // Mask Colors: #ffadad #ffd6a5 #fdffb6 #caffbf #9bf6ff #a0c4ff #bdb2ff #ffc6ff
 
@@ -1280,17 +1345,17 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture UIMaskGUIStateTexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
-    sampler UIMaskGUIStateSampler { Texture = UIMaskGUIStateTexture; };
+    texture2D UIMaskGUIStateTexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
+    sampler2D UIMaskGUIStateSampler { Texture = UIMaskGUIStateTexture; };
 
-    texture UIMaskGUIMaskTexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
-    sampler UIMaskGUIMaskSampler { Texture = UIMaskGUIMaskTexture; };
+    texture2D UIMaskGUIMaskTexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
+    sampler2D UIMaskGUIMaskSampler { Texture = UIMaskGUIMaskTexture; };
 
-    texture UIMaskGUIBeforeTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    sampler UIMaskGUIBeforeSampler { Texture = UIMaskGUIBeforeTexture;};
+    texture2D UIMaskGUIBeforeTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+    sampler2D UIMaskGUIBeforeSampler { Texture = UIMaskGUIBeforeTexture;};
 
-    texture UIMaskGUIAfterTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    sampler UIMaskGUIAfterSampler { Texture = UIMaskGUIAfterTexture;};
+    texture2D UIMaskGUIAfterTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+    sampler2D UIMaskGUIAfterSampler { Texture = UIMaskGUIAfterTexture;};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Structs
@@ -1358,7 +1423,8 @@
         return -sqrt(d.x)*sign(d.y);
     }
     
-    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 center, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor, bool feather) {
+    float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor, int anchor, bool feather) {
+        const float2 center = fillPos + fillSize * AnchorOffsets[anchor];
         const float sdFill = sdBox(basePos - center, fillSize / 2.0);
         if (sdFill <= 0.0)
             return fillColor;
@@ -1369,7 +1435,8 @@
         return baseColor;
     }
 
-    float4 DrawEllipse(float4 baseColor, float2 basePos, float2 center, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor, bool feather) {
+    float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor, int anchor, bool feather) {
+        const float2 center = fillPos + fillSize * AnchorOffsets[anchor];
         const float sdFill = sdEllipse(basePos - center, fillSize / 2.0);
         if (sdFill <= 0.0)
             return fillColor;
@@ -1380,7 +1447,11 @@
         return baseColor;
     }
 
-    float4 DrawTriangle(float4 baseColor, float2 basePos, float2 center, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor, bool feather) {
+    float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float outlineSize, float4 outlineColor, int anchor, bool feather) {
+        float2 anchorOffset = AnchorOffsets[anchor];
+        if (anchorOffset.y != 0.0) anchorOffset.y += 1.0 / 6.0;
+
+        const float2 center = fillPos + fillSize * anchorOffset;
         const float2 A = float2(-fillSize.x / 2.0, fillSize.y / 3.0);
         const float2 B = float2(0.0, -fillSize.y * 2.0 / 3.0);
         const float2 C = float2(fillSize.x / 2.0, fillSize.y / 3.0);
@@ -1395,16 +1466,16 @@
         return baseColor;
     }
 
-    float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float rotation, float outlineSize, float4 outlineColor, bool feather) {
+    float4 DrawShape(int shape, float4 baseColor, float4 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float rotation, float outlineSize, float4 outlineColor, int anchor, bool feather) {
         if (rotation > 0.0) {
             rotation = -radians(rotation);
             basePos = float4((basePos.x - fillPos.x) * cos(rotation) - (basePos.y - fillPos.y) * sin(rotation) + fillPos.x, (basePos.x - fillPos.x) * sin(rotation) + (basePos.y - fillPos.y) * cos(rotation) + fillPos.y, 0.0, 0.0);
         }
         
         float4 color;
-        if (shape == 1) color = DrawTriangle(color, basePos.xy, fillPos, fillSize, fillColor, outlineSize, outlineColor, feather);
-        else if (shape == 2) color = DrawEllipse(color, basePos.xy, fillPos, fillSize, fillColor, outlineSize, outlineColor, feather);
-        else color = DrawRectangle(color, basePos.xy, fillPos, fillSize, fillColor, outlineSize, outlineColor, feather);
+        if (shape == 1) color = DrawTriangle(color, basePos.xy, fillPos, fillSize, fillColor, outlineSize, outlineColor, anchor, feather);
+        else if (shape == 2) color = DrawEllipse(color, basePos.xy, fillPos, fillSize, fillColor, outlineSize, outlineColor, anchor, feather);
+        else color = DrawRectangle(color, basePos.xy, fillPos, fillSize, fillColor, outlineSize, outlineColor, anchor, feather);
 
         if (baseColor.a > 0.0 && color.a > 0.0)
             return float4(lerp(baseColor.rgb, color.rgb, color.a), 1.0 - (1.0 - baseColor.a) * (1.0 - color.a));
@@ -1415,16 +1486,21 @@
         return baseColor;
     }
 
-    float2 GetBoundingBoxVertexTS(int id, int shape, float2 center, float2 fillSize, float rotation, float outlineSize) {
+    float2 GetBoundingBoxVertexTS(int id, int shape, float2 fillPos, float2 fillSize, int anchor, float rotation, float outlineSize) {
         float2 retVal;
 
         outlineSize += 1.0;
 
+        float2 center = fillPos + fillSize * AnchorOffsets[anchor];
+
         retVal.x = (id < 2) ?
-            center.x - fillSize.x / 2.0 -  outlineSize :
+            center.x - fillSize.x / 2.0 - outlineSize :
             center.x + fillSize.x / 2.0 +  outlineSize;
             
         if (shape == 1) { //triangle
+            if (AnchorOffsets[anchor].y != 0.0)
+                center.y += fillSize.y * 1.0 / 6.0;
+            
             retVal.y = (id == 0 || id == 2) ?
                 center.y - fillSize.y * 2.0 / 3.0 - outlineSize :
                 center.y + fillSize.y / 3.0 + outlineSize;
@@ -1437,7 +1513,7 @@
 
         if (rotation > 0.0) {
             rotation = radians(rotation);
-            retVal.xy = float2((retVal.x - center.x) * cos(rotation) - (retVal.y - center.y) * sin(rotation) + center.x, (retVal.x - center.x) * sin(rotation) + (retVal.y - center.y) * cos(rotation) + center.y);
+            retVal.xy = float2((retVal.x - fillPos.x) * cos(rotation) - (retVal.y - fillPos.y) * sin(rotation) + fillPos.x, (retVal.x - fillPos.x) * sin(rotation) + (retVal.y - fillPos.y) * cos(rotation) + fillPos.y);
         }
 
         retVal /= BUFFER_SCREEN_SIZE;
@@ -1445,11 +1521,11 @@
         return retVal;
     }
 
-    float2 GetBoundingBoxVertexTL(int id, int shape, float2 center, float2 fillSize, float rotation, float outlineSize) {
+    float2 GetBoundingBoxVertexTL(int id, int shape, float2 center, float2 fillSize, int anchor, float rotation, float outlineSize) {
         // convert triangle list to triangle strip
         id = id % 6;
         if (id > 2) id -= 2;
-        return GetBoundingBoxVertexTS(id, shape, center, fillSize, rotation, outlineSize);
+        return GetBoundingBoxVertexTS(id, shape, center, fillSize, anchor, rotation, outlineSize);
     }
 
     float DetectorMatchAll(float2 offset, float2 size, float3 detectorColor, float3 detectorThreshold, float rotation, bool inverted, bool followCursor) {
@@ -1556,42 +1632,42 @@
         if (idMask == 0) {
             applyMask = MaskEnabled1 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor1 ? MousePoint : CenterPoint) + Offset1;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape1, maskPos, MaskSize1, Rotation1, Feather1) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape1, maskPos, MaskSize1, Anchor1, Rotation1, Feather1) : texcoord.xy;
         }
         else if (idMask == 1) {
             applyMask = MaskEnabled2 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor2 ? MousePoint : CenterPoint) + Offset2;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape2, maskPos, MaskSize2, Rotation2, Feather2) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape2, maskPos, MaskSize2, Anchor2, Rotation2, Feather2) : texcoord.xy;
         }
         else if (idMask == 2) {
             applyMask = MaskEnabled3 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor3 ? MousePoint : CenterPoint) + Offset3;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape3, maskPos, MaskSize3, Rotation3, Feather3) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape3, maskPos, MaskSize3, Anchor3, Rotation3, Feather3) : texcoord.xy;
         }
         else if (idMask == 3) {
             applyMask = MaskEnabled4 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor4 ? MousePoint : CenterPoint) + Offset4;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape4, maskPos, MaskSize4, Rotation4, Feather4) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape4, maskPos, MaskSize4, Anchor4, Rotation4, Feather4) : texcoord.xy;
         }
         else if (idMask == 4) {
             applyMask = MaskEnabled5 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor5 ? MousePoint : CenterPoint) + Offset5;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape5, maskPos, MaskSize5, Rotation5, Feather5) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape5, maskPos, MaskSize5, Anchor5, Rotation5, Feather5) : texcoord.xy;
         }
         else if (idMask == 5) {
             applyMask = MaskEnabled6 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor6 ? MousePoint : CenterPoint) + Offset6;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape6, maskPos, MaskSize6, Rotation6, Feather6) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape6, maskPos, MaskSize6, Anchor6, Rotation6, Feather6) : texcoord.xy;
         }
         else if (idMask == 6) {
             applyMask = MaskEnabled7 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor7 ? MousePoint : CenterPoint) + Offset7;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape7, maskPos, MaskSize7, Rotation7, Feather7) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape7, maskPos, MaskSize7, Anchor7, Rotation7, Feather7) : texcoord.xy;
         }
         else if (idMask == 7) {
             applyMask = MaskEnabled8 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
             maskPos = (MaskFollowCursor8 ? MousePoint : CenterPoint) + Offset8;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape8, maskPos, MaskSize8, Rotation8, Feather8) : texcoord.xy;
+            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape8, maskPos, MaskSize8, Anchor8, Rotation8, Feather8) : texcoord.xy;
         }
         
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
@@ -1606,35 +1682,35 @@
 
             if (idDetector == 0 && Detector1) {
                 detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize1, DetectorRotation1, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize1, 4, DetectorRotation1, 1.0);
             }
             if (idDetector == 1 && Detector2) {
                 detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize2, DetectorRotation2, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize2, 4, DetectorRotation2, 1.0);
             }
             if (idDetector == 2 && Detector3) {
                 detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize3, DetectorRotation3, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize3, 4, DetectorRotation3, 1.0);
             }
             if (idDetector == 3 && Detector4) {
                 detectorPos = (DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize4, DetectorRotation4, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize4, 4, DetectorRotation4, 1.0);
             }
             if (idDetector == 4 && Detector5) {
                 detectorPos = (DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize5, DetectorRotation5, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize5, 4, DetectorRotation5, 1.0);
             }
             if (idDetector == 5 && Detector6) {
                 detectorPos = (DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize6, DetectorRotation6, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize6, 4, DetectorRotation6, 1.0);
             }
             if (idDetector == 6 && Detector7) {
                 detectorPos = (DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize7, DetectorRotation7, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize7, 4, DetectorRotation7, 1.0);
             }
             if (idDetector == 7 && Detector8) {
                 detectorPos = (DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8;
-                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize8, DetectorRotation8, 1.0);
+                texcoord.xy = GetBoundingBoxVertexTL(id, 0, detectorPos, DetectorSize8, 4, DetectorRotation8, 1.0);
             }
         }
         
@@ -1714,62 +1790,60 @@
         if (applyMask) {
             maskColor = MaskColors[0] / 255.0;
             maskPos = (MaskFollowCursor1 ? MousePoint : CenterPoint) + Offset1;
-            color = DrawShape(Shape1, color, pos, maskPos, MaskSize1, maskColor, Rotation1, Feather1, maskColor, true);
+            color = DrawShape(Shape1, color, pos, maskPos, MaskSize1, maskColor, Rotation1, Feather1, maskColor, Anchor1, true);
         }
 
         applyMask = MaskEnabled2 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(1, 0), 0).r > 0.0);
         if (applyMask) {
             maskColor = MaskColors[1] / 255.0;
             maskPos = (MaskFollowCursor2 ? MousePoint : CenterPoint) + Offset2;
-            color = DrawShape(Shape2, color, pos, maskPos, MaskSize2, maskColor, Rotation2, Feather2, maskColor, true);
+            color = DrawShape(Shape2, color, pos, maskPos, MaskSize2, maskColor, Rotation2, Feather2, maskColor, Anchor2, true);
         }
 
         applyMask = MaskEnabled3 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(2, 0), 0).r > 0.0);
         if (applyMask) {
             maskColor = MaskColors[2] / 255.0;
             maskPos = (MaskFollowCursor3 ? MousePoint : CenterPoint) + Offset3;
-            color = DrawShape(Shape3, color, pos, maskPos, MaskSize3, maskColor, Rotation3, Feather3, maskColor, true);
+            color = DrawShape(Shape3, color, pos, maskPos, MaskSize3, maskColor, Rotation3, Feather3, maskColor, Anchor3, true);
         }
 
         applyMask = MaskEnabled4 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(3, 0), 0).r > 0.0);
         if (applyMask) {
             maskColor = MaskColors[3] / 255.0;
             maskPos = (MaskFollowCursor4 ? MousePoint : CenterPoint) + Offset4;
-            color = DrawShape(Shape4, color, pos, maskPos, MaskSize4, maskColor, Rotation4, Feather4, maskColor, true);
+            color = DrawShape(Shape4, color, pos, maskPos, MaskSize4, maskColor, Rotation4, Feather4, maskColor, Anchor4, true);
         }
 
         applyMask = MaskEnabled5 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(4, 0), 0).r > 0.0);
         if (applyMask) {
             maskColor = MaskColors[4] / 255.0;
             maskPos = (MaskFollowCursor5 ? MousePoint : CenterPoint) + Offset5;
-            color = DrawShape(Shape5, color, pos, maskPos, MaskSize5, maskColor, Rotation5, Feather5, maskColor, true);
+            color = DrawShape(Shape5, color, pos, maskPos, MaskSize5, maskColor, Rotation5, Feather5, maskColor, Anchor5, true);
         }
 
         applyMask = MaskEnabled6 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(5, 0), 0).r > 0.0);
         if (applyMask) {
             maskColor = MaskColors[5] / 255.0;
             maskPos = (MaskFollowCursor6 ? MousePoint : CenterPoint) + Offset6;
-            color = DrawShape(Shape6, color, pos, maskPos, MaskSize6, maskColor, Rotation6, Feather6, maskColor, true);
+            color = DrawShape(Shape6, color, pos, maskPos, MaskSize6, maskColor, Rotation6, Feather6, maskColor, Anchor6, true);
         }
 
         applyMask = MaskEnabled7 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(6, 0), 0).r > 0.0);
         if (applyMask) {
             maskColor = MaskColors[6] / 255.0;
             maskPos = (MaskFollowCursor7 ? MousePoint : CenterPoint) + Offset7;
-            color = DrawShape(Shape7, color, pos, maskPos, MaskSize7, maskColor, Rotation7, Feather7, maskColor, true);
+            color = DrawShape(Shape7, color, pos, maskPos, MaskSize7, maskColor, Rotation7, Feather7, maskColor, Anchor7, true);
         }
 
         applyMask = MaskEnabled8 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(7, 0), 0).r > 0.0);
         if (applyMask) {
             maskColor = MaskColors[7] / 255.0;
             maskPos = (MaskFollowCursor8 ? MousePoint : CenterPoint) + Offset8;
-            color = DrawShape(Shape8, color, pos, maskPos, MaskSize8, maskColor, Rotation8, Feather8, maskColor, true);
+            color = DrawShape(Shape8, color, pos, maskPos, MaskSize8, maskColor, Rotation8, Feather8, maskColor, Anchor8, true);
         }
-        
-        if (ShowMasks) return color;
 
         if (color.a > 0.0) {
-            color.rgb = tex2Dfetch(UIMaskGUIBeforeSampler, floor(pos.xy), 0).rgb;
+            color.rgb = lerp(tex2Dfetch(UIMaskGUIBeforeSampler, floor(pos.xy), 0).rgb, color.rgb, ShowMasks ? 0.5 : 0.0);
             return color;
         }
 
@@ -1783,42 +1857,42 @@
         bool detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(0, 0), 0).r > 0.0;
         float2 detectorPos = (DetectorFollowCursor1 ? MousePoint : CenterPoint) + DetectorOffset1;
         float4 detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector1) color = DrawShape(0, color, pos, detectorPos, DetectorSize1, float4(DetectorColor1, 1.0), DetectorRotation1, 1.0, detectorColorOutline, false);
+        if (Detector1) color = DrawShape(0, color, pos, detectorPos, DetectorSize1, float4(DetectorColor1, 1.0), DetectorRotation1, 1.0, detectorColorOutline, 4, false);
 
         detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(1, 0), 0).r > 0.0;
         detectorPos = (DetectorFollowCursor2 ? MousePoint : CenterPoint) + DetectorOffset2;
         detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector2) color = DrawShape(0, color, pos, detectorPos, DetectorSize2, float4(DetectorColor2, 1.0), DetectorRotation2, 1.0, detectorColorOutline, false);
+        if (Detector2) color = DrawShape(0, color, pos, detectorPos, DetectorSize2, float4(DetectorColor2, 1.0), DetectorRotation2, 1.0, detectorColorOutline, 4, false);
 
         detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(2, 0), 0).r > 0.0;
         detectorPos = (DetectorFollowCursor3 ? MousePoint : CenterPoint) + DetectorOffset3;
         detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector3) color = DrawShape(0, color, pos, detectorPos, DetectorSize3, float4(DetectorColor3, 1.0), DetectorRotation3, 1.0, detectorColorOutline, false);
+        if (Detector3) color = DrawShape(0, color, pos, detectorPos, DetectorSize3, float4(DetectorColor3, 1.0), DetectorRotation3, 1.0, detectorColorOutline, 4, false);
 
         detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(3, 0), 0).r > 0.0;
         detectorPos = (DetectorFollowCursor4 ? MousePoint : CenterPoint) + DetectorOffset4;
         detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector4) color = DrawShape(0, color, pos, detectorPos, DetectorSize4, float4(DetectorColor4, 1.0), DetectorRotation4, 1.0, detectorColorOutline, false);
+        if (Detector4) color = DrawShape(0, color, pos, detectorPos, DetectorSize4, float4(DetectorColor4, 1.0), DetectorRotation4, 1.0, detectorColorOutline, 4, false);
 
         detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(4, 0), 0).r > 0.0;
         detectorPos = (DetectorFollowCursor5 ? MousePoint : CenterPoint) + DetectorOffset5;
         detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector5) color = DrawShape(0, color, pos, detectorPos, DetectorSize5, float4(DetectorColor5, 1.0), DetectorRotation5, 1.0, detectorColorOutline, false);
+        if (Detector5) color = DrawShape(0, color, pos, detectorPos, DetectorSize5, float4(DetectorColor5, 1.0), DetectorRotation5, 1.0, detectorColorOutline, 4, false);
 
         detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(5, 0), 0).r > 0.0;
         detectorPos = (DetectorFollowCursor6 ? MousePoint : CenterPoint) + DetectorOffset6;
         detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector6) color = DrawShape(0, color, pos, detectorPos, DetectorSize6, float4(DetectorColor6, 1.0), DetectorRotation6, 1.0, detectorColorOutline, false);
+        if (Detector6) color = DrawShape(0, color, pos, detectorPos, DetectorSize6, float4(DetectorColor6, 1.0), DetectorRotation6, 1.0, detectorColorOutline, 4, false);
 
         detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(6, 0), 0).r > 0.0;
         detectorPos = (DetectorFollowCursor7 ? MousePoint : CenterPoint) + DetectorOffset7;
         detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector7) color = DrawShape(0, color, pos, detectorPos, DetectorSize7, float4(DetectorColor7, 1.0), DetectorRotation7, 1.0, detectorColorOutline, false);
+        if (Detector7) color = DrawShape(0, color, pos, detectorPos, DetectorSize7, float4(DetectorColor7, 1.0), DetectorRotation7, 1.0, detectorColorOutline, 4, false);
 
         detectorMatched = tex2Dfetch(UIMaskGUIStateSampler, int2(7, 0), 0).r > 0.0;
         detectorPos = (DetectorFollowCursor8 ? MousePoint : CenterPoint) + DetectorOffset8;
         detectorColorOutline = detectorMatched ? float4(0.0, 1.0, 0.0, 1.0) : float4(1.0, 0.0, 0.0, 1.0);
-        if (Detector8) color = DrawShape(0, color, pos, detectorPos, DetectorSize8, float4(DetectorColor8, 1.0), DetectorRotation8, 1.0, detectorColorOutline, false);
+        if (Detector8) color = DrawShape(0, color, pos, detectorPos, DetectorSize8, float4(DetectorColor8, 1.0), DetectorRotation8, 1.0, detectorColorOutline, 4, false);
 
         if (color.a > 0.0) return color;
         
