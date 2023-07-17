@@ -1675,7 +1675,7 @@
 
     static const float2 CenterPoint = float2(BUFFER_WIDTH / 2.0, BUFFER_HEIGHT / 2.0);
     static const float2 PixelOffset = float2(0.5, 0.5);
-    static const float2 anchorOffsets[9] = {float2(0.5, 0.5), float2(0.0, 0.5), float2(-0.5, 0.5), float2(0.5, 0.0), float2(0.0, 0.0), float2(-0.5, 0.0), float2(0.5, -0.5), float2(0.0, -0.5), float2(-0.5, -0.5)};
+    static const float2 AnchorOffsets[9] = {float2(0.5, 0.5), float2(0.0, 0.5), float2(-0.5, 0.5), float2(0.5, 0.0), float2(0.0, 0.0), float2(-0.5, 0.0), float2(0.5, -0.5), float2(0.0, -0.5), float2(-0.5, -0.5)};
 
     /*
     To Do:
@@ -1686,11 +1686,18 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    sampler CustomCrosshairOverlaySampler { Texture = CustomCrosshairOverlayTexture;};
+    texture2D CustomCrosshairBoundingBoxTexture < pooled = false; > { Width = 4; Height = 1; Format = R32F; };
+    sampler2D CustomCrosshairBoundingBoxSampler { Texture = CustomCrosshairBoundingBoxTexture; };
+    // storage2D CustomCrosshairBoundingBoxStorage { Texture = CustomCrosshairBoundingBoxTexture; };
 
-    texture CustomCrosshairOverlayShapeTexture <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
-    sampler CustomCrosshairOverlayShapeSampler { Texture = CustomCrosshairOverlayShapeTexture;};
+    texture2D CustomCrosshairVertexTexture < pooled = true; > { Width = 64; Height = 1; Format = RG32F; };
+    sampler2D CustomCrosshairVertexSampler { Texture = CustomCrosshairVertexTexture; };
+
+    texture2D CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+    sampler2D CustomCrosshairOverlaySampler { Texture = CustomCrosshairOverlayTexture;};
+
+    texture2D CustomCrosshairOverlayShapeTexture <pooled = true; > { Width = BUFFER_WIDTH * 2.0; Height = BUFFER_HEIGHT * 2.0; Format = RGBA8; };
+    sampler2D CustomCrosshairOverlayShapeSampler { Texture = CustomCrosshairOverlayShapeTexture;};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Imports
@@ -1771,7 +1778,7 @@
     }
     
     float4 DrawRectangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, int anchor, float outlineSize) {
-        const float2 center = fillPos + fillSize * anchorOffsets[anchor];
+        const float2 center = fillPos + fillSize * AnchorOffsets[anchor];
         const float sdFill = sdBox(basePos - center, fillSize / 2.0);
         float sdGap = 1.0;
 
@@ -1785,7 +1792,7 @@
     }
 
     float4 DrawEllipse(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, int anchor, float slice, float outlineSize) {
-        const float2 center = fillPos + fillSize * anchorOffsets[anchor];
+        const float2 center = fillPos + fillSize * AnchorOffsets[anchor];
         fillSize /= 2.0;
         
         const float sdFill = sdEllipse(basePos - center, fillSize);
@@ -1807,8 +1814,8 @@
     }
 
     float4 DrawTriangle(float4 baseColor, float2 basePos, float2 fillPos, float2 fillSize, float4 fillColor, float2 gapSize, float2 gapOffset, int anchor, float skew, float outlineSize) {
-        // float2 anchorOffsets[9] = {float2(0.5, 0.67), float2(0.0, 0.67), float2(-0.5, 0.67), float2(0.5, 0), float2(0.0, 0), float2(-0.5, 0), float2(0.5, -0.33), float2(0.0, -0.33), float2(-0.5, -0.33)};
-        float2 anchorOffset = anchorOffsets[anchor];
+        // float2 AnchorOffsets[9] = {float2(0.5, 0.67), float2(0.0, 0.67), float2(-0.5, 0.67), float2(0.5, 0), float2(0.0, 0), float2(-0.5, 0), float2(0.5, -0.33), float2(0.0, -0.33), float2(-0.5, -0.33)};
+        float2 anchorOffset = AnchorOffsets[anchor];
         if (anchorOffset.y != 0.0) anchorOffset.y += 1.0 / 6.0;
 
         const float2 center = fillPos + fillSize * anchorOffset;
@@ -1855,7 +1862,7 @@
         outlineSize += 1.0;
 
         if (shape == 1) { //triangle
-            float2 anchorOffset = anchorOffsets[anchor];
+            float2 anchorOffset = AnchorOffsets[anchor];
             if (anchorOffset.y != 0.0) anchorOffset.y += 1.0 / 6.0;
 
             const float2 center = fillPos + fillSize * anchorOffset;
@@ -1869,7 +1876,7 @@
                 center.y + fillSize.y / 3.0 + outlineSize;
         }
         else { //other
-            const float2 center = fillPos + fillSize * anchorOffsets[anchor];
+            const float2 center = fillPos + fillSize * AnchorOffsets[anchor];
 
             retVal.x = (id < 2) ?
                 center.x - fillSize.x / 2.0 - outlineSize :
@@ -1915,7 +1922,7 @@
         if (idShape == 8 && ShapeEnabled9) texcoord.xy = GetBoundingBoxVertexTL(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize);
         if (idShape == 9 && ShapeEnabled10) texcoord.xy = GetBoundingBoxVertexTL(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize);
         if (idShape == 10 && ShapeEnabled11) texcoord.xy = GetBoundingBoxVertexTL(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize);
-        if (idShape == 112 && ShapeEnabled12) texcoord.xy = GetBoundingBoxVertexTL(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize);
+        if (idShape == 11 && ShapeEnabled12) texcoord.xy = GetBoundingBoxVertexTL(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize);
         if (idShape == 12 && ShapeEnabled13) texcoord.xy = GetBoundingBoxVertexTL(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize);
         if (idShape == 13 && ShapeEnabled14) texcoord.xy = GetBoundingBoxVertexTL(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize);
         if (idShape == 14 && ShapeEnabled15) texcoord.xy = GetBoundingBoxVertexTL(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize);
@@ -1994,6 +2001,90 @@
         return float4(p0.rgb * p0.a / w4 + p1.rgb * p1.a / w4 + p2.rgb * p2.a / w4 + p3.rgb * p3.a / w4, w4 / 4.0);
     }
 
+    float2 PS_VertexCoord(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        int idShape = floor(pos.x / 4);
+        int idVertex = pos.x % 4;
+
+        float2 texcoord = Antialiasing ? 0.5 : 0.25;
+        if (idShape == 0 && ShapeEnabled1) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize);
+        if (idShape == 1 && ShapeEnabled2) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize);
+        if (idShape == 2 && ShapeEnabled3) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize);
+        if (idShape == 3 && ShapeEnabled4) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, OutlineSize);
+        if (idShape == 4 && ShapeEnabled5) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, OutlineSize);
+        if (idShape == 5 && ShapeEnabled6) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, OutlineSize);
+        if (idShape == 6 && ShapeEnabled7) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, OutlineSize);
+        if (idShape == 7 && ShapeEnabled8) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, OutlineSize);
+        if (idShape == 8 && ShapeEnabled9) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize);
+        if (idShape == 9 && ShapeEnabled10) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize);
+        if (idShape == 10 && ShapeEnabled11) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize);
+        if (idShape == 11 && ShapeEnabled12) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize);
+        if (idShape == 12 && ShapeEnabled13) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize);
+        if (idShape == 13 && ShapeEnabled14) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize);
+        if (idShape == 14 && ShapeEnabled15) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize);
+        if (idShape == 15 && ShapeEnabled16) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, OutlineSize);
+        if (!Antialiasing) texcoord *= 2.0;
+        return texcoord;
+    }
+
+    float PS_BoundingBox(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+        int id = floor(pos.x);
+        float retval = 0.5;
+        float2 vertCoord;
+        for (int i = 0; i < 64; i++) {
+            vertCoord.xy = tex2Dfetch(CustomCrosshairVertexSampler, int2(i, 0), 0).rg;
+            if (id == 0) retval = min(retval, vertCoord.x);
+            if (id == 1) retval = min(retval, vertCoord.y);
+            if (id == 2) retval = max(retval, vertCoord.x);
+            if (id == 3) retval = max(retval, vertCoord.y);
+        }
+        return retval;
+    }
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Compute Shaders
+// ------------------------------------------------------------------------------------------------------------------------
+
+    // groupshared int boundingBox[4];
+
+    // void CS_BoundingBox(uint3 tid: SV_GROUPTHREADID) {
+    //     int idShape = floor(tid.x / 4);
+    //     int idVertex = tid.x % 4;
+
+    //     float2 texcoord = CenterPoint;
+    //     if (idShape == 0 && ShapeEnabled1) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize);
+    //     if (idShape == 1 && ShapeEnabled2) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize);
+    //     if (idShape == 2 && ShapeEnabled3) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize);
+    //     if (idShape == 3 && ShapeEnabled4) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, OutlineSize);
+    //     if (idShape == 4 && ShapeEnabled5) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, OutlineSize);
+    //     if (idShape == 5 && ShapeEnabled6) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, OutlineSize);
+    //     if (idShape == 6 && ShapeEnabled7) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, OutlineSize);
+    //     if (idShape == 7 && ShapeEnabled8) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, OutlineSize);
+    //     if (idShape == 8 && ShapeEnabled9) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize);
+    //     if (idShape == 9 && ShapeEnabled10) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize);
+    //     if (idShape == 10 && ShapeEnabled11) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize);
+    //     if (idShape == 11 && ShapeEnabled12) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize);
+    //     if (idShape == 12 && ShapeEnabled13) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize);
+    //     if (idShape == 13 && ShapeEnabled14) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize);
+    //     if (idShape == 14 && ShapeEnabled15) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize);
+    //     if (idShape == 15 && ShapeEnabled16) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, OutlineSize);
+
+    //     int2 texpos = Antialiasing ? floor(texcoord.xy * BUFFER_SCREEN_SIZE) : floor(texcoord.xy * BUFFER_SCREEN_SIZE * 2.0);
+        
+    //     atomicMin(boundingBox[0], texpos.x);
+    //     atomicMin(boundingBox[1], texpos.y);
+    //     atomicMax(boundingBox[2], texpos.x);
+    //     atomicMax(boundingBox[3], texpos.y);
+    //     groupMemoryBarrier();
+    //     barrier();
+
+    //     if (tid.x == 0) {
+    //         tex2Dstore(CustomCrosshairBoundingBoxStorage, int2(0, 0), float(boundingBox[0] / BUFFER_WIDTH));
+    //         tex2Dstore(CustomCrosshairBoundingBoxStorage, int2(1, 0), float(boundingBox[1] / BUFFER_HEIGHT));
+    //         tex2Dstore(CustomCrosshairBoundingBoxStorage, int2(2, 0), float(boundingBox[2] / BUFFER_WIDTH));
+    //         tex2Dstore(CustomCrosshairBoundingBoxStorage, int2(3, 0), float(boundingBox[3] / BUFFER_HEIGHT));
+    //     }
+    // }
+
 // ------------------------------------------------------------------------------------------------------------------------
 // Techniques
 // ------------------------------------------------------------------------------------------------------------------------
@@ -2005,6 +2096,22 @@
         enabled = true;
         timeout = 1;
     > {
+        // pass BoundingBox {
+        //     ComputeShader = CS_BoundingBox<64,1,1>;
+        //     DispatchSizeX = 1;
+        //     DispatchSizeY = 1;
+		//     DispatchSizeZ = 1;
+        // }
+        pass {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_VertexCoord;
+            RenderTarget = CustomCrosshairVertexTexture;
+        }
+        pass BoundingBox {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_BoundingBox;
+            RenderTarget = CustomCrosshairBoundingBoxTexture;
+        }
         // Build Overlay
         pass Outline {
             VertexCount = 96;
@@ -2033,7 +2140,22 @@
                         "Disable for performance\n\n"
                         "\"CustomCrosshair\" must be enabled to see results.";
     > {
-        
+        // pass BoundingBox {
+        //     ComputeShader = CS_BoundingBox<64,1,1>;
+        //     DispatchSizeX = 1;
+        //     DispatchSizeY = 1;
+		//     DispatchSizeZ = 1;
+        // }
+        pass {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_VertexCoord;
+            RenderTarget = CustomCrosshairVertexTexture;
+        }
+        pass BoundingBox {
+            VertexShader = PostProcessVS;
+            PixelShader = PS_BoundingBox;
+            RenderTarget = CustomCrosshairBoundingBoxTexture;
+        }
         // Build Overlay
         pass Outline {
             VertexCount = 96;

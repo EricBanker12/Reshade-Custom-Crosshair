@@ -208,17 +208,20 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture CustomCrosshairStateTex <pooled = false; > { Width = 3; Height = 1; Format = R8; };
-    sampler CustomCrosshairStateSamp { Texture = CustomCrosshairStateTex; };
+    texture2D CustomCrosshairStateTex <pooled = false; > { Width = 3; Height = 1; Format = R8; };
+    sampler2D CustomCrosshairStateSamp { Texture = CustomCrosshairStateTex; };
 
-    texture CustomCrosshairPrevStateTex <pooled = false; > { Width = 3; Height = 1; Format = R8; };
-    sampler CustomCrosshairPrevStateSamp { Texture = CustomCrosshairPrevStateTex; };
+    texture2D CustomCrosshairPrevStateTex <pooled = false; > { Width = 3; Height = 1; Format = R8; };
+    sampler2D CustomCrosshairPrevStateSamp { Texture = CustomCrosshairPrevStateTex; };
 
-    texture UIDetectCustomCrosshairTexture <pooled = false; > { Width = 1; Height = 1; Format = R8; };
-    sampler UIDetectCustomCrosshairSampler { Texture = UIDetectCustomCrosshairTexture; };
+    texture2D CustomCrosshairBoundingBoxTexture < pooled = false; > { Width = 4; Height = 1; Format = R32F; };
+    sampler2D CustomCrosshairBoundingBoxSampler { Texture = CustomCrosshairBoundingBoxTexture; };
 
-    texture CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    sampler CustomCrosshairOverlaySampler { Texture = CustomCrosshairOverlayTexture;};
+    texture2D UIDetectCustomCrosshairTexture <pooled = false; > { Width = 1; Height = 1; Format = R8; };
+    sampler2D UIDetectCustomCrosshairSampler { Texture = UIDetectCustomCrosshairTexture; };
+
+    texture2D CustomCrosshairOverlayTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+    sampler2D CustomCrosshairOverlaySampler { Texture = CustomCrosshairOverlayTexture;};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Structs
@@ -311,8 +314,13 @@
         
         if (uiDetected || hotkeyTriggered1 || hotkeyTriggered2 || hotkeyTriggered3)
             PostProcessVS(0, position, texcoord);
-        else
-            PostProcessVS(id, position, texcoord);
+        else {
+            const float2 overlayOffset = (Offset + (FollowCursor ? MousePoint - CenterPoint : 0)) / BUFFER_SCREEN_SIZE;
+            texcoord.x = (id < 2) ? tex2Dfetch(CustomCrosshairBoundingBoxSampler, int2(0, 0), 0).r : tex2Dfetch(CustomCrosshairBoundingBoxSampler, int2(2, 0), 0).r;
+            texcoord.y = (id == 0 || id == 2) ? tex2Dfetch(CustomCrosshairBoundingBoxSampler, int2(1, 0), 0).r : tex2Dfetch(CustomCrosshairBoundingBoxSampler, int2(3, 0), 0).r;
+            texcoord.xy += overlayOffset;
+            position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
+        }
     }
 
     float4 PS_Final(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
@@ -342,6 +350,8 @@
             RenderTarget = CustomCrosshairStateTex;
         }
         pass final {
+            PrimitiveTopology = TRIANGLESTRIP;
+            VertexCount = 4;
             VertexShader = VS_Final;
             PixelShader = PS_Final;
             BlendEnable = true;
