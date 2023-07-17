@@ -46,6 +46,12 @@ uniform float sharpness <
     ui_max = 4.0f;
 > = 0.2f;
 
+texture2D FSRTexture <pooled = true; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+sampler2D FSRSampler { Texture = FSRTexture;};
+
+texture2D BufferATexture <pooled = true; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+sampler2D BufferASampler { Texture = BufferATexture;};
+
 #include "ReShade.fxh"
 
 // https://gist.github.com/TheRealMJP/c83b8c0f46b63f3a88a5986f4fa982b1
@@ -253,18 +259,18 @@ void FsrEasuF(
     float4 off = float4(-.5, .5, -.5, .5) * con1.xxyy;
     // textureGather to texture offsets
     // x=west y=east z=north w=south
-    float3 bC = tex2D(ReShade::BackBuffer, p0 + off.xw).rgb; float bL = mad(0.5, bC.r + bC.b, bC.g);
-    float3 cC = tex2D(ReShade::BackBuffer, p0 + off.yw).rgb; float cL = mad(0.5, cC.r + cC.b, cC.g);
-    float3 iC = tex2D(ReShade::BackBuffer, p1 + off.xw).rgb; float iL = mad(0.5, iC.r + iC.b, iC.g);
-    float3 jC = tex2D(ReShade::BackBuffer, p1 + off.yw).rgb; float jL = mad(0.5, jC.r + jC.b, jC.g);
-    float3 fC = tex2D(ReShade::BackBuffer, p1 + off.yz).rgb; float fL = mad(0.5, fC.r + fC.b, fC.g);
-    float3 eC = tex2D(ReShade::BackBuffer, p1 + off.xz).rgb; float eL = mad(0.5, eC.r + eC.b, eC.g);
-    float3 kC = tex2D(ReShade::BackBuffer, p2 + off.xw).rgb; float kL = mad(0.5, kC.r + kC.b, kC.g);
-    float3 lC = tex2D(ReShade::BackBuffer, p2 + off.yw).rgb; float lL = mad(0.5, lC.r + lC.b, lC.g);
-    float3 hC = tex2D(ReShade::BackBuffer, p2 + off.yz).rgb; float hL = mad(0.5, hC.r + hC.b, hC.g);
-    float3 gC = tex2D(ReShade::BackBuffer, p2 + off.xz).rgb; float gL = mad(0.5, gC.r + gC.b, gC.g);
-    float3 oC = tex2D(ReShade::BackBuffer, p3 + off.yz).rgb; float oL = mad(0.5, oC.r + oC.b, oC.g);
-    float3 nC = tex2D(ReShade::BackBuffer, p3 + off.xz).rgb; float nL = mad(0.5, nC.r + nC.b, nC.g);
+    float3 bC = tex2D(FSRSampler, p0 + off.xw).rgb; float bL = mad(0.5, bC.r + bC.b, bC.g);
+    float3 cC = tex2D(FSRSampler, p0 + off.yw).rgb; float cL = mad(0.5, cC.r + cC.b, cC.g);
+    float3 iC = tex2D(FSRSampler, p1 + off.xw).rgb; float iL = mad(0.5, iC.r + iC.b, iC.g);
+    float3 jC = tex2D(FSRSampler, p1 + off.yw).rgb; float jL = mad(0.5, jC.r + jC.b, jC.g);
+    float3 fC = tex2D(FSRSampler, p1 + off.yz).rgb; float fL = mad(0.5, fC.r + fC.b, fC.g);
+    float3 eC = tex2D(FSRSampler, p1 + off.xz).rgb; float eL = mad(0.5, eC.r + eC.b, eC.g);
+    float3 kC = tex2D(FSRSampler, p2 + off.xw).rgb; float kL = mad(0.5, kC.r + kC.b, kC.g);
+    float3 lC = tex2D(FSRSampler, p2 + off.yw).rgb; float lL = mad(0.5, lC.r + lC.b, lC.g);
+    float3 hC = tex2D(FSRSampler, p2 + off.yz).rgb; float hL = mad(0.5, hC.r + hC.b, hC.g);
+    float3 gC = tex2D(FSRSampler, p2 + off.xz).rgb; float gL = mad(0.5, gC.r + gC.b, gC.g);
+    float3 oC = tex2D(FSRSampler, p3 + off.yz).rgb; float oL = mad(0.5, oC.r + oC.b, oC.g);
+    float3 nC = tex2D(FSRSampler, p3 + off.xz).rgb; float nL = mad(0.5, nC.r + nC.b, nC.g);
 
     //------------------------------------------------------------------------------------------------------------------------------
     // Simplest multi-channel approximate luma possible (luma times 2, in 2 FMA/MAD).
@@ -333,7 +339,7 @@ void FsrEasuF(
 
 float4 FsrRcasLoadF(float2 pp, int2 off)
 {
-    return tex2Dlod(ReShade::BackBuffer, float4(pp, 0, 0), off);
+    return tex2Dlod(BufferASampler, float4(pp, 0, 0), off);
 }
 
 // The scale is {0.0 := maximum, to N>0, where N is the number of stops (halving) of the reduction of sharpness}.
@@ -459,16 +465,17 @@ technique FSR <
     pass Downscale {
         VertexShader = PostProcessVS;
         PixelShader = DownscaleBicubicPS;
+        RenderTarget = FSRTexture;
     }
     pass BufferAPass
 	{
-		VertexShader = PostProcessVS;
-		PixelShader  = BufferA;
+        VertexShader = PostProcessVS;
+        PixelShader  = BufferA;
+        RenderTarget = BufferATexture;
 	}
-
 	pass SuperResPass
 	{
-		VertexShader = PostProcessVS;
-		PixelShader  = FSR;
+        VertexShader = PostProcessVS;
+        PixelShader  = FSR;
 	}
 }
