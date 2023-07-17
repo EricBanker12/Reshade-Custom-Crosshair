@@ -642,14 +642,14 @@
 // Textures
 // ------------------------------------------------------------------------------------------------------------------------
 
-    texture UIDetectGUITexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
-    sampler UIDetectGUISampler { Texture = UIDetectGUITexture; };
+    texture2D UIDetectGUITexture <pooled = false; > { Width = 8; Height = 1; Format = R8; };
+    sampler2D UIDetectGUISampler { Texture = UIDetectGUITexture; };
 
-    texture UIDetectCustomCrosshairTexture <pooled = false; > { Width = 1; Height = 1; Format = R8; };
-    sampler UIDetectCustomCrosshairSampler { Texture = UIDetectCustomCrosshairTexture; };
+    texture2D UIDetectCustomCrosshairTexture <pooled = false; > { Width = 1; Height = 1; Format = R8; };
+    sampler2D UIDetectCustomCrosshairSampler { Texture = UIDetectCustomCrosshairTexture; };
 
-    texture UIDetectGUIBeforeTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
-    sampler UIDetectGUIBeforeSampler { Texture = UIDetectGUIBeforeTexture;};
+    texture2D UIDetectGUIBeforeTexture <pooled = false; > { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8; };
+    sampler2D UIDetectGUIBeforeSampler { Texture = UIDetectGUIBeforeTexture;};
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Functions
