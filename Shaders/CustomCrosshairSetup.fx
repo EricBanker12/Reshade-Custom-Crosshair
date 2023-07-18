@@ -6,26 +6,18 @@
     uniform int ConfigNotice <
         ui_type = "radio";
         ui_label = " ";
-        ui_text = "\"CustomCrosshair\" must be enabled to see results.\n"
-                    "Once crosshair color and shape are configured,\n"
-                    "disable this effect for performance.";
-        ui_category = "Crosshair Setup";
-        ui_category_closed = true;
+        ui_text = "Requires \"CustomCrosshair\".\n\n"
+                    "Once configured, disable this effect for performance.";
     >;
 
     uniform float4 FillColor <
         ui_type = "color";
         ui_label = "Fill Color";
-        ui_category = "Crosshair Setup";
-        ui_category_closed = true;
     > = float4(1.0, 1.0, 1.0, 0.75);
 
     uniform float4 OutlineColor <
         ui_type = "color";
         ui_label = "Outline Color";
-        ui_category = "Crosshair Setup";
-        ui_category_closed = true;
-
     > = float4(0.0, 0.0, 0.0, 0.5);
 
     uniform float OutlineSize <
@@ -34,15 +26,11 @@
         ui_min = 0.0;
         ui_max = 200.0;
         ui_step = 1.0;
-        ui_category = "Crosshair Setup";
-        ui_category_closed = true;
     > = 1.0;
 
     uniform bool Antialiasing <
         ui_label = "Antialiasing";
         ui_tooltip = "Applies SSAA x4.";
-        ui_category = "Crosshair Setup";
-        ui_category_closed = true;
     > = true;
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -1857,7 +1845,7 @@
         else return DrawRectangle(baseColor, basePos.xy, fillPos, fillSize, fillColor, gapSize, gapOffset, anchor, outlineSize);
     }
 
-    float2 GetBoundingBoxVertex(int id, int shape, float2 fillPos, float2 fillSize, float rotation, int anchor, float skew, float outlineSize) {
+    float2 GetBoundingBoxVertex(uint id, int shape, float2 fillPos, float2 fillSize, float rotation, int anchor, float skew, float outlineSize) {
         float2 retVal;
         outlineSize += 1.0;
 
@@ -1897,7 +1885,7 @@
         return retVal;
     }
 
-    float2 GetBoundingBoxVertexTL(int id, int shape, float2 fillPos, float2 fillSize, float rotation, int anchor, float skew, float outlineSize) {
+    float2 GetBoundingBoxVertexTL(uint id, int shape, float2 fillPos, float2 fillSize, float rotation, int anchor, float skew, float outlineSize) {
         id = id % 6;
         if (id > 2) id -= 2;
         return GetBoundingBoxVertex(id, shape, fillPos, fillSize, rotation, anchor, skew, outlineSize);
@@ -1910,7 +1898,7 @@
     void VS_DrawShapes(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
         texcoord.xy = float2(0.0, 0.0);
 
-        int idShape = floor(id / 6);
+        uint idShape = floor(id / 6);
         if (idShape == 0 && ShapeEnabled1) texcoord.xy = GetBoundingBoxVertexTL(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize);
         if (idShape == 1 && ShapeEnabled2) texcoord.xy = GetBoundingBoxVertexTL(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize);
         if (idShape == 2 && ShapeEnabled3) texcoord.xy = GetBoundingBoxVertexTL(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize);
@@ -2002,8 +1990,8 @@
     }
 
     float2 PS_VertexCoord(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        int idShape = floor(pos.x / 4);
-        int idVertex = pos.x % 4;
+        uint idShape = floor(pos.x / 4);
+        uint idVertex = pos.x % 4;
 
         float2 texcoord = Antialiasing ? 0.5 : 0.25;
         if (idShape == 0 && ShapeEnabled1) texcoord.xy = GetBoundingBoxVertex(idVertex, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize);

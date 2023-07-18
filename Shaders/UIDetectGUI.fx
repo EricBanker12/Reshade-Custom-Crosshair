@@ -10,15 +10,11 @@
         ui_label = "Behavior";
         ui_items = "AND\0OR\0";
         ui_tooltip = "Hide effects when all detectors are matched (AND), or when at least one detector is matched (OR).";
-        ui_category = "UI Detection";
-        ui_category_closed = true;
     > = 0;
 
     uniform bool ShowDetectors <
         ui_label = "Show Detectors";
         ui_tooltip = "Show UI detectors for ease of configuration.";
-        ui_category = "UI Detection";
-        ui_category_closed = true;
     > = true;
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -920,7 +916,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
     technique UIDetectGUIBefore <
-        ui_label = "UI Detect GUI Before";
+        ui_label = "UIDetectGUI Before";
         ui_tooltip = "Order this before the effects you want to hide.";
     > {
         pass detector {
@@ -936,8 +932,8 @@
     }
 
     technique CustomCrosshairUIDetectBefore <
-        ui_label = "CustomCrosshair UI Detect GUI Before";
-        ui_tooltip = "A lightweight version of \"UI Detect GUI Before\" only for \"CustomCrosshair\".\n"
+        ui_label = "CustomCrosshair UIDetectGUI Before";
+        ui_tooltip = "A lightweight version of \"UIDetectGUI Before\" only for \"CustomCrosshair\".\n"
                         "Order this before \"CustomCrosshair\".\n\n"
                         "\"UI Detect GUI After\" is required for the \"Show Detectors\" option,\n"
                         "but after configuration, it should be disabled for performance.";
@@ -955,7 +951,7 @@
     }
 
     technique UIDetectGUIAfter <
-        ui_label = "UI Detect GUI After";
+        ui_label = "UIDetectGUI After";
         ui_tooltip = "Order this after the effects you want to hide.";
     > {
         pass after {

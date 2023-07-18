@@ -8,8 +8,6 @@
     uniform bool ShowMasks <
         ui_label = "Show Masks";
         ui_tooltip = "Show UI masks for ease of configuration.";
-        ui_category = "UI Masks";
-        ui_category_closed = true;
     > = true;
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -638,15 +636,11 @@
         ui_items = "AND\0OR\0";
         ui_tooltip = "Hide effects inside a UI mask when all of its detectors are matched (AND),\n"
                         "or when at least one of its detectors is matched (OR).";
-        ui_category = "UI Detection";
-        ui_category_closed = true;
     > = 0;
 
     uniform bool ShowDetectors <
         ui_label = "Show Detectors";
         ui_tooltip = "Show UI detectors for ease of configuration.";
-        ui_category = "UI Detection";
-        ui_category_closed = true;
     > = true;
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -1908,7 +1902,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
     technique UIMaskGUIBefore <
-        ui_label = "UI Mask GUI Before";
+        ui_label = "UIMaskGUI Before";
         ui_tooltip = "Order this before the effects you want to mask.";
     > {
         pass UIDetect {
@@ -1929,7 +1923,7 @@
     }
 
     technique UIMaskGUIAfter <
-        ui_label = "UI Mask GUI After";
+        ui_label = "UIMaskGUI After";
         ui_tooltip = "Order this after the effects you want to mask.";
     > {
         pass AfterMasks {

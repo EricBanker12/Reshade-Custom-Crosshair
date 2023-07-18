@@ -8,10 +8,7 @@
     uniform int ConfigNotice <
         ui_type = "radio";
         ui_label = " ";
-        ui_text = "To make changes to the crosshair shape, \n"
-                    "enable the effect \"CustomCrosshairSetup\"";
-        ui_category = "Crosshair Offset";
-        ui_category_closed = true;
+        ui_text = "To change crosshair color/shape, enable \"CustomCrosshairSetup\"";
     >;
 
     uniform float2 Offset <
@@ -21,15 +18,11 @@
         ui_step = 1.0;
         ui_label = "Offset";
         ui_tooltip = "Horizontal and vertical offset for the crosshair relative to the window center.";
-        ui_category = "Crosshair Offset";
-        ui_category_closed = true;
     > = float2(0.0, 0.0);
 
     uniform bool FollowCursor <
         ui_label = "Follow Cursor";
         ui_tooltip = "Apply crosshair relative to mouse cursor instead of the window center.";
-        ui_category = "Crosshair Offset";
-        ui_category_closed = true;
     > = false;
 
 // ------------------------------------------------------------------------------------------------------------------------
