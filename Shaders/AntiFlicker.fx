@@ -1,5 +1,9 @@
-#include "ReShadeUI.fxh"
-#include "ReShade.fxh"
+// ------------------------------------------------------------------------------------------------------------------------
+// Defines
+// ------------------------------------------------------------------------------------------------------------------------
+
+#define BUFFER_PIXEL_SIZE float2(BUFFER_RCP_WIDTH, BUFFER_RCP_HEIGHT)
+#define BUFFER_ASPECT_RATIO (BUFFER_WIDTH * BUFFER_RCP_HEIGHT)
 
 // ------------------------------------------------------------------------------------------------------------------------
 // UI
@@ -10,24 +14,32 @@ uniform int FlickerDetectionType <
 	ui_label = "Flicker Detection Type";
 	ui_items = "Luminance flicker detection\0"
                 "Perceived Luminance flicker detection\0";
-> = 0;
+> = 1;
 
 uniform float FlickerDetectionThreshold <
     ui_type = "drag";
 	ui_label = "Flicker Detection Threshold";
     ui_tooltip = "Try lowering this slightly if AntiFlicker misses some flickering.\n"
-				 "Default is 0.100";
+				 "Default is 0.010";
     ui_min = 0.000; ui_max = 0.200; ui_step = 0.001;
-> = 0.100;
+> = 0.010;
+
+uniform float LocalContrastThreshold <
+    ui_type = "drag";
+	ui_label = "Local Contrast Threshold";
+    ui_tooltip = "Try lowering this slightly if AntiFlicker misses some flickering.\n"
+				 "Default is 0.020";
+    ui_min = 0.000; ui_max = 0.200; ui_step = 0.001;
+> = 0.020;
 
 uniform float FlickerTimescale <
     ui_type = "drag";
-	ui_label = "Flicker Timescale";
+	ui_label = "Smoothing Timescale";
     ui_tooltip = "The time in milliseconds to smooth brightness changes."
                  "Try raising this if flickering is still too noticeable.\n"
-				 "Default is 300";
+				 "Default is 1000";
     ui_min = 0.000; ui_max = 2000.000; ui_step = 1.000;
-> = 300.000;
+> = 1000.000;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Global Variables
@@ -37,23 +49,24 @@ static const float3 FlickerDetectionVector[2] = {
     float3(0.299, 0.587, 0.114)
 };
 
-static const uint PrevFrameCount = 2;
-
 uniform float Time < source = "timer"; >;
 uniform uint FrameCount < source = "framecount"; >;
 uniform float FrameTime < source = "frametime"; >;
 
 // ------------------------------------------------------------------------------------------------------------------------
-// Textures
+// Textures & Samplers
 // ------------------------------------------------------------------------------------------------------------------------
 
-texture2D AntiFlickerDebugTex { Height = BUFFER_HEIGHT; Width = BUFFER_WIDTH; Format = RGBA8; };
+texture2D BackBufferTex : COLOR;
+sampler2D BackBuffer { Texture = BackBufferTex; };
 
 texture2D PrevFrameTex1 { Height = BUFFER_HEIGHT; Width = BUFFER_WIDTH; Format = RGBA8; };
-texture2D PrevFrameTex2 { Height = BUFFER_HEIGHT; Width = BUFFER_WIDTH; Format = RGBA8; };
-
 sampler2D PrevFrameSampler1 { Texture = PrevFrameTex1; };
+
+texture2D PrevFrameTex2 { Height = BUFFER_HEIGHT; Width = BUFFER_WIDTH; Format = RGBA8; };
 sampler2D PrevFrameSampler2 { Texture = PrevFrameTex2; };
+
+texture2D AntiFlickerDebugTex { Height = BUFFER_HEIGHT; Width = BUFFER_WIDTH; Format = RGBA8; };
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Functions
@@ -69,35 +82,60 @@ float LinearDifference(float3 A, float3 B)
     return max(max(C.r, C.g), C.b) * (lumDiff < 0.0 ? -1.0 : 1.0); // sign intrinsic can return 0, which we don't want. Plus this is faster.
 }
 
-float4 ClampBuffer(uint2 pixPosition) {
-    uint prev = (FrameCount + 1) % PrevFrameCount;
+float4 ClampBuffer(float2 texcoord, int2 pixPosition, uint frame) {
     
-    float4 color = tex2Dfetch(ReShade::BackBuffer, pixPosition, 0);
-    
-    float4 prevColor;
-    if (prev == 1)
-        prevColor = tex2Dfetch(PrevFrameSampler1, pixPosition, 0);
-    else
-        prevColor = tex2Dfetch(PrevFrameSampler2, pixPosition, 0);
+    //  +---+---+---+---+---+
+    //  |   |   |   |   |   |
+    //  +---+---+---+---+---+
+    //  |   | e | f | g |   |
+    //  +---+--(a)-(b)--+---+
+    //  |   | h | x | i |   |
+    //  +---+--(c)-(d)--+---+
+    //  |   | j | k | l |   |
+    //  +---+---+---+---+---+
+    //  |   |   |   |   |   |
+    //  +---+---+---+---+---+
 
-    float lumineColor = dot(color.rgb, FlickerDetectionVector[FlickerDetectionType]);
-    float luminePrev = dot(prevColor.rgb, FlickerDetectionVector[FlickerDetectionType]);
+    float2 offset = 0.5 * BUFFER_PIXEL_SIZE;
+    float3 a = tex2Dlod(BackBuffer, float4(texcoord - offset, 0.0, 0.0)).rgb;
+    float3 d = tex2Dlod(BackBuffer, float4(texcoord + offset, 0.0, 0.0)).rgb;
     
-    float flicker = lumineColor - luminePrev;
+    offset.x = -offset.x;
+    float3 b = tex2Dlod(BackBuffer, float4(texcoord - offset, 0.0, 0.0)).rgb;
+    float3 c = tex2Dlod(BackBuffer, float4(texcoord + offset, 0.0, 0.0)).rgb;
+
+    float4 color = tex2Dfetch(BackBuffer, pixPosition, 0);
+    
+    float lumineA = dot(a.rgb, FlickerDetectionVector[FlickerDetectionType]);
+    float lumineD = dot(d.rgb, FlickerDetectionVector[FlickerDetectionType]);
+    float lumineB = dot(b.rgb, FlickerDetectionVector[FlickerDetectionType]);
+    float lumineC = dot(c.rgb, FlickerDetectionVector[FlickerDetectionType]);
+    float lumineColor = dot(color.rgb, FlickerDetectionVector[FlickerDetectionType]);
+
+    float2 contrast = float2(lumineC + lumineD - lumineA - lumineB, lumineB + lumineD - lumineA - lumineC);
+    float contrastLen = saturate(length(contrast));
+    
+    float4 prevColor = 0.0;
+    if (frame == 1)
+        prevColor = tex2Dfetch(PrevFrameSampler2, pixPosition, 0);
+    else
+        prevColor = tex2Dfetch(PrevFrameSampler1, pixPosition, 0);
+
+    float luminePrev = dot(prevColor.rgb, FlickerDetectionVector[FlickerDetectionType]);
+
+    float flicker = (lumineColor - luminePrev) * step(LocalContrastThreshold, contrastLen);
+
+    // darken pixels that suddenly become bright
     if (flicker >= FlickerDetectionThreshold) {
-        // darken pixels that suddenly become bright
-        float unflicker = 1.0 - flicker * saturate(1.0 - FrameTime / FlickerTimescale);
-        color.rgb *= unflicker;
+        color.rgb *= 1.0 - flicker * saturate(1.0 - FrameTime / FlickerTimescale);
     }
-    else if (flicker <= -FlickerDetectionThreshold) {
-        // brighten pixels that suddenly become dark
+    
+    // brighten pixels that suddenly become dark
+    if (flicker <= -FlickerDetectionThreshold) {
         float unflicker = luminePrev / lumineColor * saturate(1.0 - FrameTime / FlickerTimescale);
         color.rgb = lerp(color.rgb - flicker * 0.3333333, color.rgb * unflicker, lumineColor);
     }
-    else {
-        color.a = 0.0;
-    }
-    
+
     return color;
 }
 
@@ -105,13 +143,21 @@ float4 ClampBuffer(uint2 pixPosition) {
 // Vertex Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
+void PostProcessVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD)
+{
+	texcoord.x = (id == 2) ? 2.0 : 0.0;
+	texcoord.y = (id == 1) ? 2.0 : 0.0;
+	position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
+}
+
 void SaveBuffer1VS(
     in uint id : SV_VertexID,
     out float4 position : SV_POSITION,
-    out float2 texcoord : TEXCOORD
+    out float2 texcoord : TEXCOORD,
+    out nointerpolation uint frame : FRAME
 ) {
-    uint frameNumber = (FrameCount % 2);
-    if (frameNumber == 1)
+    frame = (FrameCount % 2);
+    if (frame == 1)
         PostProcessVS(id, position, texcoord);
     else
         PostProcessVS(0, position, texcoord);
@@ -120,27 +166,43 @@ void SaveBuffer1VS(
 void SaveBuffer2VS(
     in uint id : SV_VertexID,
     out float4 position : SV_POSITION,
-    out float2 texcoord : TEXCOORD
+    out float2 texcoord : TEXCOORD,
+    out nointerpolation uint frame : FRAME
 ) {
-    uint frameNumber = (FrameCount % 2);
-    if (frameNumber == 0)
+    frame = (FrameCount % 2);
+    if (frame == 0) // if (frame == 2)
         PostProcessVS(id, position, texcoord);
     else
         PostProcessVS(0, position, texcoord);
+}
+
+void ShowBufferVS(
+    in uint id : SV_VertexID,
+    out float4 position : SV_POSITION,
+    out float2 texcoord : TEXCOORD,
+    out nointerpolation uint frame : FRAME
+) {
+    frame = (FrameCount % 2);
+    PostProcessVS(id, position, texcoord);
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Pixel Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-float4 ClampBufferPS(in float4 position: SV_POSITION, in float2 texcoord : TEXCOORD) : SV_TARGET {
-    float4 color = ClampBuffer(floor(position.xy));
-    color.a = 1.0;
+float4 ClampBufferPS(float4 position: SV_POSITION, float2 texcoord : TEXCOORD, nointerpolation uint frame : FRAME) : SV_TARGET {
+    float4 color = ClampBuffer(texcoord, floor(position.xy), frame);
     return color;
 }
 
-float4 DebugBufferPS(float4 position: SV_POSITION, float2 texcoord : TEXCOORD) : SV_TARGET {
-    float4 color = ClampBuffer(floor(position.xy));
+float4 DebugBufferPS(float4 position: SV_POSITION, float2 texcoord : TEXCOORD, nointerpolation uint frame : FRAME) : SV_TARGET {
+    int2 pixPosition = floor(position.xy);
+    
+    float4 color;
+    if (frame == 1)
+        color = tex2Dfetch(PrevFrameSampler1, pixPosition, 0);
+    else // if (target == 0)
+        color = tex2Dfetch(PrevFrameSampler2, pixPosition, 0);
     
     uint row = floor(texcoord.y / 0.1);
     uint col = floor(texcoord.x * BUFFER_ASPECT_RATIO / 0.1);
@@ -173,15 +235,9 @@ float4 DebugBufferPS(float4 position: SV_POSITION, float2 texcoord : TEXCOORD) :
     return color;
 }
 
-float4 SaveBufferPS(float4 position: SV_POSITION, float2 texcoord : TEXCOORD) : SV_TARGET {
-    return tex2Dfetch(ReShade::BackBuffer, floor(position.xy), 0);
-}
-
-float4 ShowBufferAfterPS(float4 position: SV_POSITION, float2 texcoord : TEXCOORD) : SV_TARGET {
+float4 ShowBufferPS(float4 position: SV_POSITION, float2 texcoord : TEXCOORD, nointerpolation uint frame : FRAME) : SV_TARGET {
     int2 pixPosition = floor(position.xy);
-    uint target = FrameCount % PrevFrameCount;
-    
-    if (target == 1)
+    if (frame == 1)
         return tex2Dfetch(PrevFrameSampler1, pixPosition, 0);
     else // if (target == 0)
         return tex2Dfetch(PrevFrameSampler2, pixPosition, 0);
@@ -204,14 +260,14 @@ technique AntiFlicker
         RenderTarget = PrevFrameTex2;
     }
     pass {
-        VertexShader = PostProcessVS;
-        PixelShader = ShowBufferAfterPS;
+        VertexShader = ShowBufferVS;
+        PixelShader = ShowBufferPS;
     }
 }
 
 technique AntiFlickerDebug {
     pass {
-        VertexShader = PostProcessVS;
+        VertexShader = ShowBufferVS;
         PixelShader = DebugBufferPS;
         RenderTarget = AntiFlickerDebugTex;
     }
