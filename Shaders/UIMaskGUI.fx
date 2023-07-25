@@ -1624,81 +1624,45 @@
         out nointerpolation uint maskApply[8] : MASK_APPLY,
         out nointerpolation float2 maskPosition[8] : MASK_POSITION
     ) {
-        maskApply[0] = uint(MaskEnabled1 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(0, 0), 0).r > 0.0));
-        maskApply[1] = uint(MaskEnabled2 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(1, 0), 0).r > 0.0));
-        maskApply[2] = uint(MaskEnabled3 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(2, 0), 0).r > 0.0));
-        maskApply[3] = uint(MaskEnabled4 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(3, 0), 0).r > 0.0));
-        maskApply[4] = uint(MaskEnabled5 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(4, 0), 0).r > 0.0));
-        maskApply[5] = uint(MaskEnabled6 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(5, 0), 0).r > 0.0));
-        maskApply[6] = uint(MaskEnabled7 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(6, 0), 0).r > 0.0));
-        maskApply[7] = uint(MaskEnabled8 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(7, 0), 0).r > 0.0));
+        maskApply = {
+            uint(MaskEnabled1 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(0, 0), 0).r > 0.0)),
+            uint(MaskEnabled2 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(1, 0), 0).r > 0.0)),
+            uint(MaskEnabled3 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(2, 0), 0).r > 0.0)),
+            uint(MaskEnabled4 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(3, 0), 0).r > 0.0)),
+            uint(MaskEnabled5 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(4, 0), 0).r > 0.0)),
+            uint(MaskEnabled6 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(5, 0), 0).r > 0.0)),
+            uint(MaskEnabled7 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(6, 0), 0).r > 0.0)),
+            uint(MaskEnabled8 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(7, 0), 0).r > 0.0))
+        };
+
+        maskPosition = {
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor1) + Offset1,
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor2) + Offset2,
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor3) + Offset3,
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor4) + Offset4,
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor5) + Offset5,
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor6) + Offset6,
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor7) + Offset7,
+            CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor8) + Offset8
+        };
 
         maskId = floor(id / 6.0);
-
+        
         if (maskApply[maskId] == 0) {
             texcoord.xy = 0.0;
             position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
             return;
         }
 
-        int maskShape[8];
-        maskShape[0] = Shape1;
-        maskShape[1] = Shape2;
-        maskShape[2] = Shape3;
-        maskShape[3] = Shape4;
-        maskShape[4] = Shape5;
-        maskShape[5] = Shape6;
-        maskShape[6] = Shape7;
-        maskShape[7] = Shape8;
+        int maskShape[8] = { Shape1, Shape2, Shape3, Shape4, Shape5, Shape6, Shape7, Shape8 };
 
-        int maskAnchor[8];
-        maskAnchor[0] = Anchor1;
-        maskAnchor[1] = Anchor2;
-        maskAnchor[2] = Anchor3;
-        maskAnchor[3] = Anchor4;
-        maskAnchor[4] = Anchor5;
-        maskAnchor[5] = Anchor6;
-        maskAnchor[6] = Anchor7;
-        maskAnchor[7] = Anchor8;
+        int maskAnchor[8] = { Anchor1, Anchor2, Anchor3, Anchor4, Anchor5, Anchor6, Anchor7, Anchor8 };
 
-        maskPosition[0] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor1) + Offset1;
-        maskPosition[1] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor2) + Offset2;
-        maskPosition[2] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor3) + Offset3;
-        maskPosition[3] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor4) + Offset4;
-        maskPosition[4] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor5) + Offset5;
-        maskPosition[5] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor6) + Offset6;
-        maskPosition[6] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor7) + Offset7;
-        maskPosition[7] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor8) + Offset8;
+        float2 maskSize[8] = { MaskSize1, MaskSize2, MaskSize3, MaskSize4, MaskSize5, MaskSize6, MaskSize7, MaskSize8 };
 
-        float2 maskSize[8];
-        maskSize[0] = MaskSize1;
-        maskSize[1] = MaskSize2;
-        maskSize[2] = MaskSize3;
-        maskSize[3] = MaskSize4;
-        maskSize[4] = MaskSize5;
-        maskSize[5] = MaskSize6;
-        maskSize[6] = MaskSize7;
-        maskSize[7] = MaskSize8;
+        float maskRotation[8] = { Rotation1, Rotation2, Rotation3, Rotation4, Rotation5, Rotation6, Rotation7, Rotation8 };
 
-        float maskRotation[8];
-        maskRotation[0] = Rotation1;
-        maskRotation[1] = Rotation2;
-        maskRotation[2] = Rotation3;
-        maskRotation[3] = Rotation4;
-        maskRotation[4] = Rotation5;
-        maskRotation[5] = Rotation6;
-        maskRotation[6] = Rotation7;
-        maskRotation[7] = Rotation8;
-
-        float maskFeather[8];
-        maskFeather[0] = Feather1;
-        maskFeather[1] = Feather2;
-        maskFeather[2] = Feather3;
-        maskFeather[3] = Feather4;
-        maskFeather[4] = Feather5;
-        maskFeather[5] = Feather6;
-        maskFeather[6] = Feather7;
-        maskFeather[7] = Feather8;
+        float maskFeather[8] = { Feather1, Feather2, Feather3, Feather4, Feather5, Feather6, Feather7, Feather8 };
 
         texcoord.xy = GetBoundingBoxVertexTL(id, maskShape[maskId], maskPosition[maskId], maskSize[maskId], maskAnchor[maskId], maskRotation[maskId], maskFeather[maskId]);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
