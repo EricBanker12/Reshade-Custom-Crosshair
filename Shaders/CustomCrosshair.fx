@@ -8,7 +8,10 @@
     uniform int ConfigNotice <
         ui_type = "radio";
         ui_label = " ";
-        ui_text = "To change crosshair color/shape, enable \"CustomCrosshairSetup\"";
+        ui_text = "- Requires [CustomCrosshairSetup.fx]\n"
+                  "- Enable CustomCrosshairSetup to change shape and color.\n"
+                  "- Enable CustomCrosshairUIDetectGUI to automatically show/hide crosshair (requires [UIDetectGUI.fx]).\n"
+                  "- CustomCrosshairSetup may be disabled for performance.";
     >;
 
     uniform float2 Offset <
@@ -330,7 +333,10 @@
 
     technique CustomCrosshair <
         ui_label = "CustomCrosshair";
-        ui_tooltip = "Enable \"CustomCrosshairSetup\" to apply config changes.";
+        ui_tooltip = "Requires [CustomCrosshairSetup.fx]\n"
+                     "Enable to show a crosshair overlay on the screen.\n"
+                     "Enable CustomCrosshairSetup to change shape and color.\n"
+                     "Enable CustomCrosshairUIDetectGUI detect UI to show/hide crosshair (requires [UIDetectGUI.fx]).\n";
     > {
         pass prevState {
             VertexShader = PostProcessVS;

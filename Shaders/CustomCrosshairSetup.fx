@@ -6,8 +6,8 @@
     uniform int ConfigNotice <
         ui_type = "radio";
         ui_label = " ";
-        ui_text = "Requires \"CustomCrosshair\".\n\n"
-                    "Once configured, disable this effect for performance.";
+        ui_text = "- Requires [CustomCrosshair.fx]\n"
+                  "- This effect may be disabled for performance.";
     >;
 
     uniform float4 FillColor <
@@ -1697,6 +1697,54 @@
 // Structs
 // ------------------------------------------------------------------------------------------------------------------------
 
+struct Shape {
+    bool enabled;
+    int shape;
+    int anchor;
+    float2 position;
+    float2 size;
+    float4 color;
+    float2 gapSize;
+    float2 gapOffset;
+    float rotation;
+    float slice;
+    float skew;
+    float outlineSize;
+    float4 outlineColor;
+};
+
+Shape CreateShape(
+    bool enabled,
+    int shape,
+    int anchor,
+    float2 position,
+    float2 size,
+    float4 color,
+    float2 gapSize,
+    float2 gapOffset,
+    float rotation,
+    float slice,
+    float skew,
+    float outlineSize,
+    float4 outlineColor
+) {
+    Shape retval;
+    retval.enabled = enabled;
+    retval.shape = shape;
+    retval.anchor = anchor;
+    retval.position = position;
+    retval.size = size;
+    retval.color = color;
+    retval.gapSize = gapSize;
+    retval.gapOffset = gapOffset;
+    retval.rotation = rotation;
+    retval.slice = slice;
+    retval.skew = skew;
+    retval.outlineSize = outlineSize;
+    retval.outlineColor = outlineColor;
+    return retval;
+}
+
 // ------------------------------------------------------------------------------------------------------------------------
 // Functions
 // ------------------------------------------------------------------------------------------------------------------------
@@ -1885,37 +1933,63 @@
         return retVal;
     }
 
-    float2 GetBoundingBoxVertexTL(uint id, int shape, float2 fillPos, float2 fillSize, float rotation, int anchor, float skew, float outlineSize) {
+    float2 GetBoundingBoxVertexTL(uint id, Shape shape) {
+        if (!shape.enabled) return float2(1.0, 1.0);
         id = id % 6;
-        if (id > 2) id -= 2;
-        return GetBoundingBoxVertex(id, shape, fillPos, fillSize, rotation, anchor, skew, outlineSize);
+        id -= 2 * step(3, id);
+        return GetBoundingBoxVertex(id, shape.shape, shape.position, shape.size, shape.rotation, shape.anchor, shape.skew, shape.outlineSize);
     }
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Vertex Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-    void VS_DrawShapes(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = float2(0.0, 0.0);
+    void VS_DrawShapes(
+        in uint id : SV_VertexID,
+        out float4 position : SV_Position,
+        out float2 texcoord : TEXCOORD,
+        out nointerpolation int shape : SHAPE,
+        out nointerpolation int anchor : ANCHOR,
+        out nointerpolation float2 positionShape : POSITIONSHAPE,
+        out nointerpolation float2 size : SIZE,
+        out nointerpolation float2 gapSize : GAPSIZE,
+        out nointerpolation float2 gapOffset : GAPOFFSET,
+        out nointerpolation float rotation : ROTATION,
+        out nointerpolation float slice : SLICE,
+        out nointerpolation float skew : SKEW
+    ) { 
+        // Shape CreateShape(enabled,shape,anchor,position,size,color,gapSize,gapOffset,rotation,slice,skew,outlineSize,outlineColor)
+        Shape shapes[16];
+        shapes[0] = CreateShape(ShapeEnabled1, Shape1, Anchor1, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, Rotation1, Slice1, Skew1, OutlineSize, OutlineColor);
+        shapes[1] = CreateShape(ShapeEnabled2, Shape2, Anchor2, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, Rotation2, Slice2, Skew2, OutlineSize, OutlineColor);
+        shapes[2] = CreateShape(ShapeEnabled3, Shape3, Anchor3, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, Rotation3, Slice3, Skew3, OutlineSize, OutlineColor);
+        shapes[3] = CreateShape(ShapeEnabled4, Shape4, Anchor4, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, Rotation4, Slice4, Skew4, OutlineSize, OutlineColor);
+        shapes[4] = CreateShape(ShapeEnabled5, Shape5, Anchor5, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, Rotation5, Slice5, Skew5, OutlineSize, OutlineColor);
+        shapes[5] = CreateShape(ShapeEnabled6, Shape6, Anchor6, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, Rotation6, Slice6, Skew6, OutlineSize, OutlineColor);
+        shapes[6] = CreateShape(ShapeEnabled7, Shape7, Anchor7, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, Rotation7, Slice7, Skew7, OutlineSize, OutlineColor);
+        shapes[7] = CreateShape(ShapeEnabled8, Shape8, Anchor8, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, Rotation8, Slice8, Skew8, OutlineSize, OutlineColor);
+        shapes[8] = CreateShape(ShapeEnabled9, Shape9, Anchor9, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, Rotation9, Slice9, Skew9, OutlineSize, OutlineColor);
+        shapes[9] = CreateShape(ShapeEnabled10, Shape10, Anchor10, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, Rotation10, Slice10, Skew10, OutlineSize, OutlineColor);
+        shapes[10] = CreateShape(ShapeEnabled11, Shape11, Anchor11, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, Rotation11, Slice11, Skew11, OutlineSize, OutlineColor);
+        shapes[11] = CreateShape(ShapeEnabled12, Shape12, Anchor12, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, Rotation12, Slice12, Skew12, OutlineSize, OutlineColor);
+        shapes[12] = CreateShape(ShapeEnabled13, Shape13, Anchor13, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, Rotation13, Slice13, Skew13, OutlineSize, OutlineColor);
+        shapes[13] = CreateShape(ShapeEnabled14, Shape14, Anchor14, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, Rotation14, Slice14, Skew14, OutlineSize, OutlineColor);
+        shapes[14] = CreateShape(ShapeEnabled15, Shape15, Anchor15, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Slice15, Skew15, OutlineSize, OutlineColor);
+        shapes[15] = CreateShape(ShapeEnabled16, Shape16, Anchor16, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Slice16, Skew16, OutlineSize, OutlineColor);
 
         uint idShape = floor(id / 6);
-        if (idShape == 0 && ShapeEnabled1) texcoord.xy = GetBoundingBoxVertexTL(id, Shape1, CenterPoint + Offset1, FillSize1, Rotation1, Anchor1, Skew1, OutlineSize);
-        if (idShape == 1 && ShapeEnabled2) texcoord.xy = GetBoundingBoxVertexTL(id, Shape2, CenterPoint + Offset2, FillSize2, Rotation2, Anchor2, Skew2, OutlineSize);
-        if (idShape == 2 && ShapeEnabled3) texcoord.xy = GetBoundingBoxVertexTL(id, Shape3, CenterPoint + Offset3, FillSize3, Rotation3, Anchor3, Skew3, OutlineSize);
-        if (idShape == 3 && ShapeEnabled4) texcoord.xy = GetBoundingBoxVertexTL(id, Shape4, CenterPoint + Offset4, FillSize4, Rotation4, Anchor4, Skew4, OutlineSize);
-        if (idShape == 4 && ShapeEnabled5) texcoord.xy = GetBoundingBoxVertexTL(id, Shape5, CenterPoint + Offset5, FillSize5, Rotation5, Anchor5, Skew5, OutlineSize);
-        if (idShape == 5 && ShapeEnabled6) texcoord.xy = GetBoundingBoxVertexTL(id, Shape6, CenterPoint + Offset6, FillSize6, Rotation6, Anchor6, Skew6, OutlineSize);
-        if (idShape == 6 && ShapeEnabled7) texcoord.xy = GetBoundingBoxVertexTL(id, Shape7, CenterPoint + Offset7, FillSize7, Rotation7, Anchor7, Skew7, OutlineSize);
-        if (idShape == 7 && ShapeEnabled8) texcoord.xy = GetBoundingBoxVertexTL(id, Shape8, CenterPoint + Offset8, FillSize8, Rotation8, Anchor8, Skew8, OutlineSize);
-        if (idShape == 8 && ShapeEnabled9) texcoord.xy = GetBoundingBoxVertexTL(id, Shape9, CenterPoint + Offset9, FillSize9, Rotation9, Anchor9, Skew9, OutlineSize);
-        if (idShape == 9 && ShapeEnabled10) texcoord.xy = GetBoundingBoxVertexTL(id, Shape10, CenterPoint + Offset10, FillSize10, Rotation10, Anchor10, Skew10, OutlineSize);
-        if (idShape == 10 && ShapeEnabled11) texcoord.xy = GetBoundingBoxVertexTL(id, Shape11, CenterPoint + Offset11, FillSize11, Rotation11, Anchor11, Skew11, OutlineSize);
-        if (idShape == 11 && ShapeEnabled12) texcoord.xy = GetBoundingBoxVertexTL(id, Shape12, CenterPoint + Offset12, FillSize12, Rotation12, Anchor12, Skew12, OutlineSize);
-        if (idShape == 12 && ShapeEnabled13) texcoord.xy = GetBoundingBoxVertexTL(id, Shape13, CenterPoint + Offset13, FillSize13, Rotation13, Anchor13, Skew13, OutlineSize);
-        if (idShape == 13 && ShapeEnabled14) texcoord.xy = GetBoundingBoxVertexTL(id, Shape14, CenterPoint + Offset14, FillSize14, Rotation14, Anchor14, Skew14, OutlineSize);
-        if (idShape == 14 && ShapeEnabled15) texcoord.xy = GetBoundingBoxVertexTL(id, Shape15, CenterPoint + Offset15, FillSize15, Rotation15, Anchor15, Skew15, OutlineSize);
-        if (idShape == 15 && ShapeEnabled16) texcoord.xy = GetBoundingBoxVertexTL(id, Shape16, CenterPoint + Offset16, FillSize16, Rotation16, Anchor16, Skew16, OutlineSize);
+
+        shape = shapes[idShape].shape;
+        anchor = shapes[idShape].anchor;
+        positionShape = shapes[idShape].position;
+        size = shapes[idShape].size;
+        gapSize = shapes[idShape].gapSize;
+        gapOffset = shapes[idShape].gapOffset;
+        rotation = shapes[idShape].rotation;
+        slice = shapes[idShape].slice;
+        skew = shapes[idShape].skew;
         
+        texcoord.xy = GetBoundingBoxVertexTL(id, shapes[idShape]);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
@@ -1923,55 +1997,41 @@
 // Pixel Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-    float4 PS_DrawShapeOutline(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (OutlineSize < 1.0 || OutlineColor.a == 0.0) discard;
-        
-        float4 color;
-        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, OutlineColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, OutlineSize);
-        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, OutlineColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, OutlineSize);
-        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, OutlineColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, OutlineSize);
-        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, OutlineColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, OutlineSize);
-        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, OutlineColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, OutlineSize);
-        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, OutlineColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, OutlineSize);
-        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, OutlineColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, OutlineSize);
-        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, OutlineColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, OutlineSize);
-        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, OutlineColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, OutlineSize);
-        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, OutlineColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, OutlineSize);
-        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, OutlineColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, OutlineSize);
-        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, OutlineColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, OutlineSize);
-        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, OutlineColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, OutlineSize);
-        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, OutlineColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, OutlineSize);
-        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, OutlineColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, OutlineSize);
-        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, OutlineColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, OutlineSize);
-        
-        if (color.a > 0.0) return color;
-        
+    float4 PS_DrawShapeOutline(
+        float4 pos: SV_POSITION,
+        float2 texCoord: TEXCOORD,
+        in nointerpolation int shape : SHAPE,
+        in nointerpolation int anchor : ANCHOR,
+        in nointerpolation float2 positionShape : POSITIONSHAPE,
+        in nointerpolation float2 size : SIZE,
+        in nointerpolation float2 gapSize : GAPSIZE,
+        in nointerpolation float2 gapOffset : GAPOFFSET,
+        in nointerpolation float rotation : ROTATION,
+        in nointerpolation float slice : SLICE,
+        in nointerpolation float skew : SKEW
+    ) : SV_TARGET {
+        float4 color = 0.0;
+        color = DrawShape(shape, color, pos, positionShape, size, OutlineColor, gapSize, gapOffset, rotation, anchor, slice, skew, OutlineSize);
+        if (color.a > 0) return color;
         discard;
     }
 
-    float4 PS_DrawShapeFill(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        if (FillColor.a == 0.0) discard;
-        
-        float4 color;
-        if (ShapeEnabled1) color = DrawShape(Shape1, color, pos, CenterPoint + Offset1, FillSize1, FillColor, GapSize1, GapOffset1, Rotation1, Anchor1, Slice1, Skew1, 0.0);
-        if (ShapeEnabled2) color = DrawShape(Shape2, color, pos, CenterPoint + Offset2, FillSize2, FillColor, GapSize2, GapOffset2, Rotation2, Anchor2, Slice2, Skew2, 0.0);
-        if (ShapeEnabled3) color = DrawShape(Shape3, color, pos, CenterPoint + Offset3, FillSize3, FillColor, GapSize3, GapOffset3, Rotation3, Anchor3, Slice3, Skew3, 0.0);
-        if (ShapeEnabled4) color = DrawShape(Shape4, color, pos, CenterPoint + Offset4, FillSize4, FillColor, GapSize4, GapOffset4, Rotation4, Anchor4, Slice4, Skew4, 0.0);
-        if (ShapeEnabled5) color = DrawShape(Shape5, color, pos, CenterPoint + Offset5, FillSize5, FillColor, GapSize5, GapOffset5, Rotation5, Anchor5, Slice5, Skew5, 0.0);
-        if (ShapeEnabled6) color = DrawShape(Shape6, color, pos, CenterPoint + Offset6, FillSize6, FillColor, GapSize6, GapOffset6, Rotation6, Anchor6, Slice6, Skew6, 0.0);
-        if (ShapeEnabled7) color = DrawShape(Shape7, color, pos, CenterPoint + Offset7, FillSize7, FillColor, GapSize7, GapOffset7, Rotation7, Anchor7, Slice7, Skew7, 0.0);
-        if (ShapeEnabled8) color = DrawShape(Shape8, color, pos, CenterPoint + Offset8, FillSize8, FillColor, GapSize8, GapOffset8, Rotation8, Anchor8, Slice8, Skew8, 0.0);
-        if (ShapeEnabled9) color = DrawShape(Shape9, color, pos, CenterPoint + Offset9, FillSize9, FillColor, GapSize9, GapOffset9, Rotation9, Anchor9, Slice9, Skew9, 0.0);
-        if (ShapeEnabled10) color = DrawShape(Shape10, color, pos, CenterPoint + Offset10, FillSize10, FillColor, GapSize10, GapOffset10, Rotation10, Anchor10, Slice10, Skew10, 0.0);
-        if (ShapeEnabled11) color = DrawShape(Shape11, color, pos, CenterPoint + Offset11, FillSize11, FillColor, GapSize11, GapOffset11, Rotation11, Anchor11, Slice11, Skew11, 0.0);
-        if (ShapeEnabled12) color = DrawShape(Shape12, color, pos, CenterPoint + Offset12, FillSize12, FillColor, GapSize12, GapOffset12, Rotation12, Anchor12, Slice12, Skew12, 0.0);
-        if (ShapeEnabled13) color = DrawShape(Shape13, color, pos, CenterPoint + Offset13, FillSize13, FillColor, GapSize13, GapOffset13, Rotation13, Anchor13, Slice13, Skew13, 0.0);
-        if (ShapeEnabled14) color = DrawShape(Shape14, color, pos, CenterPoint + Offset14, FillSize14, FillColor, GapSize14, GapOffset14, Rotation14, Anchor14, Slice14, Skew14, 0.0);
-        if (ShapeEnabled15) color = DrawShape(Shape15, color, pos, CenterPoint + Offset15, FillSize15, FillColor, GapSize15, GapOffset15, Rotation15, Anchor15, Slice15, Skew15, 0.0);
-        if (ShapeEnabled16) color = DrawShape(Shape16, color, pos, CenterPoint + Offset16, FillSize16, FillColor, GapSize16, GapOffset16, Rotation16, Anchor16, Slice16, Skew16, 0.0);
-        
-        if (color.a > 0.0) return color;
-        
+    float4 PS_DrawShapeFill(
+        float4 pos: SV_POSITION,
+        float2 texCoord: TEXCOORD,
+        in nointerpolation int shape : SHAPE,
+        in nointerpolation int anchor : ANCHOR,
+        in nointerpolation float2 positionShape : POSITIONSHAPE,
+        in nointerpolation float2 size : SIZE,
+        in nointerpolation float2 gapSize : GAPSIZE,
+        in nointerpolation float2 gapOffset : GAPOFFSET,
+        in nointerpolation float rotation : ROTATION,
+        in nointerpolation float slice : SLICE,
+        in nointerpolation float skew : SKEW
+    ) : SV_TARGET {
+        float4 color = 0.0;
+        color = DrawShape(shape, color, pos, positionShape, size, FillColor, gapSize, gapOffset, rotation, anchor, slice, skew, 0.0);
+        if (color.a > 0) return color;
         discard;
     }
 
@@ -2084,6 +2144,8 @@
         enabled = true;
         timeout = 1;
     > {
+        // Compute bounding box containing all shapes, and store as texture to pass data to CustomCrosshair.fx
+        // Compute bugs in ReShade 4.9.1 prevent this, so replaced with 2 PS below
         // pass BoundingBox {
         //     ComputeShader = CS_BoundingBox<64,1,1>;
         //     DispatchSizeX = 1;
@@ -2124,10 +2186,12 @@
 
     technique CustomCrosshairSetup <
         ui_label = "CustomCrosshairSetup";
-        ui_tooltip = "Enable to apply config changes to \"CustomCrosshair.\"\n"
-                        "Disable for performance\n\n"
-                        "\"CustomCrosshair\" must be enabled to see results.";
+        ui_tooltip = "Requires [CustomCrosshair.fx]\n"
+                     "Enable to apply shape and color changes to CustomCrosshair.\n"
+                     "Can be disabled for performance.";
     > {
+        // Compute bounding box containing all shapes, and store as texture to pass data to CustomCrosshair.fx
+        // Compute bugs in ReShade 4.9.1 prevent this, so replaced with 2 PS below
         // pass BoundingBox {
         //     ComputeShader = CS_BoundingBox<64,1,1>;
         //     DispatchSizeX = 1;
