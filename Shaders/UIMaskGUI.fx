@@ -1480,7 +1480,7 @@
         return baseColor;
     }
 
-    float2 GetBoundingBoxVertexTS(int id, int shape, float2 fillPos, float2 fillSize, int anchor, float rotation, float outlineSize) {
+    float2 GetBoundingBoxVertexTS(uint id, int shape, float2 fillPos, float2 fillSize, int anchor, float rotation, float outlineSize) {
         float2 retVal;
 
         outlineSize += 1.0;
@@ -1515,10 +1515,10 @@
         return retVal;
     }
 
-    float2 GetBoundingBoxVertexTL(int id, int shape, float2 center, float2 fillSize, int anchor, float rotation, float outlineSize) {
+    float2 GetBoundingBoxVertexTL(uint id, int shape, float2 center, float2 fillSize, int anchor, float rotation, float outlineSize) {
         // convert triangle list to triangle strip
         id = id % 6;
-        if (id > 2) id -= 2;
+        id -= 2 * step(3, id);
         return GetBoundingBoxVertexTS(id, shape, center, fillSize, anchor, rotation, outlineSize);
     }
 
@@ -1616,54 +1616,91 @@
 // Vertex Shaders
 // ------------------------------------------------------------------------------------------------------------------------
 
-    void VS_AfterMasks(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD) {
-        texcoord.xy = float2(0.0, 0.0);
-        
-        const int idMask = floor(id / 6.0);
-        bool applyMask;
-        float2 maskPos;
-        
-        if (idMask == 0) {
-            applyMask = MaskEnabled1 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor1 ? MousePoint : CenterPoint) + Offset1;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape1, maskPos, MaskSize1, Anchor1, Rotation1, Feather1) : texcoord.xy;
+    void VS_AfterMasks(
+        in uint id : SV_VertexID,
+        out float4 position : SV_Position,
+        out float2 texcoord : TEXCOORD,
+        out nointerpolation uint maskId : MASK_ID,
+        out nointerpolation uint maskApply[8] : MASK_APPLY,
+        out nointerpolation float2 maskPosition[8] : MASK_POSITION
+    ) {
+        maskApply[0] = uint(MaskEnabled1 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(0, 0), 0).r > 0.0));
+        maskApply[1] = uint(MaskEnabled2 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(1, 0), 0).r > 0.0));
+        maskApply[2] = uint(MaskEnabled3 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(2, 0), 0).r > 0.0));
+        maskApply[3] = uint(MaskEnabled4 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(3, 0), 0).r > 0.0));
+        maskApply[4] = uint(MaskEnabled5 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(4, 0), 0).r > 0.0));
+        maskApply[5] = uint(MaskEnabled6 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(5, 0), 0).r > 0.0));
+        maskApply[6] = uint(MaskEnabled7 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(6, 0), 0).r > 0.0));
+        maskApply[7] = uint(MaskEnabled8 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(7, 0), 0).r > 0.0));
+
+        maskId = floor(id / 6.0);
+
+        if (maskApply[maskId] == 0) {
+            texcoord.xy = 0.0;
+            position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
+            return;
         }
-        else if (idMask == 1) {
-            applyMask = MaskEnabled2 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor2 ? MousePoint : CenterPoint) + Offset2;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape2, maskPos, MaskSize2, Anchor2, Rotation2, Feather2) : texcoord.xy;
-        }
-        else if (idMask == 2) {
-            applyMask = MaskEnabled3 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor3 ? MousePoint : CenterPoint) + Offset3;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape3, maskPos, MaskSize3, Anchor3, Rotation3, Feather3) : texcoord.xy;
-        }
-        else if (idMask == 3) {
-            applyMask = MaskEnabled4 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor4 ? MousePoint : CenterPoint) + Offset4;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape4, maskPos, MaskSize4, Anchor4, Rotation4, Feather4) : texcoord.xy;
-        }
-        else if (idMask == 4) {
-            applyMask = MaskEnabled5 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor5 ? MousePoint : CenterPoint) + Offset5;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape5, maskPos, MaskSize5, Anchor5, Rotation5, Feather5) : texcoord.xy;
-        }
-        else if (idMask == 5) {
-            applyMask = MaskEnabled6 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor6 ? MousePoint : CenterPoint) + Offset6;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape6, maskPos, MaskSize6, Anchor6, Rotation6, Feather6) : texcoord.xy;
-        }
-        else if (idMask == 6) {
-            applyMask = MaskEnabled7 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor7 ? MousePoint : CenterPoint) + Offset7;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape7, maskPos, MaskSize7, Anchor7, Rotation7, Feather7) : texcoord.xy;
-        }
-        else if (idMask == 7) {
-            applyMask = MaskEnabled8 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(idMask, 0), 0).r > 0.0);
-            maskPos = (MaskFollowCursor8 ? MousePoint : CenterPoint) + Offset8;
-            texcoord.xy = applyMask ? GetBoundingBoxVertexTL(id, Shape8, maskPos, MaskSize8, Anchor8, Rotation8, Feather8) : texcoord.xy;
-        }
-        
+
+        int maskShape[8];
+        maskShape[0] = Shape1;
+        maskShape[1] = Shape2;
+        maskShape[2] = Shape3;
+        maskShape[3] = Shape4;
+        maskShape[4] = Shape5;
+        maskShape[5] = Shape6;
+        maskShape[6] = Shape7;
+        maskShape[7] = Shape8;
+
+        int maskAnchor[8];
+        maskAnchor[0] = Anchor1;
+        maskAnchor[1] = Anchor2;
+        maskAnchor[2] = Anchor3;
+        maskAnchor[3] = Anchor4;
+        maskAnchor[4] = Anchor5;
+        maskAnchor[5] = Anchor6;
+        maskAnchor[6] = Anchor7;
+        maskAnchor[7] = Anchor8;
+
+        maskPosition[0] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor1) + Offset1;
+        maskPosition[1] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor2) + Offset2;
+        maskPosition[2] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor3) + Offset3;
+        maskPosition[3] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor4) + Offset4;
+        maskPosition[4] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor5) + Offset5;
+        maskPosition[5] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor6) + Offset6;
+        maskPosition[6] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor7) + Offset7;
+        maskPosition[7] = CenterPoint + (MousePoint - CenterPoint) * float(MaskFollowCursor8) + Offset8;
+
+        float2 maskSize[8];
+        maskSize[0] = MaskSize1;
+        maskSize[1] = MaskSize2;
+        maskSize[2] = MaskSize3;
+        maskSize[3] = MaskSize4;
+        maskSize[4] = MaskSize5;
+        maskSize[5] = MaskSize6;
+        maskSize[6] = MaskSize7;
+        maskSize[7] = MaskSize8;
+
+        float maskRotation[8];
+        maskRotation[0] = Rotation1;
+        maskRotation[1] = Rotation2;
+        maskRotation[2] = Rotation3;
+        maskRotation[3] = Rotation4;
+        maskRotation[4] = Rotation5;
+        maskRotation[5] = Rotation6;
+        maskRotation[6] = Rotation7;
+        maskRotation[7] = Rotation8;
+
+        float maskFeather[8];
+        maskFeather[0] = Feather1;
+        maskFeather[1] = Feather2;
+        maskFeather[2] = Feather3;
+        maskFeather[3] = Feather4;
+        maskFeather[4] = Feather5;
+        maskFeather[5] = Feather6;
+        maskFeather[6] = Feather7;
+        maskFeather[7] = Feather8;
+
+        texcoord.xy = GetBoundingBoxVertexTL(id, maskShape[maskId], maskPosition[maskId], maskSize[maskId], maskAnchor[maskId], maskRotation[maskId], maskFeather[maskId]);
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
@@ -1771,73 +1808,62 @@
                                 && (detectorMatched8 || !detectorAssigned8);
         }
 
-        return detectorMatched ? 1.0 : 0.0;
+        return float(detectorMatched);
     }
 
-    float4 PS_AfterMasks(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
+    float4 PS_AfterMasks(
+        float4 pos: SV_POSITION,
+        float2 texCoord: TEXCOORD,
+        in nointerpolation uint maskId : MASK_ID,
+        in nointerpolation uint maskApply[8] : MASK_APPLY,
+        in nointerpolation float2 maskPosition[8] : MASK_POSITION
+    ) : SV_TARGET {
         float4 color = float4(0.0, 0.0, 0.0, 0.0);
-        
-        float2 maskPos;
         float4 maskColor;
         
-        bool applyMask = MaskEnabled1 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(0, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[0] == 1 && maskId >= 0) {
             maskColor = MaskColors[0] / 255.0;
-            maskPos = (MaskFollowCursor1 ? MousePoint : CenterPoint) + Offset1;
-            color = DrawShape(Shape1, color, pos, maskPos, MaskSize1, maskColor, Rotation1, Feather1, maskColor, Anchor1, true);
+            // color = DrawShape(maskShape[0], color, pos, maskPosition[0], maskSize[0], maskColor, maskRotation[0], maskFeather[0], maskColor, maskAnchor[0], true);
+            color = DrawShape(Shape1, color, pos, maskPosition[0], MaskSize1, maskColor, Rotation1, Feather1, maskColor, Anchor1, true);
         }
-
-        applyMask = MaskEnabled2 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(1, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[1] == 1 && maskId >= 1) {
             maskColor = MaskColors[1] / 255.0;
-            maskPos = (MaskFollowCursor2 ? MousePoint : CenterPoint) + Offset2;
-            color = DrawShape(Shape2, color, pos, maskPos, MaskSize2, maskColor, Rotation2, Feather2, maskColor, Anchor2, true);
+            // color = DrawShape(maskShape[1], color, pos, maskPosition[1], maskSize[1], maskColor, maskRotation[1], maskFeather[1], maskColor, maskAnchor[1], true);
+            color = DrawShape(Shape2, color, pos, maskPosition[1], MaskSize2, maskColor, Rotation2, Feather2, maskColor, Anchor2, true);
         }
-
-        applyMask = MaskEnabled3 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(2, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[2] == 1 && maskId >= 2) {
             maskColor = MaskColors[2] / 255.0;
-            maskPos = (MaskFollowCursor3 ? MousePoint : CenterPoint) + Offset3;
-            color = DrawShape(Shape3, color, pos, maskPos, MaskSize3, maskColor, Rotation3, Feather3, maskColor, Anchor3, true);
+            // color = DrawShape(maskShape[2], color, pos, maskPosition[2], maskSize[2], maskColor, maskRotation[2], maskFeather[2], maskColor, maskAnchor[2], true);
+            color = DrawShape(Shape3, color, pos, maskPosition[2], MaskSize3, maskColor, Rotation3, Feather3, maskColor, Anchor3, true);
         }
-
-        applyMask = MaskEnabled4 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(3, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[3] == 1 && maskId >= 3) {
             maskColor = MaskColors[3] / 255.0;
-            maskPos = (MaskFollowCursor4 ? MousePoint : CenterPoint) + Offset4;
-            color = DrawShape(Shape4, color, pos, maskPos, MaskSize4, maskColor, Rotation4, Feather4, maskColor, Anchor4, true);
+            // color = DrawShape(maskShape[3], color, pos, maskPosition[3], maskSize[3], maskColor, maskRotation[3], maskFeather[3], maskColor, maskAnchor[3], true);
+            color = DrawShape(Shape4, color, pos, maskPosition[3], MaskSize4, maskColor, Rotation4, Feather4, maskColor, Anchor4, true);
         }
-
-        applyMask = MaskEnabled5 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(4, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[4] == 1 && maskId >= 4) {
             maskColor = MaskColors[4] / 255.0;
-            maskPos = (MaskFollowCursor5 ? MousePoint : CenterPoint) + Offset5;
-            color = DrawShape(Shape5, color, pos, maskPos, MaskSize5, maskColor, Rotation5, Feather5, maskColor, Anchor5, true);
+            // color = DrawShape(maskShape[4], color, pos, maskPosition[4], maskSize[4], maskColor, maskRotation[4], maskFeather[4], maskColor, maskAnchor[4], true);
+            color = DrawShape(Shape5, color, pos, maskPosition[5], MaskSize5, maskColor, Rotation5, Feather5, maskColor, Anchor5, true);
         }
-
-        applyMask = MaskEnabled6 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(5, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[5] == 1 && maskId >= 5) {
             maskColor = MaskColors[5] / 255.0;
-            maskPos = (MaskFollowCursor6 ? MousePoint : CenterPoint) + Offset6;
-            color = DrawShape(Shape6, color, pos, maskPos, MaskSize6, maskColor, Rotation6, Feather6, maskColor, Anchor6, true);
+            // color = DrawShape(maskShape[5], color, pos, maskPosition[5], maskSize[5], maskColor, maskRotation[5], maskFeather[5], maskColor, maskAnchor[5], true);
+            color = DrawShape(Shape6, color, pos, maskPosition[5], MaskSize6, maskColor, Rotation6, Feather6, maskColor, Anchor6, true);
         }
-
-        applyMask = MaskEnabled7 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(6, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[6] == 1 && maskId >= 6) {
             maskColor = MaskColors[6] / 255.0;
-            maskPos = (MaskFollowCursor7 ? MousePoint : CenterPoint) + Offset7;
-            color = DrawShape(Shape7, color, pos, maskPos, MaskSize7, maskColor, Rotation7, Feather7, maskColor, Anchor7, true);
+            // color = DrawShape(maskShape[6], color, pos, maskPosition[6], maskSize[6], maskColor, maskRotation[6], maskFeather[6], maskColor, maskAnchor[6], true);
+            color = DrawShape(Shape7, color, pos, maskPosition[6], MaskSize7, maskColor, Rotation7, Feather7, maskColor, Anchor7, true);
         }
-
-        applyMask = MaskEnabled8 && (tex2Dfetch(UIMaskGUIMaskSampler, int2(7, 0), 0).r > 0.0);
-        if (applyMask) {
+        if (maskApply[7] == 1 && maskId >= 7) {
             maskColor = MaskColors[7] / 255.0;
-            maskPos = (MaskFollowCursor8 ? MousePoint : CenterPoint) + Offset8;
-            color = DrawShape(Shape8, color, pos, maskPos, MaskSize8, maskColor, Rotation8, Feather8, maskColor, Anchor8, true);
+            // color = DrawShape(maskShape[7], color, pos, maskPosition[7], maskSize[7], maskColor, maskRotation[7], maskFeather[7], maskColor, maskAnchor[7], true);
+            color = DrawShape(Shape8, color, pos, maskPosition[7], MaskSize8, maskColor, Rotation8, Feather8, maskColor, Anchor8, true);
         }
 
         if (color.a > 0.0) {
-            color.rgb = lerp(tex2Dfetch(UIMaskGUIBeforeSampler, floor(pos.xy), 0).rgb, color.rgb, ShowMasks ? 0.5 : 0.0);
+            color.rgb = lerp(tex2Dfetch(UIMaskGUIBeforeSampler, floor(pos.xy), 0).rgb, color.rgb, 0.5 * float(ShowMasks));
             return color;
         }
 
