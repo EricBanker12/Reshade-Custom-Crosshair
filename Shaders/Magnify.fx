@@ -10,21 +10,7 @@
         ui_min = 0.0;
         ui_max = BUFFER_WIDTH;
         ui_step = 1.0;
-    > = float2(100, 100);
-
-    uniform float Magnification <
-        ui_label = "Magnification";
-        ui_type = "drag";
-        ui_min = 0.1;
-        ui_max = 10.0;
-        ui_step = 0.1;
-    > = 2.0;
-
-    uniform int Shape <
-        ui_label = "Shape";
-        ui_type = "combo";
-        ui_items = "Ellipse\0Rectangle\0";
-    > = 0;
+    > = float2(500.0, 500.0);
 
     uniform float2 Offset <
         ui_label = "Offset";
@@ -33,6 +19,28 @@
         ui_max = BUFFER_WIDTH;
         ui_step = 1.0;
     > = float2(0.0, 0.0);
+
+    uniform float Magnification <
+        ui_label = "Magnification";
+        ui_type = "drag";
+        ui_min = 0.1;
+        ui_max = 10.0;
+        ui_step = 0.1;
+    > = 1.5;
+
+    uniform float Transition <
+        ui_label = "Transition";
+        ui_type = "drag";
+        ui_min = 0.0;
+        ui_max = BUFFER_WIDTH;
+        ui_step = 1.0;
+    > = 0.0;
+
+    uniform int Shape <
+        ui_label = "Shape";
+        ui_type = "combo";
+        ui_items = "Ellipse\0Rectangle\0";
+    > = 0;
 
     uniform int Hotkey <
         ui_type = "combo";
@@ -84,23 +92,87 @@
 // ------------------------------------------------------------------------------------------------------------------------
 // Helper Functions
 // ------------------------------------------------------------------------------------------------------------------------
-bool GetHotkey() {
-    if (Hotkey > 0) {
-        const bool hotkeyDown[6] = { MouseLeft_Down, MouseRight_Down, MouseMiddle_Down, MouseBack_Down, MouseForward_Down, CustomKey_Down };
-        return hotkeyDown[Hotkey - 1];
-    }
-    return true;
-}
+    float4 GetVertex(in uint id) {
+        float4 retval = 0.0;
 
-bool GetHotkeyToggle() {
-    if (Hotkey > 0) {
-        const bool hotkeyPress[6] = { MouseLeft_Press, MouseRight_Press, MouseMiddle_Press, MouseBack_Press, MouseForward_Press, CustomKey_Press };
-        bool status = tex2Dfetch(MagnifyStatusCopy, int2(0, 0), 0).r > 0.0;
-        if (status && !hotkeyPress[Hotkey - 1] || !status && hotkeyPress[Hotkey - 1]) return true;
-        return false;
+        float2 offset = float2(Offset.x - Size.x / 2.0, Offset.y + Offset.y - Size.y / 2.0);
+        if (id > 1) offset.x += Size.x;
+        if (id == 1 || id == 3) offset.y += Size.y;
+
+        if (IsFollowCursor) {
+            retval.xy = (MousePoint + offset) / BUFFER_SCREEN_SIZE;
+            retval.zw = (MousePoint + Offset) / BUFFER_SCREEN_SIZE;
+        }
+        else {
+            retval.xy = (CenterPoint + offset) / BUFFER_SCREEN_SIZE;
+            retval.zw = (CenterPoint + Offset) / BUFFER_SCREEN_SIZE;
+        }
+
+        return retval;
     }
-    return true;
-}
+
+    bool GetHotkey() {
+        if (Hotkey > 0) {
+            const bool hotkeyDown[6] = { MouseLeft_Down, MouseRight_Down, MouseMiddle_Down, MouseBack_Down, MouseForward_Down, CustomKey_Down };
+            return hotkeyDown[Hotkey - 1];
+        }
+        return true;
+    }
+
+    bool GetHotkeyToggle() {
+        if (Hotkey > 0) {
+            const bool hotkeyPress[6] = { MouseLeft_Press, MouseRight_Press, MouseMiddle_Press, MouseBack_Press, MouseForward_Press, CustomKey_Press };
+            bool status = tex2Dfetch(MagnifyStatusCopy, int2(0, 0), 0).r > 0.0;
+            if (status && !hotkeyPress[Hotkey - 1] || !status && hotkeyPress[Hotkey - 1]) return true;
+            return false;
+        }
+        return true;
+    }
+
+    // https://iquilezles.org/articles/distfunctions2d/
+    float sdBox( in float2 p, in float2 b ) {
+        float2 d = abs(p)-b;
+        return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+    }
+
+    float sdEllipse( in float2 p, in float2 ab ) {
+        if (ab.x == ab.y) return length(p) - ab.x;
+        
+        p = abs(p);
+        if( p.x > p.y ) {p=p.yx;ab=ab.yx;}
+        float l = ab.y*ab.y - ab.x*ab.x;
+        float m = ab.x*p.x/l;
+        float m2 = m*m; 
+        float n = ab.y*p.y/l;
+        float n2 = n*n; 
+        float c = (m2+n2-1.0)/3.0;
+        float c3 = c*c*c;
+        float q = c3 + m2*n2*2.0;
+        float d = c3 + m2*n2;
+        float g = m + m*n2;
+        float co;
+        if (d < 0.0)
+        {
+            float h = acos(q/c3)/3.0;
+            float s = cos(h);
+            float t = sin(h)*sqrt(3.0);
+            float rx = sqrt( -c*(s + t + 2.0) + m2 );
+            float ry = sqrt( -c*(s - t + 2.0) + m2 );
+            co = (ry+sign(l)*rx+abs(g)/(rx*ry)- m)/2.0;
+        }
+        else
+        {
+            float h = 2.0*m*n*sqrt( d );
+            float s = sign(q+h)*pow(abs(q+h), 1.0/3.0);
+            float u = sign(q-h)*pow(abs(q-h), 1.0/3.0);
+            float rx = -s - u - c*4.0 + 2.0*m2;
+            float ry = (s - u)*sqrt(3.0);
+            float rm = sqrt( rx*rx + ry*ry );
+            co = (ry/sqrt(rm-rx)+2.0*g/rm-m)/2.0;
+        }
+        float2 r = ab * float2(co, sqrt(1.0-co*co));
+        return length(r-p) * sign(p.y-r.y);
+    }
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Vertex Shaders
@@ -111,30 +183,30 @@ bool GetHotkeyToggle() {
         position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
-    void MagnifyVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD)
+    void MagnifyVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD, out nointerpolation float2 center : TEXCOORD1)
     {   
-        float2 offset = float2(Offset.x - Size.x / 2.0, Offset.y + Offset.y - Size.y / 2.0);
-        if (id > 1) offset.x += Size.x;
-        if (id == 1 || id == 3) offset.y += Size.y;
+        float4 vertex = GetVertex(id);
+        texcoord = vertex.xy;
+        center = vertex.zw;
 
-        if (IsFollowCursor) texcoord = (MousePoint + offset) / BUFFER_SCREEN_SIZE;
-        else texcoord = (CenterPoint + offset) / BUFFER_SCREEN_SIZE;
-
-        if (!GetHotkey()) texcoord = 0.0;
+        if (!GetHotkey()) {
+            texcoord = 0.0;
+            center = 0.0;
+        }
 
 	    position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
 
-    void MagnifyToggleVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD)
+    void MagnifyToggleVS(in uint id : SV_VertexID, out float4 position : SV_Position, out float2 texcoord : TEXCOORD, out nointerpolation float2 center : TEXCOORD1)
     {   
-        float2 offset = float2(Offset.x - Size.x / 2.0, Offset.y + Offset.y - Size.y / 2.0);
-        if (id > 1) offset.x += Size.x;
-        if (id == 1 || id == 3) offset.y += Size.y;
+        float4 vertex = GetVertex(id);
+        texcoord = vertex.xy;
+        center = vertex.zw;
 
-        if (IsFollowCursor) texcoord = (MousePoint + offset) / BUFFER_SCREEN_SIZE;
-        else texcoord = (CenterPoint + offset) / BUFFER_SCREEN_SIZE;
-
-        if (!GetHotkeyToggle()) texcoord = 0.0;
+        if (!GetHotkeyToggle()) {
+            texcoord = 0.0;
+            center = 0.0;
+        }
 
 	    position = float4(texcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
     }
@@ -151,8 +223,20 @@ bool GetHotkeyToggle() {
         return tex2Dfetch(MagnifyStatus, int2(0, 0), 0).r;
     }
 
-    float4 MagnifyPS(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD) : SV_TARGET {
-        return 1.0;
+    float4 MagnifyPS(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD, nointerpolation float2 center : TEXCOORD1) : SV_TARGET {
+        float2 target = center + (texCoord - center) / Magnification;
+        if (Shape == 0)
+        {
+            float d = sdEllipse((texCoord - center) * BUFFER_SCREEN_SIZE, Size / 2.0);
+            if (d > 0) discard;
+            if (Transition > 0 && d > -Transition) target = center + (texCoord - center) / lerp(Magnification, 1.0, (Transition + d) / Transition);
+        }
+        else if (Transition > 0)
+        {
+            float d = sdBox((texCoord - center) * BUFFER_SCREEN_SIZE, Size / 2.0);
+            if (d > -Transition) target = center + (texCoord - center) / lerp(Magnification, 1.0, (Transition + d) / Transition);
+        }
+        return tex2Dlod(ReShade::BackBuffer, float4(target, 0, 0));
     }
 // ------------------------------------------------------------------------------------------------------------------------
 // Passes
