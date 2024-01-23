@@ -42,6 +42,14 @@
         ui_items = "Ellipse\0Rectangle\0";
     > = 0;
 
+    uniform float EdgeRounding <
+        ui_label = "Edge Rounding";
+        ui_type = "drag";
+        ui_min = 0.0;
+        ui_max = BUFFER_WIDTH;
+        ui_step = 1.0;
+    > = 0.0;
+
     uniform int Hotkey <
         ui_type = "combo";
         ui_label = "Hotkey";
@@ -59,6 +67,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
     static const float2 CenterPoint = BUFFER_SCREEN_SIZE / 2.0;
+    static const float PI = 3.141592;
     
     uniform float2 MousePoint < source = "mousepoint"; >;
     
@@ -174,6 +183,10 @@
         return length(r-p) * sign(p.y-r.y);
     }
 
+    float sinLerp(float x, float y, float s) {
+        return lerp(x, y, (sin(lerp(-PI/2.0, PI/2.0, s)) + 1.0) / 2.0);
+    }
+
 // ------------------------------------------------------------------------------------------------------------------------
 // Vertex Shaders
 // ------------------------------------------------------------------------------------------------------------------------
@@ -225,17 +238,14 @@
 
     float4 MagnifyPS(float4 pos: SV_POSITION, float2 texCoord: TEXCOORD, nointerpolation float2 center : TEXCOORD1) : SV_TARGET {
         float2 target = center + (texCoord - center) / Magnification;
-        if (Shape == 0)
-        {
-            float d = sdEllipse((texCoord - center) * BUFFER_SCREEN_SIZE, Size / 2.0);
-            if (d > 0) discard;
-            if (Transition > 0 && d > -Transition) target = center + (texCoord - center) / lerp(Magnification, 1.0, (Transition + d) / Transition);
-        }
-        else if (Transition > 0)
-        {
-            float d = sdBox((texCoord - center) * BUFFER_SCREEN_SIZE, Size / 2.0);
-            if (d > -Transition) target = center + (texCoord - center) / lerp(Magnification, 1.0, (Transition + d) / Transition);
-        }
+        float d;
+        if (Shape == 0) d = sdEllipse((texCoord - center) * BUFFER_SCREEN_SIZE, Size / 2.0);
+        else d = sdBox((texCoord - center) * BUFFER_SCREEN_SIZE, Size / 2.0 - EdgeRounding) - EdgeRounding;
+        
+        if (d > 0) discard;
+        
+        if (Transition > 0 && d > -Transition) target = center + (texCoord - center) / sinLerp(Magnification, 1.0, (Transition + d) / Transition);
+        
         return tex2Dlod(ReShade::BackBuffer, float4(target, 0, 0));
     }
 // ------------------------------------------------------------------------------------------------------------------------
